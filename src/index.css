@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* 
+  Custom styles for our university application.
+  Tailwind v4 handles all utilities automatically.
+*/
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom print styles for the portrait A4 transcript */
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 12px;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  /* Force A4 Portrait page size */
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+}

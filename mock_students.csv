@@ -1,0 +1,21 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+2025001,أحمد محمد,Ahmed Mohamed,student,Genie Informatique,3eme Annee,Informatique,2002-05-15,N'Djamena
+2025002,فاطمة علي,Fatima Ali,student,Genie Informatique,3eme Annee,Informatique,2003-02-20,Abéché
+2025003,عمر حسن,Omar Hassan,student,Genie Informatique,3eme Annee,Informatique,2002-08-10,Moundou
+2025004,سارة إبراهيم,Sarah Ibrahim,student,Genie Informatique,3eme Annee,Informatique,2003-01-05,Sarh
+2025005,خالد عبد الله,Khalid Abdallah,student,Genie Informatique,3eme Annee,Informatique,2001-11-30,Bongor
+2025006,مريم عيسى,Mariam Issa,student,Genie Informatique,4eme Annee,Informatique,2001-07-22,N'Djamena
+2025007,يوسف سليمان,Youssef Souleymane,student,Genie Informatique,4eme Annee,Informatique,2002-03-14,Abéché
+2025008,نورة داود,Noura Daoud,student,Genie Informatique,4eme Annee,Informatique,2001-09-09,Moundou
+2025009,علي موسى,Ali Moussa,student,Genie Informatique,4eme Annee,Informatique,2002-12-01,Sarh
+2025010,هدى جبريل,Houda Djibril,student,Genie Informatique,4eme Annee,Informatique,2001-04-18,Bongor
+2025011,محمد إسحاق,Mohamed Ishaq,student,Genie Informatique,3eme Annee,Informatique,2003-06-25,N'Djamena
+2025012,أسماء يحيى,Asma Yahya,student,Genie Informatique,3eme Annee,Informatique,2002-10-03,Abéché
+2025013,إبراهيم نوح,Ibrahim Nouh,student,Genie Informatique,4eme Annee,Informatique,2001-01-15,Moundou
+2025014,ليلى زكريا,Layla Zakaria,student,Genie Informatique,4eme Annee,Informatique,2002-07-08,Sarh
+2025015,حسين عمار,Hussein Ammar,student,Genie Informatique,3eme Annee,Informatique,2003-09-12,N'Djamena
+2025016,رانية فؤاد,Rania Fouad,student,Genie Civil,3eme Annee,Genie Civil,2002-11-20,Abéché
+2025017,كمال بشير,Kamal Bachir,student,Genie Civil,3eme Annee,Genie Civil,2003-03-30,Moundou
+2025018,جميلة نصر,Jamila Nasr,student,Genie Civil,3eme Annee,Genie Civil,2002-06-14,Sarh
+2025019,نبيل رشيد,Nabil Rachid,student,Genie Civil,4eme Annee,Genie Civil,2001-08-05,N'Djamena
+2025020,حليمة سعيد,Halima Said,student,Genie Civil,4eme Annee,Genie Civil,2001-12-25,Abéché
