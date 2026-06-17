@@ -1,0 +1,4 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+tch.eco.001,د. فريد بوزيد,Dr. Farid Bouzid,teacher,Sciences Économiques,1ère Année,Économie,1976-08-15,Alger
+tch.eco.002,د. كريمة لحلو,Dr. Karima Lahlo,teacher,Sciences de Gestion,2ème Année,Gestion,1985-11-20,Oran
+tch.eco.003,أ. عبد القادر بن يحي,Abdelkader Ben Yahia,teacher,Sciences Économiques,3ème Année,Économie,1993-04-08,Constantine

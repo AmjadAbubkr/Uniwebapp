@@ -1,0 +1,4 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+tch.med.001,د. سليمان رابح,Dr. Slimane Rabeh,teacher,Médecine Générale,1ère Année,Chirurgie,1975-09-10,Constantine
+tch.med.002,د. حليمة سعدي,Dr. Halima Saadi,teacher,Médecine Générale,2ème Année,Pédiatrie,1981-03-27,Oran
+tch.med.003,د. جمال الدين مزيان,Dr. Djamel Eddine Meziane,teacher,Pharmacie,1ère Année,Pharmacie,1977-07-14,Alger

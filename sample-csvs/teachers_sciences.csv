@@ -1,0 +1,6 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+tch.sci.001,د. عبد الله سعيد,Dr. Abdellah Said,teacher,Génie Informatique,1ère Année,Informatique,1985-03-15,Alger
+tch.sci.002,د. فاطمة بن علي,Dr. Fatima Ben Ali,teacher,Mathématiques,2ème Année,Mathématiques,1982-07-22,Oran
+tch.sci.003,د. مالك حسين,Dr. Malik Hocine,teacher,Génie Informatique,3ème Année,Informatique,1979-11-08,Constantine
+tch.sci.004,د. نور الدين بلقاسم,Dr. Noureddine Belkacem,teacher,Physique,1ère Année,Physique,1987-05-30,Annaba
+tch.sci.005,أ. سامية كريم,Samia Karim,teacher,Mathématiques,1ère Année,Mathématiques,1991-09-12,Tizi Ouzou

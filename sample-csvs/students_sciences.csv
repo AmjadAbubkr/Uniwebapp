@@ -1,0 +1,11 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+stu.sci.001,أحمد بن علي,Ahmed Ben Ali,student,Mathématiques,1ère Année,Mathématiques,2005-03-12,Alger
+stu.sci.002,فاطمة الزهراء, Fatima Zahra,student,Mathématiques,1ère Année,Mathématiques,2006-07-25,Oran
+stu.sci.003,محمد شوقي,Mohamed Chaouki,student,Mathématiques,2ème Année,Mathématiques,2004-11-08,Constantine
+stu.sci.004,سارة بن عيسى,Sara Ben Issa,student,Mathématiques,3ème Année,Mathématiques,2003-05-19,Annaba
+stu.sci.005,عبد الرحمن كريم,Abderrahmane Karim,student,Physique,1ère Année,Physique,2005-09-30,Tizi Ouzou
+stu.sci.006,نورة بلقاسم,Noura Belkacem,student,Physique,2ème Année,Physique,2004-02-14,Blida
+stu.sci.007,رضا يوسف,Redha Youcef,student,Physique,3ème Année,Physique,2003-08-22,Sétif
+stu.sci.008,أمينة حسان,Amina Hassen,student,Chimie,1ère Année,Chimie,2006-01-05,Oran
+stu.sci.009,كمال سعيد,Kamel Said,student,Chimie,2ème Année,Chimie,2004-06-17,Alger
+stu.sci.010,نبيلة عمر,Nabila Omar,student,Chimie,3ème Année,Chimie,2003-12-03,Tlemcen

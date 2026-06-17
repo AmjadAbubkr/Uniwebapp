@@ -1,0 +1,20 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth,faculty_id
+tch.sci.001,د. عبد الله سعيد,Dr. Abdellah Said,teacher,Génie Informatique,1ère Année,Informatique,1985-03-15,Alger,e9317edb-ff85-4ce0-b89a-aee5838d0a39
+tch.sci.002,د. فاطمة بن علي,Dr. Fatima Ben Ali,teacher,Mathématiques,2ème Année,Mathématiques,1982-07-22,Oran,e9317edb-ff85-4ce0-b89a-aee5838d0a39
+tch.sci.003,د. مالك حسين,Dr. Malik Hocine,teacher,Génie Informatique,3ème Année,Informatique,1979-11-08,Constantine,e9317edb-ff85-4ce0-b89a-aee5838d0a39
+tch.sci.004,د. نور الدين بلقاسم,Dr. Noureddine Belkacem,teacher,Physique,1ère Année,Physique,1987-05-30,Annaba,e9317edb-ff85-4ce0-b89a-aee5838d0a39
+tch.sci.005,أ. سامية كريم,Samia Karim,teacher,Mathématiques,1ère Année,Mathématiques,1991-09-12,Tizi Ouzou,e9317edb-ff85-4ce0-b89a-aee5838d0a39
+tch.ing.001,د. كمال جمال,Dr. Kamel Djemal,teacher,Génie Informatique,1ère Année,Informatique,1980-01-20,Alger,a9106b13-520d-4413-9d41-1c37af63e683
+tch.ing.002,د. ياسمين مراد,Dr. Yasmine Mourad,teacher,Génie Informatique,2ème Année,Informatique,1984-06-14,Oran,a9106b13-520d-4413-9d41-1c37af63e683
+tch.ing.003,د. رشيد بن عمر,Dr. Rachid Ben Omar,teacher,Génie Civil,3ème Année,Génie Civil,1978-04-05,Blida,a9106b13-520d-4413-9d41-1c37af63e683
+tch.ing.004,د. نبيلة حسان,Dr. Nabila Hassen,teacher,Génie Mécanique,2ème Année,Génie Mécanique,1986-12-18,Sétif,a9106b13-520d-4413-9d41-1c37af63e683
+tch.ing.005,أ. أمين وهاب,Amin Ouahab,teacher,Génie Informatique,3ème Année,Informatique,1992-08-25,Alger,a9106b13-520d-4413-9d41-1c37af63e683
+tch.med.001,د. سليمان رابح,Dr. Slimane Rabeh,teacher,Médecine Générale,1ère Année,Chirurgie,1975-09-10,Constantine,a77fd325-f402-4b62-875f-6e3b27963eaa
+tch.med.002,د. حليمة سعدي,Dr. Halima Saadi,teacher,Médecine Générale,2ème Année,Pédiatrie,1981-03-27,Oran,a77fd325-f402-4b62-875f-6e3b27963eaa
+tch.med.003,د. جمال الدين مزيان,Dr. Djamel Eddine Meziane,teacher,Pharmacie,1ère Année,Pharmacie,1977-07-14,Alger,a77fd325-f402-4b62-875f-6e3b27963eaa
+tch.lett.001,د. محمد أمين شريف,Dr. Mohamed Amine Cherif,teacher,Histoire,2ème Année,Histoire,1983-10-05,Tlemcen,54b13d79-1484-43e4-908e-d9b566e9e8df
+tch.lett.002,د. زينب يوسف,Dr. Zineb Youcef,teacher,Langue Française,1ère Année,Lettres Modernes,1988-02-19,Annaba,54b13d79-1484-43e4-908e-d9b566e9e8df
+tch.lett.003,أ. جمال بوجمعة,Djamel Boujemaa,teacher,Géographie,3ème Année,Géographie,1990-06-30,Béjaïa,54b13d79-1484-43e4-908e-d9b566e9e8df
+tch.eco.001,د. فريد بوزيد,Dr. Farid Bouzid,teacher,Sciences Économiques,1ère Année,Économie,1976-08-15,Alger,1e5f62c3-2f2b-455a-87ea-90bea7cf9e0f
+tch.eco.002,د. كريمة لحلو,Dr. Karima Lahlo,teacher,Sciences de Gestion,2ème Année,Gestion,1985-11-20,Oran,1e5f62c3-2f2b-455a-87ea-90bea7cf9e0f
+tch.eco.003,أ. عبد القادر بن يحي,Abdelkader Ben Yahia,teacher,Sciences Économiques,3ème Année,Économie,1993-04-08,Constantine,1e5f62c3-2f2b-455a-87ea-90bea7cf9e0f

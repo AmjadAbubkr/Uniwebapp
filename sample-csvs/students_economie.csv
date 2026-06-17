@@ -1,0 +1,9 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+stu.eco.001,عبد القادر بن محمد,Abdelkader Ben Mohamed,student,Sciences Économiques,1ère Année,Économie,2005-05-10,Alger
+stu.eco.002,نورة ياحي,Noura Yahi,student,Sciences Économiques,1ère Année,Économie,2006-10-18,Oran
+stu.eco.003,مصطفى لعجال,Mustapha Ladjal,student,Sciences Économiques,2ème Année,Économie,2004-12-07,Constantine
+stu.eco.004,حفيظة بن عبد الله,Hafidha Ben Abdellah,student,Sciences Économiques,3ème Année,Économie,2003-04-25,Annaba
+stu.eco.005,رمضان بوجمعة,Ramdane Boujemaa,student,Sciences de Gestion,1ère Année,Gestion,2005-07-30,Tizi Ouzou
+stu.eco.006,سهام محمد,Sihem Mohamed,student,Sciences de Gestion,2ème Année,Gestion,2004-02-12,Blida
+stu.eco.007,الشيخ بن عمر,Cheikh Ben Omar,student,Sciences de Gestion,3ème Année,Gestion,2003-11-16,Sétif
+stu.eco.008,حورية بن قاسم,Houria Benkacem,student,Sciences Économiques,2ème Année,Économie,2004-08-05,Alger

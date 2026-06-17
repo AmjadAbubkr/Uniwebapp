@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
   exam_session_2 NUMERIC(4,2) CHECK (exam_session_2 >= 0 AND exam_session_2 <= 20),
   subject_average NUMERIC(4,2), -- Automatically calculated
   credits_earned NUMERIC(4,2) DEFAULT 0.00, -- Automatically calculated
+  academic_year TEXT NOT NULL DEFAULT '2025-2026',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   UNIQUE(student_id, subject_id)
 );
@@ -194,8 +195,10 @@ BEGIN
   SELECT credits INTO v_credits FROM subjects WHERE id = NEW.subject_id;
   
   -- Determine which exam score to use.
-  -- If Exam 2 is taken, it replaces Exam 1
-  IF NEW.exam_session_2 IS NOT NULL THEN
+  -- Use the higher of Exam 1 and Exam 2 (max), per plan specification
+  IF NEW.exam_session_1 IS NOT NULL AND NEW.exam_session_2 IS NOT NULL THEN
+    v_exam_score := GREATEST(NEW.exam_session_1, NEW.exam_session_2);
+  ELSIF NEW.exam_session_2 IS NOT NULL THEN
     v_exam_score := NEW.exam_session_2;
   ELSE
     v_exam_score := NEW.exam_session_1;
@@ -204,11 +207,6 @@ BEGIN
   -- Compute the average only if classwork and the active exam are entered
   IF NEW.classwork IS NOT NULL AND v_exam_score IS NOT NULL THEN
     NEW.subject_average := (NEW.classwork * 0.3) + (v_exam_score * 0.7);
-    
-    -- Capping Rule: If a student did Exam 2 (catch-up session), their average is capped at 10.00
-    IF NEW.exam_session_2 IS NOT NULL AND NEW.subject_average > 10.00 THEN
-      NEW.subject_average := 10.00;
-    END IF;
   ELSE
     NEW.subject_average := NULL;
   END IF;
@@ -241,12 +239,12 @@ CREATE TRIGGER trg_calculate_enrollment_grades
 CREATE OR REPLACE FUNCTION trigger_enroll_students_in_new_subject()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO enrollments (student_id, subject_id)
+  INSERT INTO public.enrollments (student_id, subject_id)
   SELECT p.id, NEW.id
-  FROM profiles p
+  FROM public.profiles p
   WHERE p.role = 'student'
-    AND p.section = NEW.section
-    AND p.level = NEW.level
+    AND LOWER(p.section) = LOWER(NEW.section)
+    AND LOWER(p.level) = LOWER(NEW.level)
     AND p.faculty_id = NEW.faculty_id
   ON CONFLICT DO NOTHING;
   RETURN NEW;
@@ -265,11 +263,15 @@ CREATE OR REPLACE FUNCTION trigger_enroll_new_student_in_subjects()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.role = 'student' AND NEW.section IS NOT NULL AND NEW.level IS NOT NULL THEN
-    INSERT INTO enrollments (student_id, subject_id)
-    SELECT NEW.id, s.id
-    FROM subjects s
-    WHERE s.section = NEW.section
-      AND s.level = NEW.level
+    INSERT INTO public.enrollments (student_id, subject_id, academic_year)
+    SELECT NEW.id, s.id,
+      CASE
+        WHEN EXTRACT(MONTH FROM NOW()) >= 9 THEN (EXTRACT(YEAR FROM NOW())::TEXT || '-' || (EXTRACT(YEAR FROM NOW())+1)::TEXT)
+        ELSE ((EXTRACT(YEAR FROM NOW())-1)::TEXT || '-' || EXTRACT(YEAR FROM NOW())::TEXT)
+      END
+    FROM public.subjects s
+    WHERE LOWER(s.section) = LOWER(NEW.section)
+      AND LOWER(s.level) = LOWER(NEW.level)
       AND s.faculty_id = NEW.faculty_id
     ON CONFLICT DO NOTHING;
   END IF;

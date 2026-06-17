@@ -1,0 +1,9 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+stu.med.001,يوسف بلقاسم,Youcef Belkacem,student,Médecine Générale,1ère Année,Médecine,2005-02-14,Alger
+stu.med.002,حنان شريف,Hanane Cherif,student,Médecine Générale,1ère Année,Médecine,2006-06-23,Oran
+stu.med.003,سمير قدوري,Samir Kaddouri,student,Médecine Générale,2ème Année,Médecine,2004-09-11,Constantine
+stu.med.004,نادية بوجمعة,Nadia Boujemaa,student,Médecine Générale,2ème Année,Médecine,2004-01-30,Annaba
+stu.med.005,فارس بن عودة,Fares Ben Aouda,student,Médecine Générale,3ème Année,Médecine,2003-05-17,Tlemcen
+stu.med.006,سعيدة رحماني,Saida Rahmani,student,Médecine Générale,3ème Année,Médecine,2003-10-08,Sétif
+stu.med.007,عبد المجيد غزالي,Abdelmadjid Ghazali,student,Pharmacie,1ère Année,Pharmacie,2005-12-25,Blida
+stu.med.008,وهيبة عيسى,Wahiba Aissa,student,Pharmacie,2ème Année,Pharmacie,2004-07-14,Oran

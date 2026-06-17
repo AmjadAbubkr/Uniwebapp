@@ -1,0 +1,9 @@
+university_id,name_ar,name_fr,role,faculty_id,department
+dean.sci.001,د. أحمد محمد,Dr. Ahmed Mohamed,dean,e9317edb-ff85-4ce0-b89a-aee5838d0a39,Informatique
+dean.sci.002,د. سارة علي,Dr. Sarah Ali,assistant_dean,e9317edb-ff85-4ce0-b89a-aee5838d0a39,Mathématiques
+dean.eng.001,د. عمر خالد,Dr. Omar Khaled,dean,a9106b13-520d-4413-9d41-1c37af63e683,Génie Civil
+dean.eng.002,د. ليلى أحمد,Dr. Leila Ahmed,assistant_dean,a9106b13-520d-4413-9d41-1c37af63e683,Génie Mécanique
+dean.med.001,د. عبد الرحمن نور,Dr. Abderrahmane Nour,dean,a77fd325-f402-4b62-875f-6e3b27963eaa,Chirurgie
+dean.med.002,د. مريم بن سعيد,Dr. Mariam Ben Said,assistant_dean,a77fd325-f402-4b62-875f-6e3b27963eaa,Pédiatrie
+dean.lett.001,د. خالد بوزيان,Dr. Khaled Bouziane,dean,54b13d79-1484-43e4-908e-d9b566e9e8df,Histoire
+dean.eco.001,د. نورة حسين,Dr. Noura Hussein,dean,1e5f62c3-2f2b-455a-87ea-90bea7cf9e0f,Sciences Économiques

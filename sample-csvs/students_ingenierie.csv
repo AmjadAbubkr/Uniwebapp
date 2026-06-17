@@ -1,0 +1,11 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+stu.ing.001,خالد بوزيد,Khaled Bouzid,student,Génie Informatique,1ère Année,Informatique,2005-04-18,Alger
+stu.ing.002,مريم جلال,Mariam Djellal,student,Génie Informatique,1ère Année,Informatique,2006-08-07,Oran
+stu.ing.003,علي مراد,Ali Mourad,student,Génie Informatique,2ème Année,Informatique,2004-10-22,Constantine
+stu.ing.004,رفيدة بن عيسى,Rafida Ben Issa,student,Génie Informatique,2ème Année,Informatique,2004-03-15,Annaba
+stu.ing.005,عماد الدين سعيد,Imad Eddine Said,student,Génie Informatique,3ème Année,Informatique,2003-07-09,Béjaïa
+stu.ing.006,حليمة فؤاد,Halima Fouad,student,Génie Informatique,3ème Année,Informatique,2003-01-28,Tizi Ouzou
+stu.ing.007,جمال الدين ناصر,Djamel Eddine Nacer,student,Génie Civil,1ère Année,Génie Civil,2005-11-12,Blida
+stu.ing.008,زهرة أحمد,Zahra Ahmed,student,Génie Civil,2ème Année,Génie Civil,2004-05-30,Sétif
+stu.ing.009,أمين عبد السلام,Amin Abdesselam,student,Génie Mécanique,1ère Année,Génie Mécanique,2005-09-04,Alger
+stu.ing.010,نسيمة شريف,Nassima Cherif,student,Génie Mécanique,3ème Année,Génie Mécanique,2003-04-19,Oran

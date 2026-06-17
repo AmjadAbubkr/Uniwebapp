@@ -1,12 +1,134 @@
 @import "tailwindcss";
 
 /* 
-  Custom styles for our university application.
-  Tailwind v4 handles all utilities automatically.
+  King Faisal University — Design System
+  Inspired by kau.edu.sa / DESIGN.md
+  Light-only theme, IBM Plex Sans Arabic, #067647 accent
 */
 
+:root {
+  /* Primary palette */
+  --color-primary: #067647;
+  --color-secondary: #1b8354;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #092a1e;
+  --color-text: #000000;
+  --color-text-secondary: #666666;
+  --color-border: #f3fcf6;
+  --color-accent-deep: #074d31;
+  --color-accent-light: #f3fcf6;
+  --color-badge-bg: #e5e7eb;
+  --color-badge-border: #d2d6db;
+  
+  /* Spacing: 8px base unit */
+  --spacing-base: 8px;
+  
+  /* Border radius */
+  --radius-subtle: 4px;
+  --radius-card: 16px;
+  --radius-button: 8px;
+  
+  /* Shadows (tinted, from DESIGN.md) */
+  --shadow-card: rgba(16, 24, 40, 0.08) 0px 12px 16px -4px, rgba(16, 24, 40, 0.03) 0px 4px 6px -2px;
+  --shadow-sm: rgba(16, 24, 40, 0.04) 0px 2px 4px -1px;
+}
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Focus ring: green accent instead of indigo */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Primary Button — from DESIGN.md */
+.btn-primary {
+  background: #067647;
+  color: #000000;
+  border-radius: 0px;
+  padding: 4px 0px;
+  font-size: 16px;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+}
+
+/* Filled Button — from DESIGN.md */
+.btn-filled {
+  background: #1b8354;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 0.666667px solid rgb(27, 131, 84);
+  cursor: pointer;
+}
+
+/* Ghost Button 2 — from DESIGN.md */
+.btn-ghost {
+  background: transparent;
+  color: #161616;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+/* Outline Button — from DESIGN.md */
+.btn-outline {
+  background: transparent;
+  color: #161616;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 0.666667px solid rgb(210, 214, 219);
+  cursor: pointer;
+}
+
+/* Card — from DESIGN.md */
+.card {
+  background: #ffffff;
+  border-radius: 0px;
+  padding: 0px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Page transition animation for bottom nav tab switching */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-in {
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
+/* Safe area insets for notched devices (Dynamic Island, home indicator) */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* Custom print styles for the portrait A4 transcript */

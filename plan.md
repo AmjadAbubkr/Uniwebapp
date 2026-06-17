@@ -30,35 +30,35 @@ This document outlines the step-by-step development process for the React + Vite
 
 
 ## Phase 4: Admin Dashboard
-- [ ] Home page with university-wide stats (total faculties, deans, teachers, students, activity logs).
-- [ ] Office panel:
-  - [ ] Create Faculty.
-  - [ ] Create Dean/Assistant accounts.
-- [ ] Profile page (change password).
+- [x] Home page with university-wide stats (total faculties, deans, teachers, students, recent accounts).
+- [x] Office panel:
+  - [x] Create Faculty.
+  - [x] Create Dean/Assistant accounts.
+- [x] Profile page (change password).
 
 ## Phase 5: Dean & Assistant Dashboard
-- [ ] Home page with analytics (pass rates, distributions, subjects charts).
-- [ ] Office panel:
-  - [ ] CSV Uploader (with pre-validation and duplication skip).
-  - [ ] Curriculum manager (Create subjects, link to units, set credits, assign teacher).
-  - [ ] Promotion Manager (promote students by level/section).
-  - [ ] Announcements creator.
-- [ ] Profile page.
+- [x] Home page with analytics (pass rates, distributions, subjects charts).
+- [x] Office panel:
+  - [x] CSV Uploader (with pre-validation and duplication skip).
+  - [x] Curriculum manager (Create subjects, link to units, set credits, assign teacher).
+  - [x] Promotion Manager (promote students by level/section).
+  - [x] Announcements creator.
+- [x] Profile page.
 
 ## Phase 6: Teacher Dashboard
-- [ ] Home page with announcements.
-- [ ] Subjects panel:
-  - [ ] Spreadsheet grade editor (inputs for أعمال, امتحان 1, امتحان 2).
-  - [ ] Auto-calculate subject average and credit rewards.
-  - [ ] Subject-specific announcements creator.
-- [ ] Profile page.
+- [x] Home page with announcements.
+- [x] Subjects panel:
+  - [x] Spreadsheet grade editor (inputs for أعمال, امتحان 1, امتحان 2).
+  - [x] Auto-calculate subject average and credit rewards.
+  - [x] Subject-specific announcements creator.
+- [x] Profile page.
 
 ## Phase 7: Student Dashboard
-- [ ] Home page with announcements feed.
-- [ ] Grades panel:
-  - [ ] Grades list table.
-  - [ ] Bilingual A4 portrait print/PDF view (`window.print()` using CSS `@media print`).
-- [ ] Profile page.
+- [x] Home page with announcements feed.
+- [x] Grades panel:
+  - [x] Grades list table.
+  - [x] Bilingual A4 portrait print/PDF view (`window.print()` using CSS `@media print`).
+- [x] Profile page.
 
 ## Phase 8: Verification & Testing
 - [ ] Verify automatic enrollment triggers.
@@ -66,3 +66,6 @@ This document outlines the step-by-step development process for the React + Vite
   - [ ] `(Classwork * 0.3) + (max(Exam 1, Exam 2) * 0.7)`.
   - [ ] Credit award condition ($\ge 10.00$).
 - [ ] Verify Promotion Manager preserves grade history.
+
+## Change Log
+- **DB trigger fix**: Grade calculation updated to use `max(Exam 1, Exam 2)` instead of "Exam 2 replaces Exam 1". Removed Exam 2 average cap of 10.00 that contradicted the plan formula.

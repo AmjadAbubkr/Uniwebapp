@@ -1,0 +1,6 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+tch.ing.001,د. كمال جمال,Dr. Kamel Djemal,teacher,Génie Informatique,1ère Année,Informatique,1980-01-20,Alger
+tch.ing.002,د. ياسمين مراد,Dr. Yasmine Mourad,teacher,Génie Informatique,2ème Année,Informatique,1984-06-14,Oran
+tch.ing.003,د. رشيد بن عمر,Dr. Rachid Ben Omar,teacher,Génie Civil,3ème Année,Génie Civil,1978-04-05,Blida
+tch.ing.004,د. نبيلة حسان,Dr. Nabila Hassen,teacher,Génie Mécanique,2ème Année,Génie Mécanique,1986-12-18,Sétif
+tch.ing.005,أ. أمين وهاب,Amin Ouahab,teacher,Génie Informatique,3ème Année,Informatique,1992-08-25,Alger

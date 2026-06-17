@@ -1,0 +1,9 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+stu.lett.001,إبراهيم مزيان,Ibrahim Meziane,student,Histoire,1ère Année,Histoire,2005-03-22,Alger
+stu.lett.002,كريمة عثمان,Karima Osmane,student,Histoire,1ère Année,Histoire,2006-09-15,Oran
+stu.lett.003,مراد بن يحي,Mourad Ben Yahia,student,Histoire,2ème Année,Histoire,2004-11-03,Constantine
+stu.lett.004,جميلة صحراوي,Djamila Sahraoui,student,Histoire,3ème Année,Histoire,2003-06-28,Tlemcen
+stu.lett.005,لطيفة بن أحمد,Latifa Ben Ahmed,student,Langue Française,1ère Année,Lettres Modernes,2005-08-11,Annaba
+stu.lett.006,ناصر بوعلام,Nacer Boualem,student,Langue Française,2ème Année,Lettres Modernes,2004-04-09,Béjaïa
+stu.lett.007,عتيقة مولاي,Atika Moulay,student,Géographie,1ère Année,Géographie,2006-01-19,Oran
+stu.lett.008,عبد الحفيظ قادري,Abdelhafidh Kadri,student,Géographie,3ème Année,Géographie,2003-09-07,Sétif

@@ -1,0 +1,4 @@
+university_id,name_ar,name_fr,role,section,level,department,date_of_birth,place_of_birth
+tch.lett.001,د. محمد أمين شريف,Dr. Mohamed Amine Cherif,teacher,Histoire,2ème Année,Histoire,1983-10-05,Tlemcen
+tch.lett.002,د. زينب يوسف,Dr. Zineb Youcef,teacher,Langue Française,1ère Année,Lettres Modernes,1988-02-19,Annaba
+tch.lett.003,أ. جمال بوجمعة,Djamel Boujemaa,teacher,Géographie,3ème Année,Géographie,1990-06-30,Béjaïa
