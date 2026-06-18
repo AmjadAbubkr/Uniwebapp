@@ -127,7 +127,7 @@ export const DeanDashboard: React.FC = () => {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
-        <header className="h-20 bg-white border-b border-[#f3fcf6] flex items-center justify-between px-8">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#f3fcf6]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
@@ -147,7 +147,7 @@ export const DeanDashboard: React.FC = () => {
           </button>
         </header>
 
-        <div className="p-8 max-w-7xl w-full mx-auto space-y-8">
+        <div className="p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-4 lg:space-y-8">
           {error && (
             <div className="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-md flex items-start space-x-2 text-rose-800 text-sm">
               <ShieldAlert className="w-5 h-5 shrink-0" /><span>{error}</span>
@@ -167,13 +167,13 @@ export const DeanDashboard: React.FC = () => {
           {activeTab === 'announcements' && <AnnouncementsManager facultyId={facultyId!} profileId={profile?.id!} />}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-sm font-bold text-[#000000] mb-4 uppercase tracking-wider">
                   {t('Langue / اللغة', 'اللغة')}
                 </h3>
                 <LangToggle />
               </div>
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-8">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
                   <KeyRound className="w-5 h-5 text-[#067647]" />
                   <span>{t('Modifier le Mot de Passe', 'تغيير كلمة المرور')}</span>
@@ -200,8 +200,8 @@ export const DeanDashboard: React.FC = () => {
       </main>
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 flex justify-around items-center bg-white/95 backdrop-blur-md border border-[#f3fcf6] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] rounded-2xl h-16 max-w-[95vw] sm:max-w-md px-2 overflow-hidden"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)', width: 'stretch' }}
+        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[
           { key: 'home', icon: LayoutDashboard, label: 'الرئيسية' },
@@ -214,14 +214,14 @@ export const DeanDashboard: React.FC = () => {
           <button
             key={key}
             onClick={() => setActiveTab(key as any)}
-            className="relative flex flex-col items-center justify-center w-full h-full rounded-lg transition-all cursor-pointer"
+            className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
             <Icon className={`w-4 h-4 transition-colors ${activeTab === key ? 'text-[#067647]' : 'text-[#666666]'}`} />
             <span className={`text-[8px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#067647] font-semibold' : 'text-[#666666]'}`}>
               {label}
             </span>
             {activeTab === key && (
-              <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-1 bg-[#067647] rounded-full" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#067647] rounded-full opacity-90" />
             )}
           </button>
         ))}
@@ -267,7 +267,7 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           { label: t('Matières', 'المواد'), value: stats.subjects, Icon: BookOpen },
           { label: t('Annonces', 'الإعلانات'), value: stats.announcements, Icon: Megaphone },
         ].map(({ label, value, Icon }) => (
-          <div key={label} className="bg-white p-6 rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px]">
+          <div key={label} className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset]">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{label}</p>
@@ -281,7 +281,7 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
         ))}
       </div>
 
-      <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+      <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
         <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
           <Activity className="w-5 h-5 text-[#067647]" />
           <span>{t('Moyennes par Matière', 'المعدلات حسب المادة')}</span>
@@ -478,7 +478,7 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* CSV upload card */}
-        <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-8">
+        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
           <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
             <Upload className="w-5 h-5 text-[#067647]" />
             <span>{t('Importer CSV', 'رفع ملف CSV')}</span>
@@ -521,7 +521,7 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
         </div>
 
         {/* Manual form card */}
-        <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-8">
+        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
           <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
             <Plus className="w-5 h-5 text-[#067647]" />
             <span>{t('Ajouter Manuellement', 'يدوي')}</span>
@@ -579,7 +579,7 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 
       </div>
 
-      <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+      <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-md font-bold text-[#000000]">
             Utilisateurs Enregistrés ({usersList.length})
@@ -852,7 +852,7 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Existing manual form card */}
-        <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
           <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
             <Plus className="w-5 h-5 text-[#067647]" />
             <span>{t('Créer une Matière', 'إنشاء مادة')}</span>
@@ -909,7 +909,7 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
         </div>
 
         {/* New CSV upload card */}
-        <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
           <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
             <FileSpreadsheet className="w-5 h-5 text-[#067647]" />
             <span>{t('Importer Matières CSV', 'رفع ملف')}</span>
@@ -955,7 +955,7 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 
       </div>
 
-      <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+      <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
         <h3 className="text-md font-bold text-[#000000] mb-4">Matières Existantes ({subjects.length})</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
@@ -1104,7 +1104,7 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+      <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
         <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
           <TrendingUp className="w-5 h-5 text-[#067647]" />
           <span>{t('Promotion des Étudiants', 'ترقية الطلاب')}</span>
@@ -1208,7 +1208,7 @@ const AnnouncementsManager: React.FC<{ facultyId: string; profileId: string }> =
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+      <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
         <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
           <Plus className="w-5 h-5 text-[#067647]" />
           <span>{t('Nouvelle Annonce', 'إعلان جديد')}</span>
@@ -1224,7 +1224,7 @@ const AnnouncementsManager: React.FC<{ facultyId: string; profileId: string }> =
 
       <div className="space-y-4">
         {announcements.map(a => (
-          <div key={a.id} className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6 flex justify-between items-start">
+          <div key={a.id} className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6 flex justify-between items-start">
             <div>
               <h4 className="text-sm font-bold text-[#000000]">{a.title}</h4>
               <p className="text-xs text-[#666666] mt-1 whitespace-pre-wrap">{a.content}</p>

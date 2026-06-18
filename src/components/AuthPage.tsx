@@ -175,8 +175,8 @@ export const AuthPage: React.FC = () => {
       </div>
 
       {/* RIGHT PANEL: Auth Card */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12">
-        <div className="w-full max-w-md bg-white rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 lg:p-12">
+        <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.10),0_1px_0_rgba(255,255,255,0.6)_inset] p-6 md:p-8">
           
           {/* Logo / Header for Mobile */}
           <div className="flex flex-col items-center mb-8 lg:hidden">
@@ -188,7 +188,7 @@ export const AuthPage: React.FC = () => {
           </div>
 
           {/* Tab Selection */}
-          <div className="flex p-1 bg-[#f3fcf6] rounded-lg mb-8">
+          <div className="flex p-1 bg-[#f3fcf6]/80 backdrop-blur-sm rounded-[14px] mb-6 md:mb-8">
             <button
               type="button"
               className={`flex-1 py-3 text-sm font-semibold rounded-md transition-all duration-200 cursor-pointer ${

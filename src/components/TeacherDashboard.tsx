@@ -119,7 +119,7 @@ export const TeacherDashboard: React.FC = () => {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
-        <header className="h-20 bg-white border-b border-[#f3fcf6] flex items-center justify-between px-8">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#f3fcf6]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Annonces', 'الإعلانات')}
@@ -136,7 +136,7 @@ export const TeacherDashboard: React.FC = () => {
           </button>
         </header>
 
-        <div className="p-8 max-w-7xl w-full mx-auto space-y-8">
+        <div className="p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-4 lg:space-y-8">
           {error && (
             <div className="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-md flex items-start space-x-2 text-rose-800 text-sm">
               <ShieldAlert className="w-5 h-5 shrink-0" /><span>{error}</span>
@@ -153,13 +153,13 @@ export const TeacherDashboard: React.FC = () => {
           {activeTab === 'subjects' && <TeacherSubjects teacherId={profile?.id!} />}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-sm font-bold text-[#000000] mb-4 uppercase tracking-wider">
                   {t('Langue / اللغة', 'اللغة')}
                 </h3>
                 <LangToggle />
               </div>
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-8">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
                   <KeyRound className="w-5 h-5 text-[#067647]" />
                   <span>{t('Modifier le Mot de Passe', 'تغيير كلمة المرور')}</span>
@@ -186,8 +186,8 @@ export const TeacherDashboard: React.FC = () => {
       </main>
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 flex justify-around items-center bg-white/95 backdrop-blur-md border border-[#f3fcf6] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] rounded-2xl h-16 max-w-[90vw] sm:max-w-sm px-3 overflow-hidden"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)', width: 'stretch' }}
+        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[
           { key: 'home', icon: Megaphone, label: 'إعلانات' },
@@ -197,14 +197,14 @@ export const TeacherDashboard: React.FC = () => {
           <button
             key={key}
             onClick={() => setActiveTab(key as any)}
-            className="relative flex flex-col items-center justify-center w-full h-full rounded-lg transition-all cursor-pointer"
+            className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
             <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#067647]' : 'text-[#666666]'}`} />
             <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#067647] font-semibold' : 'text-[#666666]'}`}>
               {label}
             </span>
             {activeTab === key && (
-              <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-1 bg-[#067647] rounded-full" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#067647] rounded-full opacity-90" />
             )}
           </button>
         ))}
@@ -229,13 +229,13 @@ const TeacherHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   return (
     <div className="space-y-4">
       {announcements.length === 0 ? (
-        <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-12 text-center">
+        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-12 text-center">
           <Megaphone className="w-12 h-12 mx-auto text-[#666666] mb-4" />
           <p className="text-[#666666]">{t('Aucune annonce', 'لا توجد إعلانات')}</p>
         </div>
       ) : (
         announcements.map(a => (
-          <div key={a.id} className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+          <div key={a.id} className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
             <div className="flex items-start space-x-3">
               <div className="w-10 h-10 bg-[#f3fcf6] rounded-lg flex items-center justify-center text-[#067647] shrink-0">
                 <Megaphone className="w-5 h-5" />
@@ -348,7 +348,7 @@ const TeacherSubjects: React.FC<{ teacherId: string }> = ({ teacherId }) => {
             <button
               key={s.id}
               onClick={() => handleSelectSubject(s.id)}
-              className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6 text-left hover:border-[#067647] transition-all cursor-pointer"
+              className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6 text-left hover:border-[#067647] transition-all cursor-pointer"
             >
               <h4 className="text-sm font-bold text-[#000000]">{s.name_fr}</h4>
               <p className="text-xs text-[#666666] mt-1">{s.unit_name_fr} • {s.credits} crédits • S{s.semester}</p>
@@ -371,7 +371,7 @@ const TeacherSubjects: React.FC<{ teacherId: string }> = ({ teacherId }) => {
           </div>
 
           {showAnnouncementForm && (
-            <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+            <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
               <form onSubmit={handleCreateAnnouncement} className="space-y-3">
                 <input type="text" required placeholder={t('Titre', 'العنوان')} value={annTitle} onChange={e => setAnnTitle(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]" />
                 <textarea required rows={3} placeholder={t('Contenu', 'المحتوى')} value={annContent} onChange={e => setAnnContent(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647] resize-none" />
@@ -395,7 +395,7 @@ const TeacherSubjects: React.FC<{ teacherId: string }> = ({ teacherId }) => {
             </div>
           )}
 
-          <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6 overflow-x-auto">
+          <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6 overflow-x-auto">
             <h4 className="text-md font-bold text-[#000000] mb-4">{t('Saisie des Notes', 'إدخال الدرجات')} ({enrollments.length} {t('étudiants', 'طالب')})</h4>
             {enrollments.length === 0 ? (
               <p className="text-sm text-[#666666] text-center py-6">{t('Aucun étudiant inscrit', 'لا يوجد طلاب مسجلون')}</p>

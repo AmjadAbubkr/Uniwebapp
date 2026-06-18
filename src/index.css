@@ -133,7 +133,29 @@ body {
 
 /* Custom print styles for the portrait A4 transcript */
 @media print {
-  body {
+/* === Liquid Glass tokens (DESIGN.md) === */
+:root {
+  --glass-light:           rgba(255, 255, 255, 0.55);
+  --glass-light-heavy:     rgba(255, 255, 255, 0.80);
+  --glass-border-light:    rgba(255, 255, 255, 0.35);
+  --shadow-glass:          0 8px 32px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.5) inset;
+  --shadow-float:          0 24px 64px rgba(0,0,0,0.20);
+  --radius-lg:             20px;
+  --radius-full:           9999px;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass { background: rgba(242, 242, 247, 0.97) !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
     background: white;
     color: black;
     font-size: 12px;

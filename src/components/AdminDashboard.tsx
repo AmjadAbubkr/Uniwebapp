@@ -509,7 +509,7 @@ export const AdminDashboard: React.FC = () => {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
         {/* Header bar */}
-        <header className="h-20 bg-white border-b border-[#f3fcf6] flex items-center justify-between px-8">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#f3fcf6]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
@@ -530,7 +530,7 @@ export const AdminDashboard: React.FC = () => {
         </header>
 
         {/* Dynamic Inner Page */}
-        <div className="p-8 max-w-7xl w-full mx-auto space-y-8">
+        <div className="p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-4 lg:space-y-8">
           
           {/* Alerts */}
           {error && (
@@ -555,10 +555,10 @@ export const AdminDashboard: React.FC = () => {
             <div className="space-y-8">
               
               {/* Stat Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
                 
                 {/* Faculties */}
-                <div className="bg-white p-6 rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] hover:shadow-md transition-all">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Facultés', 'الكليات')}</p>
@@ -571,7 +571,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Deans */}
-                <div className="bg-white p-6 rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] hover:shadow-md transition-all">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Doyens', 'العمداء')}</p>
@@ -584,7 +584,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Teachers */}
-                <div className="bg-white p-6 rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] hover:shadow-md transition-all">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Professeurs', 'الأساتذة')}</p>
@@ -597,7 +597,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Students */}
-                <div className="bg-white p-6 rounded-lg border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] hover:shadow-md transition-all">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Étudiants', 'الطلاب')}</p>
@@ -612,7 +612,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Recent Activity Panel */}
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
                   <Activity className="w-5 h-5 text-[#067647]" />
                   <span>{t('Derniers Comptes Activés', 'أحدث الحسابات النشطة')}</span>
@@ -658,7 +658,7 @@ export const AdminDashboard: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
 
                   {/* Existing manual form card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
                       <Plus className="w-5 h-5 text-[#067647]" />
                       <span>{t('Créer une Faculté', 'إنشاء كلية')}</span>
@@ -701,7 +701,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
 
                   {/* New CSV upload card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
                       <FileSpreadsheet className="w-5 h-5 text-[#067647]" />
                       <span>{t('Importer Facultés CSV', 'رفع ملف')}</span>
@@ -744,7 +744,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* List of existing faculties */}
-                <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                   <h4 className="text-sm font-bold text-[#666666] uppercase tracking-wider mb-4">
                     Facultés Existantes ({facultiesList.length})
                   </h4>
@@ -764,7 +764,7 @@ export const AdminDashboard: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                   {/* Manual form card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
                       <Plus className="w-5 h-5 text-[#067647]" />
                       <span>{t('Ajouter Manuellement', 'يدوي')}</span>
@@ -868,7 +868,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
 
                   {/* CSV upload card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
                       <Upload className="w-5 h-5 text-[#067647]" />
                       <span>{t('Importer CSV', 'رفع ملف')}</span>
@@ -912,7 +912,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Table of active and pending Deans */}
-                <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+                <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                   <h3 className="text-md font-bold text-[#000000] mb-4">
                     {t('Comptes Créés', 'الحسابات المسجلة')}
                   </h3>
@@ -1072,13 +1072,13 @@ export const AdminDashboard: React.FC = () => {
              ========================================== */}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-6">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-sm font-bold text-[#000000] mb-4 uppercase tracking-wider">
                   {t('Langue / اللغة', 'اللغة')}
                 </h3>
                 <LangToggle />
               </div>
-              <div className="bg-white border border-[#f3fcf6] shadow-[rgba(16,24,40,0.08)_0px_12px_16px_-4px,rgba(16,24,40,0.03)_0px_4px_6px_-2px] rounded-lg p-8">
+              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
                   <KeyRound className="w-5 h-5 text-[#067647]" />
                   <span>{t('Modifier le Mot de Passe', 'تغيير كلمة المرور')}</span>
@@ -1131,8 +1131,8 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 flex justify-around items-center bg-white/95 backdrop-blur-md border border-[#f3fcf6] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] rounded-2xl h-16 max-w-[90vw] sm:max-w-sm px-3 overflow-hidden"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)', width: 'stretch' }}
+        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[
           { key: 'home', icon: LayoutDashboard, label: 'الرئيسية' },
@@ -1142,14 +1142,14 @@ export const AdminDashboard: React.FC = () => {
           <button
             key={key}
             onClick={() => setActiveTab(key as any)}
-            className="relative flex flex-col items-center justify-center w-full h-full rounded-lg transition-all cursor-pointer"
+            className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
             <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#067647]' : 'text-[#666666]'}`} />
             <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#067647] font-semibold' : 'text-[#666666]'}`}>
               {label}
             </span>
             {activeTab === key && (
-              <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-1 bg-[#067647] rounded-full" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#067647] rounded-full opacity-90" />
             )}
           </button>
         ))}
