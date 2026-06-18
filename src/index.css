@@ -7,16 +7,16 @@
 */
 
 :root {
-  /* Primary palette */
-  --color-primary: #067647;
-  --color-secondary: #1b8354;
+  /* Primary palette — Université Roi Fayçal brand colors */
+  --color-primary: #00b4d8;
+  --color-secondary: #0099c2;
   --color-bg: #ffffff;
-  --color-bg-secondary: #092a1e;
+  --color-bg-secondary: #0a0e1a;
   --color-text: #000000;
   --color-text-secondary: #666666;
-  --color-border: #f3fcf6;
-  --color-accent-deep: #074d31;
-  --color-accent-light: #f3fcf6;
+  --color-border: #e8f7fc;
+  --color-accent-deep: #0077a8;
+  --color-accent-light: #e8f7fc;
   --color-badge-bg: #e5e7eb;
   --color-badge-border: #d2d6db;
   
@@ -47,7 +47,7 @@ body {
 
 /* Primary Button — from DESIGN.md */
 .btn-primary {
-  background: #067647;
+  background: #00b4d8;
   color: #000000;
   border-radius: 0px;
   padding: 4px 0px;
@@ -59,13 +59,13 @@ body {
 
 /* Filled Button — from DESIGN.md */
 .btn-filled {
-  background: #1b8354;
+  background: #00b4d8;
   color: #ffffff;
   border-radius: 4px;
   padding: 8px 16px;
   font-size: 16px;
   font-weight: 500;
-  border: 0.666667px solid rgb(27, 131, 84);
+  border: 0.666667px solid rgb(0, 180, 216);
   cursor: pointer;
 }
 

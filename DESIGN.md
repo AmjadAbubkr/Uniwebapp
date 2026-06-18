@@ -12,7 +12,7 @@ The hero section leads with "جامعة الملك عبدالعزيز" followed 
 - IBM Plex Sans Arabic as the heading font (custom web font loaded via @font-face)
 - IBM Plex Sans Arabic as the body font for all running text
 - Light/white background (#ffffff) as the primary canvas
-- Primary accent `#067647` used for CTAs and brand highlights
+- Primary accent `#00b4d8` used for CTAs and brand highlights
 - 5 shadow level(s) detected — tinted shadows
 - Rounded corners (4px+) creating a friendly, approachable feel
 - Tags: light, rounded, accented, sans-serif
@@ -20,28 +20,28 @@ The hero section leads with "جامعة الملك عبدالعزيز" followed 
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Primary Accent** (`#067647`) · `--color-primary`: Brand color, CTA backgrounds, link text, interactive highlights.
-- **Secondary Accent** (`#1b8354`) · `--color-secondary`: Secondary brand, hover states, complementary highlights.
+- **Primary Accent** (`#00b4d8`) · `--color-primary`: Brand color, CTA backgrounds, link text, interactive highlights.
+- **Secondary Accent** (`#0099c2`) · `--color-secondary`: Secondary brand, hover states, complementary highlights.
 - **Background** (`#ffffff`) · `--color-bg`: Page background, primary canvas.
-- **Background Secondary** (`#092a1e`) · `--color-bg-secondary`: Cards, surfaces, alternating sections.
+- **Background Secondary** (`#0a0e1a`) · `--color-bg-secondary`: Cards, surfaces, alternating sections.
 
 ### Text
 - **Text Primary** (`#000000`) · `--color-text`: Headings and body text.
 - **Text Secondary** (`#666666`) · `--color-text-secondary`: Muted text, captions, placeholders.
 
 ### Borders & Surfaces
-- **Border** (`#f3fcf6`) · `--color-border`: Dividers, outlines, input borders.
+- **Border** (`#e8f7fc`) · `--color-border`: Dividers, outlines, input borders.
 
 ### Full Extracted Palette
 
 | # | Hex | CSS Variable | Role | Area | Contrast |
 |---|---|---|---|---|---|
 | 1 | `#ffffff` | `--palette-1` | block | large | text-dark |
-| 2 | `#092a1e` | `--palette-2` | section | large | text-light |
-| 3 | `#074d31` | `--palette-3` | section | large | text-light |
-| 4 | `#f3fcf6` | `--palette-4` | button | large | text-dark |
-| 5 | `#067647` | `--palette-5` | block | medium | text-light |
-| 6 | `#1b8354` | `--palette-6` | text-accent | medium | text-light |
+| 2 | `#0a0e1a` | `--palette-2` | section | large | text-light |
+| 3 | `#0077a8` | `--palette-3` | section | large | text-light |
+| 4 | `#e8f7fc` | `--palette-4` | button | large | text-dark |
+| 5 | `#00b4d8` | `--palette-5` | block | medium | text-light |
+| 6 | `#0099c2` | `--palette-6` | text-accent | medium | text-light |
 | 7 | `#e5e7eb` | `--palette-7` | badge | small | text-dark |
 | 8 | `#d2d6db` | `--palette-8` | badge | small | text-dark |
 | 9 | `#14573a` | `--palette-9` | text-accent | small | text-light |
@@ -219,7 +219,7 @@ The hero section leads with "جامعة الملك عبدالعزيز" followed 
 ### Do
 - Use `#ffffff` as the primary background color
 - Use `IBM Plex Sans Arabic` for all headings and `IBM Plex Sans Arabic` for body text
-- Use `#067647` as the single dominant accent/CTA color
+- Use `#00b4d8` as the single dominant accent/CTA color
 - Maintain `8px` as the base spacing unit — all gaps should be multiples
 - Use rounded corners (`4px`+) consistently for all interactive elements
 - Apply the shadow system for elevation — use the extracted shadow values
@@ -253,18 +253,18 @@ The hero section leads with "جامعة الملك عبدالعزيز" followed 
 ```
 Background:  #ffffff
 Text:        #000000
-Accent:      #067647
-Secondary:   #1b8354
-Border:      #f3fcf6
+Accent:      #00b4d8
+Secondary:   #0099c2
+Border:      #e8f7fc
 ```
 
 ### Example Prompts
 
-1. "Build a hero section with a `#ffffff` background, `IBM Plex Sans Arabic` heading in `#000000`, and a `#067647` CTA button with 0px radius."
-2. "Create a pricing card using background `#092a1e`, border `#f3fcf6`, `IBM Plex Sans Arabic` for text, and 24px padding."
-3. "Design a navigation bar — `#ffffff` background, `#000000` links, `#067647` for active state."
+1. "Build a hero section with a `#ffffff` background, `IBM Plex Sans Arabic` heading in `#000000`, and a `#00b4d8` CTA button with 0px radius."
+2. "Create a pricing card using background `#0a0e1a`, border `#e8f7fc`, `IBM Plex Sans Arabic` for text, and 24px padding."
+3. "Design a navigation bar — `#ffffff` background, `#000000` links, `#00b4d8` for active state."
 4. "Build a feature grid with 3 columns, 24px gap, each card using the card component style."
-5. "Create a footer with `#000000` background, `#ffffff` text, and 16px padding."
+5. "Create a footer with `#0a0e1a` background, `#ffffff` text, and 16px padding."
 
 ### Iteration Guide
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LanguageContext';
 import { LangToggle } from './LangToggle';
+import logo from '../assets/logo.png';
 import { supabase } from '../lib/supabase';
 import jsPDF from 'jspdf';
 import { toPng } from 'html-to-image';
@@ -73,13 +74,13 @@ export const StudentDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-white safe-top">
-      <aside className="hidden lg:flex w-64 bg-[#092a1e] text-[#f3fcf6] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#074d31]">
+      <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
-          <div className="p-6 border-b border-[#074d31] flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#067647] rounded-lg flex items-center justify-center font-bold text-white shadow-md">KF</div>
+          <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
+            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain" /></div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
-              <span className="text-xs text-[#1b8354] font-semibold uppercase">Student Portal</span>
+              <span className="text-xs text-[#0099c2] font-semibold uppercase">Student Portal</span>
             </div>
           </div>
           <nav className="p-4 space-y-1">
@@ -93,8 +94,8 @@ export const StudentDashboard: React.FC = () => {
                 onClick={() => setActiveTab(key as any)}
                 className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                   activeTab === key
-                    ? 'bg-[#067647] text-white shadow-lg'
-                    : 'text-[#1b8354] hover:bg-[#074d31] hover:text-white'
+                    ? 'bg-[#00b4d8] text-white shadow-lg'
+                    : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -103,12 +104,12 @@ export const StudentDashboard: React.FC = () => {
             ))}
           </nav>
         </div>
-        <div className="p-4 border-t border-[#074d31] space-y-3">
-          <div className="px-4 py-3 bg-[#074d31]/50 rounded-lg flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-[#067647]/20 text-[#1b8354] flex items-center justify-center font-bold">S</div>
+        <div className="p-4 border-t border-[#0077a8] space-y-3">
+          <div className="px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-[#00b4d8]/20 text-[#0099c2] flex items-center justify-center font-bold">S</div>
             <div className="truncate">
               <p className="text-xs font-bold truncate">{profile?.name_fr || 'Student'}</p>
-              <span className="text-[10px] text-[#1b8354] uppercase font-semibold">Étudiant</span>
+              <span className="text-[10px] text-[#0099c2] uppercase font-semibold">Étudiant</span>
             </div>
           </div>
           <button onClick={logout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold cursor-pointer transition-all">
@@ -119,7 +120,7 @@ export const StudentDashboard: React.FC = () => {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
-        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#f3fcf6]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#e8f7fc]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Annonces', 'الإعلانات')}
@@ -143,7 +144,7 @@ export const StudentDashboard: React.FC = () => {
             </div>
           )}
           {success && (
-            <div className="p-4 bg-[#f3fcf6] border-l-4 border-[#067647] rounded-r-md flex items-start space-x-2 text-[#074d31] text-sm no-print">
+            <div className="p-4 bg-[#e8f7fc] border-l-4 border-[#00b4d8] rounded-r-md flex items-start space-x-2 text-[#0077a8] text-sm no-print">
               <Activity className="w-5 h-5 shrink-0" /><span>{success}</span>
             </div>
           )}
@@ -153,27 +154,27 @@ export const StudentDashboard: React.FC = () => {
           {activeTab === 'grades' && <StudentGrades studentId={profile?.id!} profile={profile!} />}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
-              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-sm font-bold text-[#000000] mb-4 uppercase tracking-wider">
                   {t('Langue / اللغة', 'اللغة')}
                 </h3>
                 <LangToggle />
               </div>
-              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
-                  <KeyRound className="w-5 h-5 text-[#067647]" />
+                  <KeyRound className="w-5 h-5 text-[#00b4d8]" />
                   <span>{t('Modifier le Mot de Passe', 'تغيير كلمة المرور')}</span>
                 </h3>
                 <form onSubmit={handleChangePassword} className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">{t('Nouveau Mot de Passe', 'كلمة المرور الجديدة')}</label>
-                    <input type="password" required placeholder="••••••••" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]" />
+                    <input type="password" required placeholder="••••••••" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">{t('Confirmer le Mot de Passe', 'تأكيد كلمة المرور')}</label>
-                    <input type="password" required placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]" />
+                    <input type="password" required placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
                   </div>
-                  <button type="submit" disabled={loading} className="w-full py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
+                  <button type="submit" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
                     {loading ? t('Mise à jour...', 'تحديث...') : t('Mettre à jour', 'تحديث كلمة المرور')}
                   </button>
                 </form>
@@ -199,12 +200,12 @@ export const StudentDashboard: React.FC = () => {
             onClick={() => setActiveTab(key as any)}
             className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
-            <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#067647]' : 'text-[#666666]'}`} />
-            <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#067647] font-semibold' : 'text-[#666666]'}`}>
+            <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#00b4d8]' : 'text-[#666666]'}`} />
+            <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#00b4d8] font-semibold' : 'text-[#666666]'}`}>
               {label}
             </span>
             {activeTab === key && (
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#067647] rounded-full opacity-90" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#00b4d8] rounded-full opacity-90" />
             )}
           </button>
         ))}
@@ -233,21 +234,21 @@ const StudentHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   return (
     <div className="space-y-4">
       {announcements.length === 0 ? (
-        <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-12 text-center">
+        <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-12 text-center">
           <Megaphone className="w-12 h-12 mx-auto text-[#666666] mb-4" />
           <p className="text-[#666666]">{t('Aucune annonce', 'لا توجد إعلانات')}</p>
         </div>
       ) : (
         announcements.map(a => (
-          <div key={a.id} className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+          <div key={a.id} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
             <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-[#f3fcf6] rounded-lg flex items-center justify-center text-[#067647] shrink-0">
+              <div className="w-10 h-10 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8] shrink-0">
                 <Megaphone className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center space-x-2">
                   <h4 className="text-sm font-bold text-[#000000]">{a.title}</h4>
-                  {a.subjects && <span className="text-[10px] bg-[#f3fcf6] text-[#067647] px-2 py-0.5 rounded-md font-semibold">{a.subjects.name_fr}</span>}
+                  {a.subjects && <span className="text-[10px] bg-[#e8f7fc] text-[#00b4d8] px-2 py-0.5 rounded-md font-semibold">{a.subjects.name_fr}</span>}
                 </div>
                 <p className="text-xs text-[#666666] mt-1 whitespace-pre-wrap">{a.content}</p>
                 <p className="text-[10px] text-[#666666] mt-2">{new Date(a.created_at).toLocaleString()}</p>
@@ -353,7 +354,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
     <div className="mb-8">
       <h3 className="text-md font-bold text-[#000000] mb-3">Semestre {semesterNum} / الفصل {semesterNum === 1 ? 'الأول' : 'الثاني'}</h3>
       <table className="w-full text-left text-xs border-collapse border border-[#d2d6db]">
-        <thead className="bg-[#f3fcf6]">
+        <thead className="bg-[#e8f7fc]">
           <tr className="text-[#666666] font-bold border-b border-[#d2d6db]">
             <th className="p-3 border-r border-[#d2d6db]">المادة (FR)</th>
             <th className="p-3 border-r border-[#d2d6db] text-right">المادة (AR)</th>
@@ -368,7 +369,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
         </thead>
         <tbody className="divide-y divide-[#d2d6db]">
           {subs.map(en => (
-            <tr key={en.id} className="text-[#000000] hover:bg-[#f3fcf6]">
+            <tr key={en.id} className="text-[#000000] hover:bg-[#e8f7fc]">
               <td className="p-3 border-r border-[#d2d6db] font-medium">{en.subjects?.name_fr}</td>
               <td className="p-3 border-r border-[#d2d6db] text-right">{en.subjects?.name_ar}</td>
               <td className="p-3 border-r border-[#d2d6db] text-xs">{en.subjects?.unit_name_fr}</td>
@@ -383,7 +384,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
             </tr>
           ))}
         </tbody>
-        <tfoot className="bg-[#f3fcf6] border-t border-[#d2d6db]">
+        <tfoot className="bg-[#e8f7fc] border-t border-[#d2d6db]">
           <tr className="font-bold text-[#000000]">
             <td colSpan={3} className="p-3 text-right">المجموع / Total</td>
             <td className="p-3 text-center">{stats.totalCredits}</td>
@@ -404,18 +405,18 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
       <div className="flex items-center justify-between no-print">
         <div className="flex items-center space-x-2">
           <label className="text-sm font-semibold text-[#666666]">Année Universitaire / السنة الجامعية</label>
-          <select value={selectedYear} onChange={e => setSelectedYear(e.target.value)} className="px-3 py-2 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]">
+          <select value={selectedYear} onChange={e => setSelectedYear(e.target.value)} className="px-3 py-2 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]">
             {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
         </div>
-        <button onClick={() => handleDownloadPdf(selectedYear)} disabled={pdfLoading} className="px-4 py-2.5 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all flex items-center space-x-2 disabled:opacity-50">
+        <button onClick={() => handleDownloadPdf(selectedYear)} disabled={pdfLoading} className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all flex items-center space-x-2 disabled:opacity-50">
           <Download className="w-4 h-4" />
           <span>{pdfLoading ? 'Génération...' : `Télécharger PDF (${selectedYear})`}</span>
         </button>
       </div>
 
-      <div id={`grades-report-${selectedYear}`} className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
-        <div className="print-header mb-8 text-center border-b-2 border-[#f3fcf6] pb-6">
+      <div id={`grades-report-${selectedYear}`} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
+        <div className="print-header mb-8 text-center border-b-2 border-[#e8f7fc] pb-6">
           <div className="flex justify-between items-start mb-4">
             <div className="text-left">
               <p className="text-sm font-bold text-[#000000]">السنة الجامعية: {selectedYear}</p>
@@ -451,7 +452,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
         {renderSemesterTable(s1Subjects, 1, s1Stats)}
         {renderSemesterTable(s2Subjects, 2, s2Stats)}
 
-        <div className="mt-8 p-4 bg-[#f3fcf6] border border-[#f3fcf6] rounded-md">
+        <div className="mt-8 p-4 bg-[#e8f7fc] border border-[#e8f7fc] rounded-md">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-xs text-[#666666] font-bold uppercase">Total Crédits</p>

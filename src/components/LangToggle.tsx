@@ -6,7 +6,7 @@ export const LangToggle: React.FC = () => {
   return (
     <button
       onClick={toggleLang}
-      className="flex items-center space-x-2 px-4 py-2.5 bg-[#f3fcf6] hover:bg-[#067647] hover:text-white text-[#067647] border border-[#067647]/30 font-semibold text-sm rounded-md cursor-pointer transition-all"
+      className="flex items-center space-x-2 px-4 py-2.5 bg-[#e8f7fc] hover:bg-[#00b4d8] hover:text-white text-[#00b4d8] border border-[#00b4d8]/30 font-semibold text-sm rounded-md cursor-pointer transition-all"
     >
       <span>{lang === 'fr' ? '🌐 العربية' : '🌐 Français'}</span>
     </button>

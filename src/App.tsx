@@ -5,6 +5,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { DeanDashboard } from './components/DeanDashboard';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { StudentDashboard } from './components/StudentDashboard';
+import logo from './assets/logo.png';
 
 const DashboardRouter: React.FC = () => {
   const { user, profile, loading } = useAuth();
@@ -13,7 +14,7 @@ const DashboardRouter: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 bg-[#067647] rounded-lg flex items-center justify-center font-bold text-white shadow-lg mx-auto animate-pulse">KF</div>
+          <div className="w-12 h-12 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-lg mx-auto animate-pulse"><img src={logo} alt="KF" className="w-full h-full object-contain" /></div>
           <p className="text-sm text-[#666666] font-semibold">Chargement... / جاري التحميل</p>
         </div>
       </div>

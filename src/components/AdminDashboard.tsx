@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LanguageContext';
 import { LangToggle } from './LangToggle';
+import logo from '../assets/logo.png';
 import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
@@ -432,16 +433,16 @@ export const AdminDashboard: React.FC = () => {
     <div className="min-h-screen flex bg-white safe-top">
       
       {/* SIDEBAR NAVIGATION */}
-      <aside className="hidden lg:flex w-64 bg-[#092a1e] text-[#f3fcf6] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#074d31]">
+      <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
           {/* Logo Brand */}
-          <div className="p-6 border-b border-[#074d31] flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#067647] rounded-lg flex items-center justify-center font-bold text-white shadow-md">
-              <img src="./assets/logo.png" alt="KF" className="w-100% h-full object-contain " />
+          <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
+            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5">
+              <img src={logo} alt="KF" className="w-full h-full object-contain" />
             </div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
-              <span className="text-xs text-[#1b8354] font-semibold uppercase">Admin Panel</span>
+              <span className="text-xs text-[#0099c2] font-semibold uppercase">Admin Panel</span>
             </div>
           </div>
 
@@ -451,8 +452,8 @@ export const AdminDashboard: React.FC = () => {
               onClick={() => setActiveTab('home')}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                 activeTab === 'home'
-                  ? 'bg-[#067647] text-white shadow-lg'
-                  : 'text-[#1b8354] hover:bg-[#074d31] hover:text-white'
+                  ? 'bg-[#00b4d8] text-white shadow-lg'
+                  : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
               }`}
             >
               <LayoutDashboard className="w-5 h-5" />
@@ -463,8 +464,8 @@ export const AdminDashboard: React.FC = () => {
               onClick={() => setActiveTab('office')}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                 activeTab === 'office'
-                  ? 'bg-[#067647] text-white shadow-lg'
-                  : 'text-[#1b8354] hover:bg-[#074d31] hover:text-white'
+                  ? 'bg-[#00b4d8] text-white shadow-lg'
+                  : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
               }`}
             >
               <Building2 className="w-5 h-5" />
@@ -475,8 +476,8 @@ export const AdminDashboard: React.FC = () => {
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                 activeTab === 'profile'
-                  ? 'bg-[#067647] text-white shadow-lg'
-                  : 'text-[#1b8354] hover:bg-[#074d31] hover:text-white'
+                  ? 'bg-[#00b4d8] text-white shadow-lg'
+                  : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
               }`}
             >
               <KeyRound className="w-5 h-5" />
@@ -486,14 +487,14 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* User Info & Logout */}
-        <div className="p-4 border-t border-[#074d31] space-y-3">
-          <div className="px-4 py-3 bg-[#074d31]/50 rounded-lg flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-[#067647]/20 text-[#1b8354] flex items-center justify-center font-bold">
+        <div className="p-4 border-t border-[#0077a8] space-y-3">
+          <div className="px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-[#00b4d8]/20 text-[#0099c2] flex items-center justify-center font-bold">
               A
             </div>
             <div className="truncate">
               <p className="text-xs font-bold truncate">{profile?.name_fr || 'Admin'}</p>
-              <span className="text-[10px] text-[#1b8354] uppercase font-semibold">Administrateur</span>
+              <span className="text-[10px] text-[#0099c2] uppercase font-semibold">Administrateur</span>
             </div>
           </div>
           <button
@@ -509,7 +510,7 @@ export const AdminDashboard: React.FC = () => {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
         {/* Header bar */}
-        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#f3fcf6]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#e8f7fc]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
@@ -541,7 +542,7 @@ export const AdminDashboard: React.FC = () => {
           )}
 
           {success && (
-            <div className="p-4 bg-[#f3fcf6] border-l-4 border-[#067647] rounded-r-md flex items-start space-x-2 text-[#074d31] text-sm">
+            <div className="p-4 bg-[#e8f7fc] border-l-4 border-[#00b4d8] rounded-r-md flex items-start space-x-2 text-[#0077a8] text-sm">
               <Activity className="w-5 h-5 shrink-0" />
               <span>{success}</span>
             </div>
@@ -564,7 +565,7 @@ export const AdminDashboard: React.FC = () => {
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Facultés', 'الكليات')}</p>
                       <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.faculties}</h3>
                     </div>
-                    <div className="w-12 h-12 bg-[#f3fcf6] rounded-lg flex items-center justify-center text-[#067647]">
+                    <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8]">
                       <Building2 className="w-6 h-6" />
                     </div>
                   </div>
@@ -577,7 +578,7 @@ export const AdminDashboard: React.FC = () => {
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Doyens', 'العمداء')}</p>
                       <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.deans}</h3>
                     </div>
-                    <div className="w-12 h-12 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600">
+                    <div className="w-12 h-12 bg-[#fdf3e0] rounded-lg flex items-center justify-center text-[#c9902a]">
                       <Briefcase className="w-6 h-6" />
                     </div>
                   </div>
@@ -590,7 +591,7 @@ export const AdminDashboard: React.FC = () => {
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Professeurs', 'الأساتذة')}</p>
                       <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.teachers}</h3>
                     </div>
-                    <div className="w-12 h-12 bg-[#f3fcf6] rounded-lg flex items-center justify-center text-[#067647]">
+                    <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8]">
                       <Users className="w-6 h-6" />
                     </div>
                   </div>
@@ -603,7 +604,7 @@ export const AdminDashboard: React.FC = () => {
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Étudiants', 'الطلاب')}</p>
                       <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.students}</h3>
                     </div>
-                    <div className="w-12 h-12 bg-[#f3fcf6] rounded-lg flex items-center justify-center text-[#1b8354]">
+                    <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#0099c2]">
                       <GraduationCap className="w-6 h-6" />
                     </div>
                   </div>
@@ -612,24 +613,24 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Recent Activity Panel */}
-              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
-                  <Activity className="w-5 h-5 text-[#067647]" />
+                  <Activity className="w-5 h-5 text-[#00b4d8]" />
                   <span>{t('Derniers Comptes Activés', 'أحدث الحسابات النشطة')}</span>
                 </h3>
-                <div className="divide-y divide-[#f3fcf6]">
+                <div className="divide-y divide-[#e8f7fc]">
                   {recentUsers.length === 0 ? (
                     <p className="text-sm text-[#666666] py-4 text-center">{t('Aucune activité récente', 'لا يوجد نشاط مؤخراً')}</p>
                   ) : (
                     recentUsers.map((user, idx) => (
                       <div key={idx} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
                         <div className="flex items-center space-x-4">
-                          <div className="w-10 h-10 rounded-full bg-[#f3fcf6] flex items-center justify-center font-bold text-[#067647]">
+                          <div className="w-10 h-10 rounded-full bg-[#e8f7fc] flex items-center justify-center font-bold text-[#00b4d8]">
                             {user.university_id.substring(0,2).toUpperCase()}
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-[#000000]">{user.name_fr}</p>
-                            <span className="text-[10px] bg-[#f3fcf6] text-[#067647] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                            <span className="text-[10px] bg-[#e8f7fc] text-[#00b4d8] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
                               {user.role}
                             </span>
                           </div>
@@ -658,9 +659,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
 
                   {/* Existing manual form card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <Plus className="w-5 h-5 text-[#067647]" />
+                      <Plus className="w-5 h-5 text-[#00b4d8]" />
                       <span>{t('Créer une Faculté', 'إنشاء كلية')}</span>
                     </h3>
                     <form onSubmit={handleCreateFaculty} className="space-y-4">
@@ -674,7 +675,7 @@ export const AdminDashboard: React.FC = () => {
                           placeholder="Ex: Faculté des Sciences"
                           value={facultyNameFr}
                           onChange={(e) => setFacultyNameFr(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]"
+                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]"
                         />
                       </div>
                       <div>
@@ -687,13 +688,13 @@ export const AdminDashboard: React.FC = () => {
                           placeholder="مثال: كلية العلوم"
                           value={facultyNameAr}
                           onChange={(e) => setFacultyNameAr(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647] text-right"
+                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] text-right"
                         />
                       </div>
                       <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                        className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
                       >
                         {loading ? 'Création...' : 'Créer Faculté'}
                       </button>
@@ -701,18 +702,18 @@ export const AdminDashboard: React.FC = () => {
                   </div>
 
                   {/* New CSV upload card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <FileSpreadsheet className="w-5 h-5 text-[#067647]" />
+                      <FileSpreadsheet className="w-5 h-5 text-[#00b4d8]" />
                       <span>{t('Importer Facultés CSV', 'رفع ملف')}</span>
                     </h3>
                     <p className="text-sm text-[#666666] mb-4">
-                      Required: <code className="bg-[#f3fcf6] px-2 py-0.5 rounded text-xs">name_ar, name_fr</code>
+                      Required: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">name_ar, name_fr</code>
                     </p>
-                    <p className="text-xs text-[#666666] mb-4">Duplicates are skipped by matching <code className="bg-[#f3fcf6] px-1 rounded">name_fr</code>.</p>
-                    <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#067647] transition-colors">
+                    <p className="text-xs text-[#666666] mb-4">Duplicates are skipped by matching <code className="bg-[#e8f7fc] px-1 rounded">name_fr</code>.</p>
+                    <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
                       <label className="cursor-pointer">
-                        <span className="px-6 py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+                        <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
                           {facultyCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
                         </span>
                         <input type="file" accept=".csv" onChange={handleFacultyCsvUpload} disabled={facultyCsvLoading} className="hidden" />
@@ -721,13 +722,13 @@ export const AdminDashboard: React.FC = () => {
                     {facultyCsvResults && (
                       <div className="mt-4 space-y-3">
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-[#f3fcf6] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#067647]">{facultyCsvResults.inserted}</p>
-                            <p className="text-xs text-[#074d31] font-semibold">{t('Insérées', 'مدرجة')}</p>
+                          <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
+                            <p className="text-2xl font-black text-[#00b4d8]">{facultyCsvResults.inserted}</p>
+                            <p className="text-xs text-[#0077a8] font-semibold">{t('Insérées', 'مدرجة')}</p>
                           </div>
-                          <div className="p-4 bg-amber-50 rounded-md text-center">
-                            <p className="text-2xl font-black text-amber-600">{facultyCsvResults.skipped}</p>
-                            <p className="text-xs text-amber-700 font-semibold">{t('Ignorées', 'متجاهلة')}</p>
+                          <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
+                            <p className="text-2xl font-black text-[#c9902a]">{facultyCsvResults.skipped}</p>
+                            <p className="text-xs text-[#a07020] font-semibold">{t('Ignorées', 'متجاهلة')}</p>
                           </div>
                         </div>
                         {facultyCsvResults.errors.length > 0 && (
@@ -744,13 +745,13 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* List of existing faculties */}
-                <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                   <h4 className="text-sm font-bold text-[#666666] uppercase tracking-wider mb-4">
                     Facultés Existantes ({facultiesList.length})
                   </h4>
                   <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
                     {facultiesList.map((fac, idx) => (
-                      <div key={idx} className="p-3 bg-[#f3fcf6] border border-[#f3fcf6] rounded-md flex justify-between items-center text-xs">
+                      <div key={idx} className="p-3 bg-[#e8f7fc] border border-[#e8f7fc] rounded-md flex justify-between items-center text-xs">
                         <div className="font-semibold text-[#000000]">{fac.name_fr}</div>
                         <div className="text-[#666666] text-right">{fac.name_ar}</div>
                       </div>
@@ -764,9 +765,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                   {/* Manual form card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <Plus className="w-5 h-5 text-[#067647]" />
+                      <Plus className="w-5 h-5 text-[#00b4d8]" />
                       <span>{t('Ajouter Manuellement', 'يدوي')}</span>
                     </h3>
                     <form onSubmit={handleRegisterDean} className="space-y-4">
@@ -860,7 +861,7 @@ export const AdminDashboard: React.FC = () => {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                        className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
                       >
                         {loading ? t('Inscription...', 'تسجيل...') : t('Enregistrer', 'تسجيل')}
                       </button>
@@ -868,19 +869,19 @@ export const AdminDashboard: React.FC = () => {
                   </div>
 
                   {/* CSV upload card */}
-                  <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                     <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <Upload className="w-5 h-5 text-[#067647]" />
+                      <Upload className="w-5 h-5 text-[#00b4d8]" />
                       <span>{t('Importer CSV', 'رفع ملف')}</span>
                     </h3>
                     <p className="text-sm text-[#666666] mb-4">
-                      Required: <code className="bg-[#f3fcf6] px-2 py-0.5 rounded text-xs">university_id, name_ar, name_fr, role, faculty_id</code>
-                      <br />Optional: <code className="bg-[#f3fcf6] px-2 py-0.5 rounded text-xs">department</code>
+                      Required: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">university_id, name_ar, name_fr, role, faculty_id</code>
+                      <br />Optional: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">department</code>
                     </p>
-                    <p className="text-xs text-[#666666] mb-4">Role must be <code className="bg-[#f3fcf6] px-1 rounded">dean</code> or <code className="bg-[#f3fcf6] px-1 rounded">assistant_dean</code>. faculty_id must be a valid UUID.</p>
-                    <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#067647] transition-colors">
+                    <p className="text-xs text-[#666666] mb-4">Role must be <code className="bg-[#e8f7fc] px-1 rounded">dean</code> or <code className="bg-[#e8f7fc] px-1 rounded">assistant_dean</code>. faculty_id must be a valid UUID.</p>
+                    <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
                       <label className="cursor-pointer">
-                        <span className="px-6 py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+                        <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
                           {deanCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
                         </span>
                         <input type="file" accept=".csv" onChange={handleDeanCsvUpload} disabled={deanCsvLoading} className="hidden" />
@@ -889,13 +890,13 @@ export const AdminDashboard: React.FC = () => {
                     {deanCsvResults && (
                       <div className="mt-4 space-y-3">
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-[#f3fcf6] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#067647]">{deanCsvResults.inserted}</p>
-                            <p className="text-xs text-[#074d31] font-semibold">{t('Insérés', 'مسجلون')}</p>
+                          <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
+                            <p className="text-2xl font-black text-[#00b4d8]">{deanCsvResults.inserted}</p>
+                            <p className="text-xs text-[#0077a8] font-semibold">{t('Insérés', 'مسجلون')}</p>
                           </div>
-                          <div className="p-4 bg-amber-50 rounded-md text-center">
-                            <p className="text-2xl font-black text-amber-600">{deanCsvResults.skipped}</p>
-                            <p className="text-xs text-amber-700 font-semibold">Ignorés</p>
+                          <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
+                            <p className="text-2xl font-black text-[#c9902a]">{deanCsvResults.skipped}</p>
+                            <p className="text-xs text-[#a07020] font-semibold">Ignorés</p>
                           </div>
                         </div>
                         {deanCsvResults.errors.length > 0 && (
@@ -912,7 +913,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Table of active and pending Deans */}
-                <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                   <h3 className="text-md font-bold text-[#000000] mb-4">
                     {t('Comptes Créés', 'الحسابات المسجلة')}
                   </h3>
@@ -920,8 +921,8 @@ export const AdminDashboard: React.FC = () => {
                   {/* Active deans */}
                   <div className="space-y-4">
                     <div>
-                      <h4 className="text-xs font-bold text-[#067647] uppercase tracking-wider mb-2 flex items-center">
-                        <span className="w-1.5 h-1.5 bg-[#067647] rounded-full mr-2" />
+                      <h4 className="text-xs font-bold text-[#00b4d8] uppercase tracking-wider mb-2 flex items-center">
+                        <span className="w-1.5 h-1.5 bg-[#00b4d8] rounded-full mr-2" />
                          Comptes Actifs (Actifs dans le système)
                        </h4>
                        {deansList.length === 0 ? (
@@ -930,7 +931,7 @@ export const AdminDashboard: React.FC = () => {
                          <div className="overflow-x-auto">
                            <table className="w-full text-left text-xs border-collapse">
                              <thead>
-                               <tr className="border-b border-[#f3fcf6] text-[#666666] font-bold">
+                               <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
                                  <th className="pb-2">ID</th>
                                  <th className="pb-2">Nom (FR)</th>
                                  <th className="pb-2">الاسم (AR)</th>
@@ -939,7 +940,7 @@ export const AdminDashboard: React.FC = () => {
                                  <th className="pb-2"></th>
                                </tr>
                              </thead>
-                             <tbody className="divide-y divide-[#f3fcf6]">
+                             <tbody className="divide-y divide-[#e8f7fc]">
                                {deansList.map((d, i) => {
                                  const isEditing = editingDeanId === d.id;
                                  return (
@@ -947,37 +948,37 @@ export const AdminDashboard: React.FC = () => {
                                      <td className="py-2 font-semibold font-mono">{d.university_id}</td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none" />
+                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                                        ) : d.name_fr}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs text-right focus:outline-none" />
+                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                                        ) : d.name_ar}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none">
+                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
                                            {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
                                          </select>
                                        ) : d.faculties?.name_fr}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none">
+                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
                                            <option value="dean">dean</option>
                                            <option value="assistant_dean">assistant_dean</option>
                                          </select>
-                                       ) : <span className="font-bold uppercase text-[10px] text-[#067647]">{d.role}</span>}
+                                       ) : <span className="font-bold uppercase text-[10px] text-[#00b4d8]">{d.role}</span>}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
                                          <div className="flex space-x-1">
-                                           <button onClick={saveEditDean} className="text-[#067647] hover:text-[#074d31] cursor-pointer"><Check className="w-4 h-4" /></button>
+                                           <button onClick={saveEditDean} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
                                            <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
                                          </div>
                                        ) : (
-                                         <button onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#067647] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                         <button onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
                                        )}
                                      </td>
                                    </tr>
@@ -990,9 +991,9 @@ export const AdminDashboard: React.FC = () => {
                     </div>
 
                     {/* Pending deans */}
-                    <div className="border-t border-[#f3fcf6] pt-4">
-                      <h4 className="text-xs font-bold text-amber-500 uppercase tracking-wider mb-2 flex items-center">
-                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full mr-2 animate-pulse" />
+                    <div className="border-t border-[#e8f7fc] pt-4">
+                      <h4 className="text-xs font-bold text-[#c9902a] uppercase tracking-wider mb-2 flex items-center">
+                        <span className="w-1.5 h-1.5 bg-[#fdf3e0]0 rounded-full mr-2 animate-pulse" />
                          Comptes en Attente d'Activation (Staging)
                        </h4>
                        {pendingDeansList.length === 0 ? (
@@ -1001,7 +1002,7 @@ export const AdminDashboard: React.FC = () => {
                          <div className="overflow-x-auto">
                            <table className="w-full text-left text-xs border-collapse">
                              <thead>
-                               <tr className="border-b border-[#f3fcf6] text-[#666666] font-bold">
+                               <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
                                  <th className="pb-2">ID</th>
                                  <th className="pb-2">Nom (FR)</th>
                                  <th className="pb-2">الاسم (AR)</th>
@@ -1010,7 +1011,7 @@ export const AdminDashboard: React.FC = () => {
                                  <th className="pb-2"></th>
                                </tr>
                              </thead>
-                             <tbody className="divide-y divide-[#f3fcf6]">
+                             <tbody className="divide-y divide-[#e8f7fc]">
                                {pendingDeansList.map((d, i) => {
                                  const isEditing = editingPendingId === d.id;
                                  return (
@@ -1018,37 +1019,37 @@ export const AdminDashboard: React.FC = () => {
                                      <td className="py-2 font-semibold font-mono">{d.university_id}</td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none" />
+                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                                        ) : d.name_fr}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs text-right focus:outline-none" />
+                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                                        ) : d.name_ar}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none">
+                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
                                            {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
                                          </select>
                                        ) : d.faculties?.name_fr}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
-                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#067647] rounded text-xs focus:outline-none">
+                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
                                            <option value="dean">dean</option>
                                            <option value="assistant_dean">assistant_dean</option>
                                          </select>
-                                       ) : <span className="font-bold uppercase text-[10px] text-amber-500">{d.role}</span>}
+                                       ) : <span className="font-bold uppercase text-[10px] text-[#c9902a]">{d.role}</span>}
                                      </td>
                                      <td className="py-2">
                                        {isEditing ? (
                                          <div className="flex space-x-1">
-                                           <button onClick={saveEditPending} className="text-[#067647] hover:text-[#074d31] cursor-pointer"><Check className="w-4 h-4" /></button>
+                                           <button onClick={saveEditPending} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
                                            <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
                                          </div>
                                        ) : (
-                                         <button onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#067647] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                         <button onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
                                        )}
                                      </td>
                                    </tr>
@@ -1072,15 +1073,15 @@ export const AdminDashboard: React.FC = () => {
              ========================================== */}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
-              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                 <h3 className="text-sm font-bold text-[#000000] mb-4 uppercase tracking-wider">
                   {t('Langue / اللغة', 'اللغة')}
                 </h3>
                 <LangToggle />
               </div>
-              <div className="bg-white border border-[#f3fcf6] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
                 <h3 className="text-lg font-bold text-[#000000] mb-6 flex items-center space-x-2">
-                  <KeyRound className="w-5 h-5 text-[#067647]" />
+                  <KeyRound className="w-5 h-5 text-[#00b4d8]" />
                   <span>{t('Modifier le Mot de Passe', 'تغيير كلمة المرور')}</span>
                 </h3>
                 
@@ -1095,7 +1096,7 @@ export const AdminDashboard: React.FC = () => {
                       placeholder="••••••••"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]"
+                      className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]"
                     />
                   </div>
 
@@ -1109,14 +1110,14 @@ export const AdminDashboard: React.FC = () => {
                       placeholder="••••••••"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#067647]/20 focus:border-[#067647]"
+                      className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 bg-[#067647] hover:bg-[#074d31] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                    className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
                   >
                     {loading ? t('Mise à jour...', 'تحديث...') : t('Mettre à jour', 'تحديث كلمة المرور')}
                   </button>
@@ -1144,12 +1145,12 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setActiveTab(key as any)}
             className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
-            <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#067647]' : 'text-[#666666]'}`} />
-            <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#067647] font-semibold' : 'text-[#666666]'}`}>
+            <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#00b4d8]' : 'text-[#666666]'}`} />
+            <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#00b4d8] font-semibold' : 'text-[#666666]'}`}>
               {label}
             </span>
             {activeTab === key && (
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#067647] rounded-full opacity-90" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#00b4d8] rounded-full opacity-90" />
             )}
           </button>
         ))}
