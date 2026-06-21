@@ -8,7 +8,7 @@ import jsPDF from 'jspdf';
 import { toPng } from 'html-to-image';
 import {
   Megaphone, GraduationCap, KeyRound, LogOut, ShieldAlert,
-  Activity, Download
+  Activity, Download, ArrowLeft, FileText
 } from 'lucide-react';
 
 interface EnrollmentRow {
@@ -18,7 +18,6 @@ interface EnrollmentRow {
   exam_session_2: number | null;
   subject_average: number | null;
   credits_earned: number;
-  academic_year?: string;
   subjects: {
     name_ar: string;
     name_fr: string;
@@ -26,6 +25,7 @@ interface EnrollmentRow {
     unit_name_fr: string;
     credits: number;
     semester: number;
+    level: string;
   } | null;
 }
 
@@ -261,33 +261,334 @@ const StudentHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   );
 };
 
+const LEVELS_ORDER = ['1ère Année', '2ème Année', '3ème Année', '4ème Année'];
+
 const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentId, profile }) => {
   const [enrollments, setEnrollments] = useState<EnrollmentRow[]>([]);
   const [facultyName, setFacultyName] = useState({ name_fr: '', name_ar: '' });
-  const [selectedYear, setSelectedYear] = useState('2025-2026');
-  const availableYears = ['2024-2025', '2025-2026', '2026-2027'];
+  
+  const [gradesLoading, setGradesLoading] = useState(true);
+  
+  const [activeLevelForDetail, setActiveLevelForDetail] = useState<string | null>(null);
+  
+  const [pdfLevelToRender, setPdfLevelToRender] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from('enrollments')
-        .select('*, subjects(name_ar, name_fr, unit_name_ar, unit_name_fr, credits, semester)')
-        .eq('student_id', studentId)
-        .order('subjects(semester)', { ascending: true });
+      setGradesLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('enrollments')
+          .select('*, subjects(name_ar, name_fr, unit_name_ar, unit_name_fr, credits, semester, level)')
+          .eq('student_id', studentId);
 
-      setEnrollments((data as EnrollmentRow[]) || []);
+        if (error) {
+          console.error('Error fetching enrollments:', error);
+        }
 
-      if (profile?.faculty_id) {
-        const { data: fac } = await supabase.from('faculties').select('name_fr, name_ar').eq('id', profile.faculty_id).single();
-        if (fac) setFacultyName(fac as any);
+        const normalized = ((data as EnrollmentRow[]) || []);
+        normalized.sort((a, b) => (a.subjects?.semester || 0) - (b.subjects?.semester || 0));
+
+        setEnrollments(normalized);
+
+        if (profile?.faculty_id) {
+          const { data: fac } = await supabase.from('faculties').select('name_fr, name_ar').eq('id', profile.faculty_id).single();
+          if (fac) setFacultyName(fac as any);
+        }
+      } catch (err) {
+        console.error('Error loading grades:', err);
+      } finally {
+        setGradesLoading(false);
       }
     };
     load();
   }, [studentId, profile?.faculty_id]);
 
-  const yearEnrollments = enrollments.filter(e => !e.academic_year || e.academic_year === selectedYear);
-  const s1Subjects = yearEnrollments.filter(e => e.subjects?.semester === 1);
-  const s2Subjects = yearEnrollments.filter(e => e.subjects?.semester === 2);
+  const levels = Array.from(new Set(enrollments.map(e => e.subjects?.level).filter(Boolean) as string[]));
+  
+  const sortedLevels = [...levels].sort((a, b) => {
+    const ai = LEVELS_ORDER.indexOf(a);
+    const bi = LEVELS_ORDER.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+  
+  const currentLevel = profile?.level || sortedLevels[sortedLevels.length - 1];
+  
+  const passedLevels = sortedLevels.filter(l => l !== currentLevel);
+
+  const getLevelStats = (level: string) => {
+    const levelEnrollments = enrollments.filter(e => e.subjects?.level === level);
+    const s1Subs = levelEnrollments.filter(e => e.subjects?.semester === 1);
+    const s2Subs = levelEnrollments.filter(e => e.subjects?.semester === 2);
+
+    const calcStats = (subs: EnrollmentRow[]) => {
+      const graded = subs.filter(e => e.subject_average !== null);
+      const totalCredits = subs.reduce((acc, e) => acc + (e.subjects?.credits || 0), 0);
+      const earnedCredits = subs.reduce((acc, e) => acc + e.credits_earned, 0);
+      const sumWeighted = graded.reduce((acc, e) => acc + (e.subject_average || 0) * (e.subjects?.credits || 1), 0);
+      const sumCreditsGraded = graded.reduce((acc, e) => acc + (e.subjects?.credits || 1), 0);
+      return { totalCredits, earnedCredits, sumWeighted, sumCreditsGraded };
+    };
+
+    const s1 = calcStats(s1Subs);
+    const s2 = calcStats(s2Subs);
+
+    const totalCredits = s1.totalCredits + s2.totalCredits;
+    const earnedCredits = s1.earnedCredits + s2.earnedCredits;
+    const totalWeighted = s1.sumWeighted + s2.sumWeighted;
+    const totalCreditsGraded = s1.sumCreditsGraded + s2.sumCreditsGraded;
+
+    const avg = totalCreditsGraded > 0 ? totalWeighted / totalCreditsGraded : null;
+    const subjectsCount = levelEnrollments.length;
+
+    return { totalCredits, earnedCredits, avg, subjectsCount };
+  };
+
+  const handleDownloadPdf = async (level: string) => {
+    setPdfLevelToRender(level);
+    setPdfLoading(true);
+    
+    setTimeout(async () => {
+      try {
+        const element = document.getElementById(`grades-report-${level}`);
+        if (!element) {
+          console.error("PDF generation failed: transcript element not found in DOM");
+          setPdfLoading(false);
+          setPdfLevelToRender(null);
+          return;
+        }
+
+        const dataUrl = await toPng(element, {
+          pixelRatio: 2,
+          backgroundColor: '#ffffff',
+        });
+
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const img = new Image();
+        img.src = dataUrl;
+        await img.decode();
+        const imgWidth = pageWidth;
+        const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save(`releve-notes-${level}-${profile?.university_id || 'etudiant'}.pdf`);
+      } catch (err) {
+        console.error('PDF generation failed:', err);
+      } finally {
+        setPdfLoading(false);
+        setPdfLevelToRender(null);
+      }
+    }, 300);
+  };
+
+  if (gradesLoading) {
+    return (
+      <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-12 text-center">
+        <div className="w-8 h-8 border-4 border-[#e8f7fc] border-t-[#00b4d8] rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-[#666666] text-sm">Chargement... / جاري التحميل...</p>
+      </div>
+    );
+  }
+
+  if (enrollments.length === 0) {
+    return (
+      <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-12 text-center">
+        <GraduationCap className="w-12 h-12 mx-auto text-[#666666] mb-4" />
+        <p className="text-[#666666]">Aucun relevé de notes disponible / لا يوجد كشف درجات.</p>
+      </div>
+    );
+  }
+
+  if (activeLevelForDetail !== null) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between no-print">
+          <button
+            onClick={() => setActiveLevelForDetail(null)}
+            className="px-4 py-2 bg-[#e8f7fc] hover:bg-[#00b4d8]/20 text-[#0077a8] font-bold text-sm rounded-md transition-all flex items-center space-x-2 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Retour / رجوع</span>
+          </button>
+          <button
+            onClick={() => handleDownloadPdf(activeLevelForDetail)}
+            disabled={pdfLoading}
+            className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all flex items-center space-x-2 disabled:opacity-50"
+          >
+            <Download className="w-4 h-4" />
+            <span>{pdfLoading ? 'Génération...' : `Télécharger PDF (${activeLevelForDetail})`}</span>
+          </button>
+        </div>
+
+        <div id={`grades-report-${activeLevelForDetail}`} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
+          <GradesReportContent
+            level={activeLevelForDetail}
+            enrollments={enrollments}
+            facultyName={facultyName}
+            profile={profile}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {pdfLevelToRender && (
+        <div
+          id={`grades-report-${pdfLevelToRender}`}
+          className="absolute -left-[9999px] top-0 w-[1000px] bg-white p-8"
+          style={{ zIndex: -9999 }}
+        >
+          <GradesReportContent
+            level={pdfLevelToRender}
+            enrollments={enrollments}
+            facultyName={facultyName}
+            profile={profile}
+          />
+        </div>
+      )}
+
+      {currentLevel && (() => {
+        const stats = getLevelStats(currentLevel);
+        return stats.subjectsCount > 0 ? (
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-[#666666] uppercase tracking-wider">
+              Niveau Actuel / المستوى الحالي
+            </h3>
+            <div className="bg-gradient-to-br from-[#e8f7fc]/40 to-white border-2 border-[#00b4d8]/30 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[20px] p-6 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-[#00b4d8]/10 rounded-xl flex items-center justify-center text-[#00b4d8] shrink-0">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-[#000000]">{currentLevel}</h4>
+                  <p className="text-xs text-[#666666]">
+                    Niveau actuel / المستوى الحالي
+                  </p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-[#666666]">
+                    <span>{stats.subjectsCount} Matières / مواد</span>
+                    <span>•</span>
+                    <span>{stats.earnedCredits} / {stats.totalCredits} Credits / وحدات</span>
+                    {stats.avg !== null && (
+                      <>
+                        <span>•</span>
+                        <span className="font-bold text-[#0077a8]">Moyenne: {stats.avg.toFixed(2)} / معدل</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 shrink-0">
+                <button
+                  onClick={() => setActiveLevelForDetail(currentLevel)}
+                  className="px-4 py-2.5 bg-[#e8f7fc] hover:bg-[#00b4d8]/20 text-[#0077a8] font-bold text-sm rounded-md transition-all cursor-pointer"
+                >
+                  Consulter / عرض
+                </button>
+                <button
+                  onClick={() => handleDownloadPdf(currentLevel)}
+                  disabled={pdfLoading}
+                  className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all flex items-center space-x-2 disabled:opacity-50"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>{pdfLoading ? '...' : 'PDF'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null;
+      })()}
+
+      {passedLevels.length > 0 && (
+        <div className="space-y-4 pt-4">
+          <h3 className="text-sm font-bold text-[#666666] uppercase tracking-wider">
+            Niveaux Précédents / المستويات السابقة
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {passedLevels.map(level => {
+              const stats = getLevelStats(level);
+              return (
+                <div key={level} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[20px] p-6 flex flex-col justify-between space-y-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#666666] shrink-0">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-[#000000]">{level}</h4>
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#666666]">
+                        <span>{stats.subjectsCount} Matières / مواد</span>
+                        <span>•</span>
+                        <span>{stats.earnedCredits} / {stats.totalCredits} Credits / وحدات</span>
+                        {stats.avg !== null && (
+                          <>
+                            <span>•</span>
+                            <span className="font-bold text-emerald-600">Moyenne: {stats.avg.toFixed(2)} / معدل</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 pt-2 border-t border-[#e8f7fc]">
+                    <button
+                      onClick={() => setActiveLevelForDetail(level)}
+                      className="flex-1 px-3 py-2 bg-[#e8f7fc] hover:bg-[#00b4d8]/20 text-[#0077a8] font-bold text-xs rounded-md transition-all cursor-pointer text-center"
+                    >
+                      Consulter / عرض
+                    </button>
+                    <button
+                      onClick={() => handleDownloadPdf(level)}
+                      disabled={pdfLoading}
+                      className="flex-1 px-3 py-2 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-xs rounded-md cursor-pointer transition-all flex items-center justify-center space-x-1.5 disabled:opacity-50"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>{pdfLoading ? '...' : 'PDF'}</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Extracted Component to render the detailed transcripts / grade sheets
+const GradesReportContent: React.FC<{
+  level: string;
+  enrollments: EnrollmentRow[];
+  facultyName: { name_fr: string; name_ar: string };
+  profile: any;
+}> = ({ level, enrollments, facultyName, profile }) => {
+  const levelEnrollments = enrollments.filter(e => e.subjects?.level === level);
+  const s1Subjects = levelEnrollments.filter(e => e.subjects?.semester === 1);
+  const s2Subjects = levelEnrollments.filter(e => e.subjects?.semester === 2);
 
   const calcSemesterStats = (subs: EnrollmentRow[]) => {
     const graded = subs.filter(e => e.subject_average !== null);
@@ -304,51 +605,6 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   const s2Stats = calcSemesterStats(s2Subjects);
   const totalEarned = s1Stats.earnedCredits + s2Stats.earnedCredits;
   const totalCredits = s1Stats.totalCredits + s2Stats.totalCredits;
-
-  const [pdfLoading, setPdfLoading] = useState(false);
-
-  const handleDownloadPdf = async (year: string) => {
-    const element = document.getElementById(`grades-report-${year}`);
-    if (!element) return;
-    setPdfLoading(true);
-    try {
-      const dataUrl = await toPng(element, {
-        pixelRatio: 2,
-        backgroundColor: '#ffffff',
-      });
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const img = new Image();
-      img.src = dataUrl;
-      await img.decode();
-      const imgWidth = pageWidth;
-      const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save(`releve-notes-${year}-${profile?.university_id || 'etudiant'}.pdf`);
-    } catch (err) {
-      console.error('PDF generation failed:', err);
-    } finally {
-      setPdfLoading(false);
-    }
-  };
 
   const renderSemesterTable = (subs: EnrollmentRow[], semesterNum: number, stats: ReturnType<typeof calcSemesterStats>) => (
     <div className="mb-8">
@@ -401,82 +657,67 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between no-print">
-        <div className="flex items-center space-x-2">
-          <label className="text-sm font-semibold text-[#666666]">Année Universitaire / السنة الجامعية</label>
-          <select value={selectedYear} onChange={e => setSelectedYear(e.target.value)} className="px-3 py-2 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]">
-            {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
-          </select>
+    <>
+      <div className="print-header mb-8 text-center border-b-2 border-[#e8f7fc] pb-6">
+        <div className="flex justify-between items-start mb-4">
+          <div className="text-left">
+            <p className="text-sm font-bold text-[#000000]">المستوى: {level}</p>
+            <p className="text-xs text-[#666666]">Niveau: {level}</p>
+          </div>
+          <div className="text-right font-capitalized">
+            <p className="text-sm font-bold text-[#666666]">جمهورية تشاد</p>
+            <p className="text-xs text-[#666666]">République du Tchad</p>
+            <p className="text-sm font-bold text-[#666666]">وزارة التربية والتعليم والبحت والتكوين العلمي</p>
+            <p className="text-xs text-[#666666]">Ministere de l'Enseignement Supérieur de la recherche et de la formation supérieure</p>
+            <p className="text-sm font-bold text-[#666666] mt-1">جامعة الملك فيصل بتشاد</p>
+            <p className="text-sm font-bold text-[#666666] mt-1">universte du roi faycal du tchad</p>
+            <p className="text-xs text-[#666666]">{facultyName.name_fr}</p>
+            <p className="text-xs text-[#666666]">{facultyName.name_ar}</p>
+          </div>
         </div>
-        <button onClick={() => handleDownloadPdf(selectedYear)} disabled={pdfLoading} className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all flex items-center space-x-2 disabled:opacity-50">
-          <Download className="w-4 h-4" />
-          <span>{pdfLoading ? 'Génération...' : `Télécharger PDF (${selectedYear})`}</span>
-        </button>
+        <h2 className="text-xl font-black text-[#000000]">كشف الدرجات / Relevé de Notes</h2>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-1 mt-4 text-xs text-[#000000] max-w-lg mx-auto">
+          <div className="flex justify-between"><span className="font-semibold">الاسم واللقب:</span><span>{profile?.name_ar}</span></div>
+          <div className="flex justify-between"><span className="font-semibold">Nom & Prénom:</span><span>{profile?.name_fr}</span></div>
+          <div className="flex justify-between"><span className="font-semibold">الرقم الجامعي:</span><span>{profile?.university_id}</span></div>
+          <div className="flex justify-between"><span className="font-semibold">القسم:</span><span>{profile?.section || '—'}</span></div>
+          <div className="flex justify-between"><span className="font-semibold">المستوى:</span><span>{profile?.level || '—'}</span></div>
+          {profile?.date_of_birth && (
+            <div className="flex justify-between"><span className="font-semibold">تاريخ الميلاد:</span><span>{new Date(profile.date_of_birth).toLocaleDateString()}</span></div>
+          )}
+          {profile?.place_of_birth && (
+            <div className="flex justify-between"><span className="font-semibold">مكان الميلاد:</span><span>{profile.place_of_birth}</span></div>
+          )}
+        </div>
       </div>
 
-      <div id={`grades-report-${selectedYear}`} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
-        <div className="print-header mb-8 text-center border-b-2 border-[#e8f7fc] pb-6">
-          <div className="flex justify-between items-start mb-4">
-            <div className="text-left">
-              <p className="text-sm font-bold text-[#000000]">السنة الجامعية: {selectedYear}</p>
-              <p className="text-xs text-[#666666]">Année Universitaire: {selectedYear}</p>
-            </div>
-            <div className="text-right font-capitalized">
-              <p className="text-sm font-bold text-[#666666]">جمهورية تشاد</p>
-              <p className="text-xs text-[#666666]">République du Tchad</p>
-              <p className="text-sm font-bold text-[#666666]">وزارة التربية والتعليم والبحت والتكوين العلمي</p>
-              <p className="text-xs text-[#666666]">Ministere de l'Enseignement Supérieur de la recherche et de la formation supérieure</p>
-              <p className="text-sm font-bold text-[#666666] mt-1">جامعة الملك فيصل بتشاد</p>
-              <p className="text-sm font-bold text-[#666666] mt-1">universte du roi faycal du tchad</p>
-              <p className="text-xs text-[#666666]">{facultyName.name_fr}</p>
-              <p className="text-xs text-[#666666]">{facultyName.name_ar}</p>
-            </div>
-          </div>
-          <h2 className="text-xl font-black text-[#000000]">كشف الدرجات / Relevé de Notes</h2>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-1 mt-4 text-xs text-[#000000] max-w-lg mx-auto">
-            <div className="flex justify-between"><span className="font-semibold">الاسم واللقب:</span><span>{profile?.name_ar}</span></div>
-            <div className="flex justify-between"><span className="font-semibold">Nom & Prénom:</span><span>{profile?.name_fr}</span></div>
-            <div className="flex justify-between"><span className="font-semibold">الرقم الجامعي:</span><span>{profile?.university_id}</span></div>
-            <div className="flex justify-between"><span className="font-semibold">القسم:</span><span>{profile?.section || '—'}</span></div>
-            <div className="flex justify-between"><span className="font-semibold">المستوى:</span><span>{profile?.level || '—'}</span></div>
-            {profile?.date_of_birth && (
-              <div className="flex justify-between"><span className="font-semibold">تاريخ الميلاد:</span><span>{new Date(profile.date_of_birth).toLocaleDateString()}</span></div>
-            )}
-            {profile?.place_of_birth && (
-              <div className="flex justify-between"><span className="font-semibold">مكان الميلاد:</span><span>{profile.place_of_birth}</span></div>
-            )}
-          </div>
-        </div>
+      {renderSemesterTable(s1Subjects, 1, s1Stats)}
+      {renderSemesterTable(s2Subjects, 2, s2Stats)}
 
-        {renderSemesterTable(s1Subjects, 1, s1Stats)}
-        {renderSemesterTable(s2Subjects, 2, s2Stats)}
-
-        <div className="mt-8 p-4 bg-[#e8f7fc] border border-[#e8f7fc] rounded-md">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-xs text-[#666666] font-bold uppercase">Total Crédits</p>
-              <p className="text-lg font-black text-[#000000]">{totalCredits}</p>
-            </div>
-            <div>
-              <p className="text-xs text-[#666666] font-bold uppercase">Crédits Obttenus / الوحدات المكتسبة</p>
-              <p className="text-lg font-black text-emerald-600">{totalEarned}</p>
-            </div>
-            <div>
-              <p className="text-xs text-[#666666] font-bold uppercase">المعدل العام / Moyenne Générale</p>
-              <p className="text-lg font-black">
-                {(() => {
-                  const all = [...s1Subjects, ...s2Subjects].filter(e => e.subject_average !== null);
-                  if (all.length === 0) return <span className="text-[#666666]">—</span>;
-                  const avg = all.reduce((acc, e) => acc + (e.subject_average || 0) * (e.subjects?.credits || 1), 0) /
-                    all.reduce((acc, e) => acc + (e.subjects?.credits || 1), 0);
-                  return <span className={avg >= 10 ? 'text-emerald-600' : 'text-rose-600'}>{avg.toFixed(2)}</span>;
-                })()}
-              </p>
-            </div>
+      <div className="mt-8 p-4 bg-[#e8f7fc] border border-[#e8f7fc] rounded-md">
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <p className="text-xs text-[#666666] font-bold uppercase">Total Crédits</p>
+            <p className="text-lg font-black text-[#000000]">{totalCredits}</p>
+          </div>
+          <div>
+            <p className="text-xs text-[#666666] font-bold uppercase">Crédits Obtenus / الوحدات المكتسبة</p>
+            <p className="text-lg font-black text-emerald-600">{totalEarned}</p>
+          </div>
+          <div>
+            <p className="text-xs text-[#666666] font-bold uppercase">المعدل العام / Moyenne Générale</p>
+            <p className="text-lg font-black">
+              {(() => {
+                const all = [...s1Subjects, ...s2Subjects].filter(e => e.subject_average !== null);
+                if (all.length === 0) return <span className="text-[#666666]">—</span>;
+                const avg = all.reduce((acc, e) => acc + (e.subject_average || 0) * (e.subjects?.credits || 1), 0) /
+                  all.reduce((acc, e) => acc + (e.subjects?.credits || 1), 0);
+                return <span className={avg >= 10 ? 'text-emerald-600' : 'text-rose-600'}>{avg.toFixed(2)}</span>;
+              })()}
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -26,7 +26,7 @@ export const AdminDashboard: React.FC = () => {
   const { logout, profile } = useAuth();
   const { t } = useLang();
   const [pageKey, setPageKey] = useState(0);
-  const [activeTab, setActiveTab] = useState<'home' | 'office' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'faculties' | 'deans' | 'profile'>('home');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -173,7 +173,7 @@ export const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (activeTab === 'home') {
       loadStats();
-    } else if (activeTab === 'office') {
+    } else if (activeTab === 'faculties' || activeTab === 'deans') {
       loadOfficeData();
     }
     setError(null);
@@ -461,15 +461,27 @@ export const AdminDashboard: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveTab('office')}
+              onClick={() => setActiveTab('faculties')}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'office'
+                activeTab === 'faculties'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
               }`}
             >
               <Building2 className="w-5 h-5" />
-              <span>{t('Office', 'إدارة الكليات')}</span>
+              <span>{t('Facultés', 'إدارة الكليات')}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('deans')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'deans'
+                  ? 'bg-[#00b4d8] text-white shadow-lg'
+                  : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
+              }`}
+            >
+              <Users className="w-5 h-5" />
+              <span>{t('Doyens', 'إدارة العمداء')}</span>
             </button>
 
             <button
@@ -514,7 +526,8 @@ export const AdminDashboard: React.FC = () => {
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
-              {activeTab === 'office' && t('Administration', 'المكتب الإداري')}
+              {activeTab === 'faculties' && t('Gestion des Facultés', 'إدارة الكليات')}
+              {activeTab === 'deans' && t('Gestion des Doyens', 'إدارة العمداء')}
               {activeTab === 'profile' && t('Paramètres du Profil', 'إعدادات الحساب')}
             </h1>
             <p className="text-xs text-[#666666]">
@@ -648,15 +661,15 @@ export const AdminDashboard: React.FC = () => {
           )}
 
           {/* ==========================================
-              TAB 2: OFFICE VIEW (Management forms)
+              TAB 2: FACULTIES VIEW
              ========================================== */}
-          {activeTab === 'office' && (
+          {activeTab === 'faculties' && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               
               {/* Form Col 1: Create Faculty */}
               <div className="lg:col-span-1 space-y-8">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6">
 
                   {/* Existing manual form card */}
                   <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
@@ -744,12 +757,15 @@ export const AdminDashboard: React.FC = () => {
 
                 </div>
 
-                {/* List of existing faculties */}
+              </div>
+
+              {/* List of existing faculties */}
+              <div className="lg:col-span-2 space-y-8">
                 <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
                   <h4 className="text-sm font-bold text-[#666666] uppercase tracking-wider mb-4">
                     Facultés Existantes ({facultiesList.length})
                   </h4>
-                  <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                  <div className="space-y-3 max-h-120 overflow-y-auto pr-2">
                     {facultiesList.map((fac, idx) => (
                       <div key={idx} className="p-3 bg-[#e8f7fc] border border-[#e8f7fc] rounded-md flex justify-between items-center text-xs">
                         <div className="font-semibold text-[#000000]">{fac.name_fr}</div>
@@ -759,312 +775,329 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
 
-              {/* Form Col 2: Register Dean / Assistant — two side-by-side cards */}
-              <div className="lg:col-span-2 space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ==========================================
+              TAB 2.5: DEANS VIEW
+             ========================================== */}
+          {activeTab === 'deans' && (
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                  {/* Manual form card */}
-                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
-                    <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <Plus className="w-5 h-5 text-[#00b4d8]" />
-                      <span>{t('Ajouter Manuellement', 'يدوي')}</span>
-                    </h3>
-                    <form onSubmit={handleRegisterDean} className="space-y-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
-                          {t('Identifiant (ID)', 'معرف الحساب (ID)')} *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Ex: dean01, dean_assistant"
-                          value={deanId}
-                          onChange={(e) => setDeanId(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
-                          {t('Faculté', 'الكلية المعين بها')} *
-                        </label>
-                        <select
-                          required
-                          value={selectedFacultyId}
-                          onChange={(e) => setSelectedFacultyId(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                        >
-                          <option value="">Sélectionner Faculté</option>
-                          {facultiesList.map((f, i) => (
-                            <option key={i} value={f.id}>{f.name_fr}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
-                          Nom et Prénom (French/English) *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Ex: Dr. Ahmed Mohamed"
-                          value={deanNameFr}
-                          onChange={(e) => setDeanNameFr(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1 text-right">
-                          الاسم واللقب (بالعربية) *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="مثال: د. أحمد محمد"
-                          value={deanNameAr}
-                          onChange={(e) => setDeanNameAr(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden text-right"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
-                          {t('Rôle', 'الدور الوظيفي')} *
-                        </label>
-                        <select
-                          required
-                          value={deanRole}
-                          onChange={(e) => setDeanRole(e.target.value as any)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                        >
-                          <option value="dean">Doyen (عميد)</option>
-                          <option value="assistant_dean">Assistant Doyen (مساعد العميد)</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
-                          {t('Département', 'القسم')} (Optional)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Ex: Informatique"
-                          value={deanDepartment}
-                          onChange={(e) => setDeanDepartment(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
-                      >
-                        {loading ? t('Inscription...', 'تسجيل...') : t('Enregistrer', 'تسجيل')}
-                      </button>
-                    </form>
-                  </div>
-
-                  {/* CSV upload card */}
-                  <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
-                    <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
-                      <Upload className="w-5 h-5 text-[#00b4d8]" />
-                      <span>{t('Importer CSV', 'رفع ملف')}</span>
-                    </h3>
-                    <p className="text-sm text-[#666666] mb-4">
-                      Required: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">university_id, name_ar, name_fr, role, faculty_id</code>
-                      <br />Optional: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">department</code>
-                    </p>
-                    <p className="text-xs text-[#666666] mb-4">Role must be <code className="bg-[#e8f7fc] px-1 rounded">dean</code> or <code className="bg-[#e8f7fc] px-1 rounded">assistant_dean</code>. faculty_id must be a valid UUID.</p>
-                    <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
-                      <label className="cursor-pointer">
-                        <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
-                          {deanCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
-                        </span>
-                        <input type="file" accept=".csv" onChange={handleDeanCsvUpload} disabled={deanCsvLoading} className="hidden" />
+                {/* Manual form card */}
+                <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                  <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
+                    <Plus className="w-5 h-5 text-[#00b4d8]" />
+                    <span>{t('Ajouter Manuellement', 'يدوي')}</span>
+                  </h3>
+                  <form onSubmit={handleRegisterDean} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        {t('Identifiant (ID)', 'معرف الحساب (ID)')} *
                       </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Ex: dean01, dean_assistant"
+                        value={deanId}
+                        onChange={(e) => setDeanId(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      />
                     </div>
-                    {deanCsvResults && (
-                      <div className="mt-4 space-y-3">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#00b4d8]">{deanCsvResults.inserted}</p>
-                            <p className="text-xs text-[#0077a8] font-semibold">{t('Insérés', 'مسجلون')}</p>
-                          </div>
-                          <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#c9902a]">{deanCsvResults.skipped}</p>
-                            <p className="text-xs text-[#a07020] font-semibold">Ignorés</p>
-                          </div>
-                        </div>
-                        {deanCsvResults.errors.length > 0 && (
-                          <div className="p-3 bg-rose-50 rounded-md">
-                            {deanCsvResults.errors.slice(0, 10).map((err, i) => (
-                              <p key={i} className="text-xs text-rose-500">{err}</p>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
 
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        {t('Faculté', 'الكلية المعين بها')} *
+                      </label>
+                      <select
+                        required
+                        value={selectedFacultyId}
+                        onChange={(e) => setSelectedFacultyId(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      >
+                        <option value="">Sélectionner Faculté</option>
+                        {facultiesList.map((f, i) => (
+                          <option key={i} value={f.id}>{f.name_fr}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        Nom et Prénom (French/English) *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Ex: Dr. Ahmed Mohamed"
+                        value={deanNameFr}
+                        onChange={(e) => setDeanNameFr(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1 text-right">
+                        الاسم واللقب (بالعربية) *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="مثال: د. أحمد محمد"
+                        value={deanNameAr}
+                        onChange={(e) => setDeanNameAr(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden text-right"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        {t('Rôle', 'الدور الوظيفي')} *
+                      </label>
+                      <select
+                        required
+                        value={deanRole}
+                        onChange={(e) => setDeanRole(e.target.value as any)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      >
+                        <option value="dean">Doyen (عميد)</option>
+                        <option value="assistant_dean">Assistant Doyen (مساعد العميد)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        {t('Rôle', 'الدور الوظيفي')} *
+                      </label>
+                      <select
+                        required
+                        value={deanRole}
+                        onChange={(e) => setDeanRole(e.target.value as any)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      >
+                        <option value="dean">Doyen (عميد)</option>
+                        <option value="assistant_dean">Assistant Doyen (مساعد العميد)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+                        {t('Département', 'القسم')} (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ex: Informatique"
+                        value={deanDepartment}
+                        onChange={(e) => setDeanDepartment(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                    >
+                      {loading ? t('Inscription...', 'تسجيل...') : t('Enregistrer', 'تسجيل')}
+                    </button>
+                  </form>
                 </div>
 
-                {/* Table of active and pending Deans */}
+                {/* CSV upload card */}
                 <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
-                  <h3 className="text-md font-bold text-[#000000] mb-4">
-                    {t('Comptes Créés', 'الحسابات المسجلة')}
+                  <h3 className="text-lg font-bold text-[#000000] mb-4 flex items-center space-x-2">
+                    <Upload className="w-5 h-5 text-[#00b4d8]" />
+                    <span>{t('Importer CSV', 'رفع ملف')}</span>
                   </h3>
-
-                  {/* Active deans */}
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-xs font-bold text-[#00b4d8] uppercase tracking-wider mb-2 flex items-center">
-                        <span className="w-1.5 h-1.5 bg-[#00b4d8] rounded-full mr-2" />
-                         Comptes Actifs (Actifs dans le système)
-                       </h4>
-                       {deansList.length === 0 ? (
-                         <p className="text-xs text-[#666666] italic">Aucun compte actif</p>
-                       ) : (
-                         <div className="overflow-x-auto">
-                           <table className="w-full text-left text-xs border-collapse">
-                             <thead>
-                               <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
-                                 <th className="pb-2">ID</th>
-                                 <th className="pb-2">Nom (FR)</th>
-                                 <th className="pb-2">الاسم (AR)</th>
-                                 <th className="pb-2">Faculté</th>
-                                 <th className="pb-2">Rôle</th>
-                                 <th className="pb-2"></th>
-                               </tr>
-                             </thead>
-                             <tbody className="divide-y divide-[#e8f7fc]">
-                               {deansList.map((d, i) => {
-                                 const isEditing = editingDeanId === d.id;
-                                 return (
-                                   <tr key={i} className="text-[#000000]">
-                                     <td className="py-2 font-semibold font-mono">{d.university_id}</td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
-                                       ) : d.name_fr}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
-                                       ) : d.name_ar}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                           {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
-                                         </select>
-                                       ) : d.faculties?.name_fr}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                           <option value="dean">dean</option>
-                                           <option value="assistant_dean">assistant_dean</option>
-                                         </select>
-                                       ) : <span className="font-bold uppercase text-[10px] text-[#00b4d8]">{d.role}</span>}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <div className="flex space-x-1">
-                                           <button onClick={saveEditDean} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                                           <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
-                                         </div>
-                                       ) : (
-                                         <button onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
-                                       )}
-                                     </td>
-                                   </tr>
-                                 );
-                               })}
-                             </tbody>
-                           </table>
-                         </div>
-                       )}
-                    </div>
-
-                    {/* Pending deans */}
-                    <div className="border-t border-[#e8f7fc] pt-4">
-                      <h4 className="text-xs font-bold text-[#c9902a] uppercase tracking-wider mb-2 flex items-center">
-                        <span className="w-1.5 h-1.5 bg-[#fdf3e0]0 rounded-full mr-2 animate-pulse" />
-                         Comptes en Attente d'Activation (Staging)
-                       </h4>
-                       {pendingDeansList.length === 0 ? (
-                         <p className="text-xs text-[#666666] italic">Aucun compte en attente</p>
-                       ) : (
-                         <div className="overflow-x-auto">
-                           <table className="w-full text-left text-xs border-collapse">
-                             <thead>
-                               <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
-                                 <th className="pb-2">ID</th>
-                                 <th className="pb-2">Nom (FR)</th>
-                                 <th className="pb-2">الاسم (AR)</th>
-                                 <th className="pb-2">Faculté</th>
-                                 <th className="pb-2">Rôle</th>
-                                 <th className="pb-2"></th>
-                               </tr>
-                             </thead>
-                             <tbody className="divide-y divide-[#e8f7fc]">
-                               {pendingDeansList.map((d, i) => {
-                                 const isEditing = editingPendingId === d.id;
-                                 return (
-                                   <tr key={i} className="text-[#000000]">
-                                     <td className="py-2 font-semibold font-mono">{d.university_id}</td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
-                                       ) : d.name_fr}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
-                                       ) : d.name_ar}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                           {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
-                                         </select>
-                                       ) : d.faculties?.name_fr}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                           <option value="dean">dean</option>
-                                           <option value="assistant_dean">assistant_dean</option>
-                                         </select>
-                                       ) : <span className="font-bold uppercase text-[10px] text-[#c9902a]">{d.role}</span>}
-                                     </td>
-                                     <td className="py-2">
-                                       {isEditing ? (
-                                         <div className="flex space-x-1">
-                                           <button onClick={saveEditPending} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                                           <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
-                                         </div>
-                                       ) : (
-                                         <button onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
-                                       )}
-                                     </td>
-                                   </tr>
-                                 );
-                               })}
-                             </tbody>
-                           </table>
-                         </div>
-                       )}
-                    </div>
+                  <p className="text-sm text-[#666666] mb-4">
+                    Required: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">university_id, name_ar, name_fr, role, faculty_id</code>
+                    <br />Optional: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">department</code>
+                  </p>
+                  <p className="text-xs text-[#666666] mb-4">Role must be <code className="bg-[#e8f7fc] px-1 rounded">dean</code> or <code className="bg-[#e8f7fc] px-1 rounded">assistant_dean</code>. faculty_id must be a valid UUID.</p>
+                  <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
+                    <label className="cursor-pointer">
+                      <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+                        {deanCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
+                      </span>
+                      <input type="file" accept=".csv" onChange={handleDeanCsvUpload} disabled={deanCsvLoading} className="hidden" />
+                    </label>
                   </div>
+                  {deanCsvResults && (
+                    <div className="mt-4 space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
+                          <p className="text-2xl font-black text-[#00b4d8]">{deanCsvResults.inserted}</p>
+                          <p className="text-xs text-[#0077a8] font-semibold">{t('Insérés', 'مسجلون')}</p>
+                        </div>
+                        <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
+                          <p className="text-2xl font-black text-[#c9902a]">{deanCsvResults.skipped}</p>
+                          <p className="text-xs text-[#a07020] font-semibold">Ignorés</p>
+                        </div>
+                      </div>
+                      {deanCsvResults.errors.length > 0 && (
+                        <div className="p-3 bg-rose-50 rounded-md">
+                          {deanCsvResults.errors.slice(0, 10).map((err, i) => (
+                            <p key={i} className="text-xs text-rose-500">{err}</p>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
               </div>
 
+              {/* Table of active and pending Deans */}
+              <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-6">
+                <h3 className="text-md font-bold text-[#000000] mb-4">
+                  {t('Comptes Créés', 'الحسابات المسجلة')}
+                </h3>
+
+                {/* Active deans */}
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-xs font-bold text-[#00b4d8] uppercase tracking-wider mb-2 flex items-center">
+                      <span className="w-1.5 h-1.5 bg-[#00b4d8] rounded-full mr-2" />
+                       Comptes Actifs (Actifs dans le système)
+                     </h4>
+                     {deansList.length === 0 ? (
+                       <p className="text-xs text-[#666666] italic">Aucun compte actif</p>
+                     ) : (
+                       <div className="overflow-x-auto">
+                         <table className="w-full text-left text-xs border-collapse">
+                           <thead>
+                             <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
+                               <th className="pb-2">ID</th>
+                               <th className="pb-2">Nom (FR)</th>
+                               <th className="pb-2">الاسم (AR)</th>
+                               <th className="pb-2">Faculté</th>
+                               <th className="pb-2">Rôle</th>
+                               <th className="pb-2"></th>
+                             </tr>
+                           </thead>
+                           <tbody className="divide-y divide-[#e8f7fc]">
+                             {deansList.map((d, i) => {
+                               const isEditing = editingDeanId === d.id;
+                               return (
+                                 <tr key={i} className="text-[#000000]">
+                                   <td className="py-2 font-semibold font-mono">{d.university_id}</td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                                     ) : d.name_fr}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                                     ) : d.name_ar}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                                         {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
+                                       </select>
+                                     ) : d.faculties?.name_fr}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                                         <option value="dean">dean</option>
+                                         <option value="assistant_dean">assistant_dean</option>
+                                       </select>
+                                     ) : <span className="font-bold uppercase text-[10px] text-[#00b4d8]">{d.role}</span>}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <div className="flex space-x-1">
+                                         <button onClick={saveEditDean} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
+                                         <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                                       </div>
+                                     ) : (
+                                       <button onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                     )}
+                                   </td>
+                                 </tr>
+                               );
+                             })}
+                           </tbody>
+                         </table>
+                       </div>
+                     )}
+                  </div>
+
+                  {/* Pending deans */}
+                  <div className="border-t border-[#e8f7fc] pt-4">
+                    <h4 className="text-xs font-bold text-[#c9902a] uppercase tracking-wider mb-2 flex items-center">
+                      <span className="w-1.5 h-1.5 bg-[#fdf3e0]0 rounded-full mr-2 animate-pulse" />
+                       Comptes en Attente d'Activation (Staging)
+                     </h4>
+                     {pendingDeansList.length === 0 ? (
+                       <p className="text-xs text-[#666666] italic">Aucun compte en attente</p>
+                     ) : (
+                       <div className="overflow-x-auto">
+                         <table className="w-full text-left text-xs border-collapse">
+                           <thead>
+                             <tr className="border-b border-[#e8f7fc] text-[#666666] font-bold">
+                               <th className="pb-2">ID</th>
+                               <th className="pb-2">Nom (FR)</th>
+                               <th className="pb-2">الاسم (AR)</th>
+                               <th className="pb-2">Faculté</th>
+                               <th className="pb-2">Rôle</th>
+                               <th className="pb-2"></th>
+                             </tr>
+                           </thead>
+                           <tbody className="divide-y divide-[#e8f7fc]">
+                             {pendingDeansList.map((d, i) => {
+                               const isEditing = editingPendingId === d.id;
+                               return (
+                                 <tr key={i} className="text-[#000000]">
+                                   <td className="py-2 font-semibold font-mono">{d.university_id}</td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                                     ) : d.name_fr}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                                     ) : d.name_ar}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                                         {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
+                                       </select>
+                                     ) : d.faculties?.name_fr}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                                         <option value="dean">dean</option>
+                                         <option value="assistant_dean">assistant_dean</option>
+                                       </select>
+                                     ) : <span className="font-bold uppercase text-[10px] text-[#c9902a]">{d.role}</span>}
+                                   </td>
+                                   <td className="py-2">
+                                     {isEditing ? (
+                                       <div className="flex space-x-1">
+                                         <button onClick={saveEditPending} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
+                                         <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                                       </div>
+                                     ) : (
+                                       <button onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                     )}
+                                   </td>
+                                 </tr>
+                               );
+                             })}
+                           </tbody>
+                         </table>
+                       </div>
+                     )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1137,7 +1170,8 @@ export const AdminDashboard: React.FC = () => {
       >
         {[
           { key: 'home', icon: LayoutDashboard, label: 'الرئيسية' },
-          { key: 'office', icon: Building2, label: 'كليات' },
+          { key: 'faculties', icon: Building2, label: 'الكليات' },
+          { key: 'deans', icon: Users, label: 'العمداء' },
           { key: 'profile', icon: KeyRound, label: 'الملف' },
         ].map(({ key, icon: Icon, label }) => (
           <button

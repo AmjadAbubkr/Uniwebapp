@@ -42,7 +42,7 @@ export const DeanDashboard: React.FC = () => {
   const { logout, profile } = useAuth();
   const { t } = useLang();
   const [pageKey, setPageKey] = useState(0);
-  const [activeTab, setActiveTab] = useState<'home' | 'csv' | 'curriculum' | 'promotion' | 'announcements' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'students' | 'curriculum' | 'announcements' | 'profile'>('home');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -91,9 +91,8 @@ export const DeanDashboard: React.FC = () => {
           <nav className="p-4 space-y-1">
             {[
               { key: 'home', icon: LayoutDashboard, label: t('Tableau de Bord', 'الرئيسية') },
-              { key: 'csv', icon: Upload, label: t('CSV Uploader', 'رفع الملفات') },
+              { key: 'students', icon: Users, label: t('Étudiants', 'الطلاب') },
               { key: 'curriculum', icon: BookOpen, label: t('Curriculum', 'المنهج') },
-              { key: 'promotion', icon: TrendingUp, label: t('Promotion', 'الترقية') },
               { key: 'announcements', icon: Megaphone, label: t('Annonces', 'الإعلانات') },
               { key: 'profile', icon: KeyRound, label: t('Profil', 'الملف الشخصي') },
             ].map(({ key, icon: Icon, label }) => (
@@ -132,9 +131,8 @@ export const DeanDashboard: React.FC = () => {
           <div>
             <h1 className="text-xl font-extrabold text-[#000000]">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
-              {activeTab === 'csv' && t('CSV Uploader', 'رفع ملف الطلاب')}
+              {activeTab === 'students' && t('Gestion des Étudiants', 'إدارة الطلاب')}
               {activeTab === 'curriculum' && t('Gestion du Curriculum', 'إدارة المنهج')}
-              {activeTab === 'promotion' && t('Gestion des Promotions', 'إدارة الترقيات')}
               {activeTab === 'announcements' && t('Annonces', 'الإعلانات')}
               {activeTab === 'profile' && t('Paramètres du Profil', 'إعدادات الحساب')}
             </h1>
@@ -162,9 +160,8 @@ export const DeanDashboard: React.FC = () => {
 
           <div key={pageKey} className="animate-page-in">
           {activeTab === 'home' && <DeanHome facultyId={facultyId!} />}
-          {activeTab === 'csv' && <CSVUploader facultyId={facultyId!} />}
+          {activeTab === 'students' && <StudentsManager facultyId={facultyId!} />}
           {activeTab === 'curriculum' && <CurriculumManager facultyId={facultyId!} />}
-          {activeTab === 'promotion' && <PromotionManager facultyId={facultyId!} />}
           {activeTab === 'announcements' && <AnnouncementsManager facultyId={facultyId!} profileId={profile?.id!} />}
           {activeTab === 'profile' && (
             <div className="max-w-md space-y-6">
@@ -206,9 +203,8 @@ export const DeanDashboard: React.FC = () => {
       >
         {[
           { key: 'home', icon: LayoutDashboard, label: 'الرئيسية' },
-          { key: 'csv', icon: Upload, label: 'رفع' },
+          { key: 'students', icon: Users, label: 'الطلاب' },
           { key: 'curriculum', icon: BookOpen, label: 'المنهج' },
-          { key: 'promotion', icon: TrendingUp, label: 'ترقية' },
           { key: 'announcements', icon: Megaphone, label: 'إعلانات' },
           { key: 'profile', icon: KeyRound, label: 'الملف' },
         ].map(({ key, icon: Icon, label }) => (
@@ -304,6 +300,18 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           </div>
         )}
       </div>
+    </div>
+  );
+};
+
+const StudentsManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
+  return (
+    <div className="space-y-8">
+      {/* Student Upload & Registration Section */}
+      <CSVUploader facultyId={facultyId} />
+      
+      {/* Student Promotion Section */}
+      <PromotionManager facultyId={facultyId} />
     </div>
   );
 };
@@ -553,7 +561,10 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau</label>
-              <input type="text" value={mLevel} onChange={e => setMLevel(e.target.value)} placeholder="Ex: 4eme Annee" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <select value={mLevel} onChange={e => setMLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
+                <option value="">Sélectionner</option>
+                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Département</label>
@@ -641,7 +652,10 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.level} onChange={e => setUserEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <select value={userEditValues.level} onChange={e => setUserEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                              <option value="">—</option>
+                              {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                            </select>
                           ) : u.level || '\u2014'}
                         </td>
                         <td className="py-2 pr-3">
@@ -683,6 +697,8 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
     </div>
   );
 };
+
+const LEVELS = ['1ère Année', '2ème Année', '3ème Année', '4ème Année'];
 
 const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   const { t } = useLang();
@@ -892,7 +908,10 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau *</label>
-              <input type="text" required value={level} onChange={e => setLevel(e.target.value)} placeholder="Ex: 4ème Année" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <select value={level} onChange={e => setLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
+                <option value="">Sélectionner</option>
+                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Semestre *</label>
@@ -1018,7 +1037,9 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input value={subjectEditValues.level} onChange={e => setSubjectEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                        <select value={subjectEditValues.level} onChange={e => setSubjectEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
+                          {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                        </select>
                       ) : s.level}
                     </td>
                     <td className="py-2 pr-2">
@@ -1058,20 +1079,19 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   const { t } = useLang();
   const [loading, setLoading] = useState(false);
-  const [sections, setSections] = useState<string[]>([]);
-  const [levels, setLevels] = useState<string[]>([]);
   const [selectedSection, setSelectedSection] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
   const [newLevel, setNewLevel] = useState('');
+  const LEVELS = ['1ère Année', '2ème Année', '3ème Année', '4ème Année'];
+  const [sections, setSections] = useState<string[]>([]);
   const [students, setStudents] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase.from('profiles').select('section, level').eq('faculty_id', facultyId).eq('role', 'student').eq('status', 'active');
+      const { data } = await supabase.from('profiles').select('section').eq('faculty_id', facultyId).eq('role', 'student').eq('status', 'active');
       const all = data || [];
       setSections([...new Set(all.map((s: any) => s.section).filter(Boolean))].sort());
-      setLevels([...new Set(all.map((s: any) => s.level).filter(Boolean))].sort());
     };
     load();
   }, [facultyId]);
@@ -1092,11 +1112,11 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   };
 
   const handlePromote = async () => {
-    if (!newLevel.trim() || selectedIds.size === 0) { return; }
+    if (!newLevel || selectedIds.size === 0) { return; }
     setLoading(true);
     try {
       const ids = Array.from(selectedIds);
-      const { error: updateError } = await supabase.from('profiles').update({ level: newLevel.trim() }).in('id', ids);
+      const { error: updateError } = await supabase.from('profiles').update({ level: newLevel }).in('id', ids);
       if (updateError) throw updateError;
       searchStudents();
     } catch (_err: any) { /* ignore */ }
@@ -1123,7 +1143,7 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau Actuel</label>
             <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
               <option value="">Sélectionner</option>
-              {levels.map(l => <option key={l} value={l}>{l}</option>)}
+              {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
             </select>
           </div>
           <div className="flex items-end">
@@ -1138,7 +1158,10 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <div className="mb-4 flex items-center space-x-4">
               <div className="flex-1">
                 <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">{t('Nouveau Niveau', 'المستوى الجديد')} *</label>
-                <input type="text" value={newLevel} onChange={e => setNewLevel(e.target.value)} placeholder="Ex: 5ème Année" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+                <select value={newLevel} onChange={e => setNewLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
+                  <option value="">Sélectionner</option>
+                  {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                </select>
               </div>
               <div className="pt-5">
                 <button onClick={handlePromote} disabled={loading} className="px-6 py-2.5 bg-[#0099c2] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer transition-all">
