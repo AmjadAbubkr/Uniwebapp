@@ -32,11 +32,7 @@ export function Select({
       disabled={disabled}
       required={required}
     >
-      <BaseSelect.Select.Trigger className={(state) => {
-        const base = `w-full flex items-center justify-between px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-left transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[#00b4d8]'}`;
-        const focus = 'focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]';
-        return `${base} ${focus} ${className}`;
-      }}>
+      <BaseSelect.Select.Trigger className={`w-full flex items-center justify-between px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-left transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[#00b4d8]'} focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] ${className}`}>
         <BaseSelect.Select.Value placeholder={placeholder} className="text-[#999999] data-[selected]:text-[#000000]" />
         <BaseSelect.Select.Icon className="text-[#666666] ml-2">
           <ChevronDown className="w-4 h-4" />

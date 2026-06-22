@@ -810,7 +810,7 @@ export const AdminDashboard: React.FC = () => {
                       <Select
                         required
                         value={selectedFacultyId}
-                        onValueChange={setSelectedFacultyId}
+                        onValueChange={(val) => val && setSelectedFacultyId(val)}
                         options={facultiesList.map(f => ({ value: f.id, label: f.name_fr }))}
                         placeholder="Sélectionner Faculté"
                       />

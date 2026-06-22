@@ -24,11 +24,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <BaseButton
         ref={ref}
-        className={(state) => {
-          const base = `inline-flex items-center justify-center font-semibold rounded-md cursor-pointer transition-all active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed ${sizeStyles} ${variantStyles[variant]}`;
-          const custom = typeof className === 'function' ? className(state) : className;
-          return `${base} ${custom || ''}`.trim();
-        }}
+        className={`inline-flex items-center justify-center font-semibold rounded-md cursor-pointer transition-all active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed ${sizeStyles} ${variantStyles[variant]} ${className}`}
         {...props}
       />
     );

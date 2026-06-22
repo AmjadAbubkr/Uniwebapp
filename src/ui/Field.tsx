@@ -1,7 +1,7 @@
+import type { ReactNode, ElementType } from 'react';
 import { Field as BaseField } from '@base-ui/react/field';
-import type { ReactNode } from 'react';
 
-export const Field = BaseField;
+export { Field } from '@base-ui/react/field';
 
 export interface FormFieldProps {
   label: string;
@@ -14,21 +14,21 @@ export interface FormFieldProps {
 
 export function FormField({ label, error, description, required, children, className = '' }: FormFieldProps) {
   return (
-    <Field.Root className={className} required={required} invalid={!!error}>
-      <Field.Label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
+    <BaseField.Root className={className} required={required}>
+      <BaseField.Label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
         {label}
-      </Field.Label>
+      </BaseField.Label>
       {children}
       {description && !error && (
-        <Field.Description className="text-xs text-[#666666] mt-1">
+        <BaseField.Description className="text-xs text-[#666666] mt-1">
           {description}
-        </Field.Description>
+        </BaseField.Description>
       )}
       {error && (
-        <Field.Error className="text-xs text-rose-600 mt-1 font-semibold">
+        <BaseField.Error className="text-xs text-rose-600 mt-1 font-semibold">
           {error}
-        </Field.Error>
+        </BaseField.Error>
       )}
-    </Field.Root>
+    </BaseField.Root>
   );
 }
