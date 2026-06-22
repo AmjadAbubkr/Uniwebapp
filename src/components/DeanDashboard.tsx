@@ -6,10 +6,11 @@ import logo from '../assets/logo.png';
 import { supabase } from '../lib/supabase';
 import {
   LayoutDashboard, LogOut, Plus, KeyRound,
-  ShieldAlert, Activity, Upload, BookOpen, TrendingUp,
+  Activity, Upload, BookOpen, TrendingUp,
   Megaphone, Users, GraduationCap, FileSpreadsheet,
   Trash2, Pencil, Check, X
 } from 'lucide-react';
+import { Button, Input, Select, Alert } from '../ui';
 
 interface SubjectRow {
   id: string;
@@ -51,7 +52,6 @@ export const DeanDashboard: React.FC = () => {
 
   const clearMessages = () => { setError(null); setSuccess(null); };
 
-  // Increment pageKey to trigger page transition animation on tab switch
   useEffect(() => {
     setPageKey(k => k + 1);
   }, [activeTab]);
@@ -82,7 +82,7 @@ export const DeanDashboard: React.FC = () => {
       <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
           <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain" /></div>
+            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain img-outline" /></div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
               <span className="text-xs text-[#0099c2] font-semibold uppercase">Dean Panel</span>
@@ -96,10 +96,11 @@ export const DeanDashboard: React.FC = () => {
               { key: 'announcements', icon: Megaphone, label: t('Annonces', 'الإعلانات') },
               { key: 'profile', icon: KeyRound, label: t('Profil', 'الملف الشخصي') },
             ].map(({ key, icon: Icon, label }) => (
-              <button
+              <Button
                 key={key}
+                variant="ghost"
                 onClick={() => setActiveTab(key as any)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
                   activeTab === key
                     ? 'bg-[#00b4d8] text-white shadow-lg'
                     : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -107,7 +108,7 @@ export const DeanDashboard: React.FC = () => {
               >
                 <Icon className="w-5 h-5" />
                 <span>{label}</span>
-              </button>
+              </Button>
             ))}
           </nav>
         </div>
@@ -119,17 +120,17 @@ export const DeanDashboard: React.FC = () => {
               <span className="text-[10px] text-[#0099c2] uppercase font-semibold">{profile?.role === 'dean' ? 'Doyen' : 'Assistant Doyen'}</span>
             </div>
           </div>
-          <button onClick={logout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold cursor-pointer transition-all">
+          <Button variant="danger" onClick={logout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer transition-colors active:scale-[0.96]">
             <LogOut className="w-5 h-5" />
             <span>{t('Déconnexion', 'خروج')}</span>
-          </button>
+          </Button>
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
         <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#e8f7fc]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
-            <h1 className="text-xl font-extrabold text-[#000000]">
+            <h1 className="text-xl font-extrabold text-[#000000] text-balance">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
               {activeTab === 'students' && t('Gestion des Étudiants', 'إدارة الطلاب')}
               {activeTab === 'curriculum' && t('Gestion du Curriculum', 'إدارة المنهج')}
@@ -137,26 +138,19 @@ export const DeanDashboard: React.FC = () => {
               {activeTab === 'profile' && t('Paramètres du Profil', 'إعدادات الحساب')}
             </h1>
           </div>
-          <button
+          <Button
+            variant="ghost"
             onClick={logout}
-            className="flex items-center space-x-2 px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold cursor-pointer transition-all"
+            className="flex items-center space-x-2 px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Déconnexion</span>
-          </button>
+          </Button>
         </header>
 
         <div className="p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-4 lg:space-y-8">
-          {error && (
-            <div className="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-md flex items-start space-x-2 text-rose-800 text-sm">
-              <ShieldAlert className="w-5 h-5 shrink-0" /><span>{error}</span>
-            </div>
-          )}
-          {success && (
-            <div className="p-4 bg-[#e8f7fc] border-l-4 border-[#00b4d8] rounded-r-md flex items-start space-x-2 text-[#0077a8] text-sm">
-              <Activity className="w-5 h-5 shrink-0" /><span>{success}</span>
-            </div>
-          )}
+          {error && <Alert variant="error" message={error} />}
+          {success && <Alert variant="success" message={success} />}
 
           <div key={pageKey} className="animate-page-in">
           {activeTab === 'home' && <DeanHome facultyId={facultyId!} />}
@@ -179,15 +173,15 @@ export const DeanDashboard: React.FC = () => {
                 <form onSubmit={handleChangePassword} className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">{t('Nouveau Mot de Passe', 'كلمة المرور الجديدة')}</label>
-                    <input type="password" required placeholder="••••••••" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
+                    <Input type="password" required placeholder="••••••••" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">{t('Confirmer le Mot de Passe', 'تأكيد كلمة المرور')}</label>
-                    <input type="password" required placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
+                    <Input type="password" required placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
                   </div>
-                  <button type="submit" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
+                  <Button type="submit" variant="primary" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96]">
                     {loading ? t('Mise à jour...', 'تحديث...') : t('Mettre à jour', 'تحديث كلمة المرور')}
-                  </button>
+                  </Button>
                 </form>
               </div>
             </div>
@@ -196,7 +190,6 @@ export const DeanDashboard: React.FC = () => {
 
         </div>
       </main>
-      {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
         className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
@@ -208,8 +201,9 @@ export const DeanDashboard: React.FC = () => {
           { key: 'announcements', icon: Megaphone, label: 'إعلانات' },
           { key: 'profile', icon: KeyRound, label: 'الملف' },
         ].map(({ key, icon: Icon, label }) => (
-          <button
+          <Button
             key={key}
+            variant="ghost"
             onClick={() => setActiveTab(key as any)}
             className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
           >
@@ -220,7 +214,7 @@ export const DeanDashboard: React.FC = () => {
             {activeTab === key && (
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#00b4d8] rounded-full opacity-90" />
             )}
-          </button>
+          </Button>
         ))}
       </nav>
 
@@ -268,7 +262,7 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{label}</p>
-                <h3 className="text-3xl font-black text-[#000000] mt-2">{value}</h3>
+                <h3 className="text-3xl font-black text-[#000000] mt-2 nums-tabular">{value}</h3>
               </div>
               <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8]">
                 <Icon className="w-6 h-6" />
@@ -291,7 +285,7 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
               <div key={i} className="flex items-center space-x-4">
                 <span className="text-xs font-medium text-[#666666] w-40 truncate">{d.label}</span>
                 <div className="flex-1 h-8 bg-[#e8f7fc] rounded-md overflow-hidden">
-                  <div className="h-full bg-[#00b4d8] rounded-md flex items-center px-3 transition-all duration-500" style={{ width: `${(d.avg / 20) * 100}%` }}>
+                  <div className="h-full bg-[#00b4d8] rounded-md flex items-center px-3 transition-[width] duration-500" style={{ width: `${(d.avg / 20) * 100}%` }}>
                     <span className="text-xs font-bold text-white">{d.avg.toFixed(2)}</span>
                   </div>
                 </div>
@@ -307,10 +301,7 @@ const DeanHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 const StudentsManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   return (
     <div className="space-y-8">
-      {/* Student Upload & Registration Section */}
       <CSVUploader facultyId={facultyId} />
-      
-      {/* Student Promotion Section */}
       <PromotionManager facultyId={facultyId} />
     </div>
   );
@@ -321,7 +312,6 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<{ inserted: number; skipped: number; errors: string[] }>({ inserted: 0, skipped: 0, errors: [] });
 
-  // Manual form state
   const [manualLoading, setManualLoading] = useState(false);
   const [mUniId, setMUniId] = useState('');
   const [mNameAr, setMNameAr] = useState('');
@@ -499,7 +489,7 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-8 text-center hover:border-[#00b4d8] transition-colors">
             <FileSpreadsheet className="w-12 h-12 mx-auto text-[#666666] mb-4" />
             <label className="cursor-pointer">
-              <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+              <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-transform active:scale-[0.96]">
                 {loading ? 'Traitement...' : 'Sélectionner le fichier CSV'}
               </span>
               <input type="file" accept=".csv" onChange={handleFileUpload} disabled={loading} className="hidden" />
@@ -510,11 +500,11 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <div className="mt-4 space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
-                  <p className="text-2xl font-black text-[#00b4d8]">{results.inserted}</p>
+                  <p className="text-2xl font-black text-[#00b4d8] nums-tabular">{results.inserted}</p>
                   <p className="text-xs text-[#0077a8] font-semibold">{t('Insérés', 'مسجلون')}</p>
                 </div>
                 <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
-                  <p className="text-2xl font-black text-[#c9902a]">{results.skipped}</p>
+                  <p className="text-2xl font-black text-[#c9902a] nums-tabular">{results.skipped}</p>
                   <p className="text-xs text-[#a07020] font-semibold">{t('Ignorés', 'متجاهلون')}</p>
                 </div>
               </div>
@@ -538,54 +528,46 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           <form onSubmit={handleManualAdd} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">ID Universitaire *</label>
-              <input required type="text" value={mUniId} onChange={e => setMUniId(e.target.value)} placeholder="Ex: 20260042" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input required type="text" value={mUniId} onChange={e => setMUniId(e.target.value)} placeholder="Ex: 20260042" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Rôle *</label>
-              <select required value={mRole} onChange={e => setMRole(e.target.value as any)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                <option value="student">{t('Étudiant', 'طالب')}</option>
-                <option value="teacher">{t('Enseignant', 'أستاذ')}</option>
-              </select>
+              <Select required value={mRole} onValueChange={(v) => v && setMRole(v as 'student' | 'teacher')} options={[{value: 'student', label: t('Étudiant', 'طالب')}, {value: 'teacher', label: t('Enseignant', 'أستاذ')}]} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Nom (FR) *</label>
-              <input required type="text" value={mNameFr} onChange={e => setMNameFr(e.target.value)} placeholder="Ex: Ahmed Mohamed" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input required type="text" value={mNameFr} onChange={e => setMNameFr(e.target.value)} placeholder="Ex: Ahmed Mohamed" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1 text-right">الاسم (AR) *</label>
-              <input required type="text" value={mNameAr} onChange={e => setMNameAr(e.target.value)} placeholder="مثال: أحمد محمد" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] text-right focus:outline-hidden" />
+              <Input required type="text" value={mNameAr} onChange={e => setMNameAr(e.target.value)} placeholder="مثال: أحمد محمد" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] text-right focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Section</label>
-              <input type="text" value={mSection} onChange={e => setMSection(e.target.value)} placeholder="Ex: Génie Informatique" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="text" value={mSection} onChange={e => setMSection(e.target.value)} placeholder="Ex: Génie Informatique" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau</label>
-              <select value={mLevel} onChange={e => setMLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                <option value="">Sélectionner</option>
-                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-              </select>
+              <Select value={mLevel} onValueChange={(v) => setMLevel(v || '')} placeholder="Sélectionner" options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Département</label>
-              <input type="text" value={mDepartment} onChange={e => setMDepartment(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="text" value={mDepartment} onChange={e => setMDepartment(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Date de Naissance</label>
-              <input type="date" value={mDob} onChange={e => setMDob(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="date" value={mDob} onChange={e => setMDob(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Lieu de Naissance</label>
-              <input type="text" value={mPob} onChange={e => setMPob(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="text" value={mPob} onChange={e => setMPob(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             {manualResult && (
-              <div className={`p-3 rounded-md text-sm font-semibold ${manualResult.startsWith('success') ? 'bg-[#e8f7fc] text-[#0077a8]' : 'bg-rose-50 text-rose-700'}`}>
-                {manualResult.split(':').slice(1).join(':')}
-              </div>
+              <Alert variant={manualResult.startsWith('success') ? 'success' : 'error'} message={manualResult.split(':').slice(1).join(':')} />
             )}
-            <button type="submit" disabled={manualLoading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
+            <Button type="submit" variant="primary" disabled={manualLoading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96]">
               {manualLoading ? t('Enregistrement...', 'تسجيل...') : t('Enregistrer', 'تسجيل')}
-            </button>
+            </Button>
           </form>
         </div>
 
@@ -598,10 +580,10 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           </h3>
           <div className="flex space-x-2">
             {(['all', 'student', 'teacher'] as const).map(f => (
-              <button key={f} onClick={() => setUsersFilter(f)}
-                className={`px-3 py-1 text-xs font-semibold rounded-md cursor-pointer transition-all ${usersFilter === f ? 'bg-[#00b4d8] text-white' : 'bg-[#e8f7fc] text-[#666666]'}`}>
+              <Button key={f} variant={usersFilter === f ? 'primary' : 'secondary'} onClick={() => setUsersFilter(f)}
+                className="px-3 py-1 text-xs font-semibold rounded-md cursor-pointer transition-colors active:scale-[0.96]">
                 {f === 'all' ? 'Tous' : f === 'student' ? 'Étudiants' : 'Enseignants'}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -634,12 +616,12 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
                         <td className="py-2 pr-3 font-mono font-semibold">{u.university_id}</td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.name_fr} onChange={e => setUserEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <Input value={userEditValues.name_fr} onChange={e => setUserEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.name_fr}
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.name_ar} onChange={e => setUserEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                            <Input value={userEditValues.name_ar} onChange={e => setUserEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                           ) : u.name_ar}
                         </td>
                         <td className="py-2 pr-3">
@@ -647,40 +629,37 @@ const CSVUploader: React.FC<{ facultyId: string }> = ({ facultyId }) => {
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.section} onChange={e => setUserEditValues((p: any) => ({ ...p, section: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <Input value={userEditValues.section} onChange={e => setUserEditValues((p: any) => ({ ...p, section: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.section || '\u2014'}
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <select value={userEditValues.level} onChange={e => setUserEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                              <option value="">—</option>
-                              {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-                            </select>
+                            <Select value={userEditValues.level || ''} onValueChange={(v) => setUserEditValues((p: any) => ({ ...p, level: v || '' }))} placeholder="—" options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.level || '\u2014'}
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.department} onChange={e => setUserEditValues((p: any) => ({ ...p, department: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <Input value={userEditValues.department} onChange={e => setUserEditValues((p: any) => ({ ...p, department: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.department || '\u2014'}
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input type="date" value={userEditValues.date_of_birth} onChange={e => setUserEditValues((p: any) => ({ ...p, date_of_birth: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <Input type="date" value={userEditValues.date_of_birth} onChange={e => setUserEditValues((p: any) => ({ ...p, date_of_birth: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.date_of_birth ? new Date(u.date_of_birth).toLocaleDateString() : '\u2014'}
                         </td>
                         <td className="py-2 pr-3">
                           {isEditing ? (
-                            <input value={userEditValues.place_of_birth} onChange={e => setUserEditValues((p: any) => ({ ...p, place_of_birth: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                            <Input value={userEditValues.place_of_birth} onChange={e => setUserEditValues((p: any) => ({ ...p, place_of_birth: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                           ) : u.place_of_birth || '\u2014'}
                         </td>
                         <td className="py-2">
                           {isEditing ? (
                             <div className="flex space-x-1">
-                              <button onClick={saveEditUser} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                              <button onClick={cancelEditUser} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                              <Button variant="ghost" size="sm" onClick={saveEditUser} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></Button>
+                              <Button variant="ghost" size="sm" onClick={cancelEditUser} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></Button>
                             </div>
                           ) : (
-                            <button onClick={() => startEditUser(u)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                            <Button variant="ghost" size="sm" onClick={() => startEditUser(u)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></Button>
                           )}
                         </td>
                       </tr>
@@ -877,53 +856,44 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           <form onSubmit={handleCreateSubject} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Nom (FR) *</label>
-              <input type="text" required value={nameFr} onChange={e => setNameFr(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
+              <Input type="text" required value={nameFr} onChange={e => setNameFr(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">الاسم (AR) *</label>
-              <input type="text" required value={nameAr} onChange={e => setNameAr(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-right text-[#000000] focus:outline-hidden" />
+              <Input type="text" required value={nameAr} onChange={e => setNameAr(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-right text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Unité (FR) *</label>
-              <input type="text" required value={unitNameFr} onChange={e => setUnitNameFr(e.target.value)} placeholder="Ex: Unité 1" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="text" required value={unitNameFr} onChange={e => setUnitNameFr(e.target.value)} placeholder="Ex: Unité 1" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">الوحدة (AR) *</label>
-              <input type="text" required value={unitNameAr} onChange={e => setUnitNameAr(e.target.value)} placeholder="مثال: الوحدة الأولى" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-right text-[#000000] focus:outline-hidden" />
+              <Input type="text" required value={unitNameAr} onChange={e => setUnitNameAr(e.target.value)} placeholder="مثال: الوحدة الأولى" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-right text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Crédits *</label>
-              <input type="number" required step="0.01" min="0.01" value={credits} onChange={e => setCredits(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="number" required step="0.01" min="0.01" value={credits} onChange={e => setCredits(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Enseignant</label>
-              <select value={teacherId} onChange={e => setTeacherId(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                <option value="">{t('Aucun', 'بدون أستاذ')}</option>
-                {teachers.map(t => <option key={t.id} value={t.id}>{t.name_fr}</option>)}
-              </select>
+              <Select value={teacherId} onValueChange={(v) => setTeacherId(v || '')} options={[{value: '', label: t('Aucun', 'بدون أستاذ')}, ...teachers.map(t => ({value: t.id, label: t.name_fr}))]} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Section *</label>
-              <input type="text" required value={section} onChange={e => setSection(e.target.value)} placeholder="Ex: Génie Informatique" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+              <Input type="text" required value={section} onChange={e => setSection(e.target.value)} placeholder="Ex: Génie Informatique" className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau *</label>
-              <select value={level} onChange={e => setLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                <option value="">Sélectionner</option>
-                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-              </select>
+              <Select value={level} onValueChange={(v) => setLevel(v || '')} placeholder="Sélectionner" options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Semestre *</label>
-              <select value={semester} onChange={e => setSemester(e.target.value as '1' | '2')} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                <option value="1">Semestre 1</option>
-                <option value="2">Semestre 2</option>
-              </select>
+              <Select value={semester} onValueChange={(v) => v && setSemester(v as '1' | '2')} options={[{value: '1', label: 'Semestre 1'}, {value: '2', label: 'Semestre 2'}]} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
             </div>
             <div className="md:col-span-2 lg:col-span-3 mt-2">
-              <button type="submit" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
+              <Button type="submit" variant="primary" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96]">
                 {loading ? 'Création...' : 'Créer la Matière'}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -937,14 +907,11 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
           <p className="text-sm text-[#666666] mb-2">
             Required: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">name_ar, name_fr, unit_name_ar, unit_name_fr, credits, section, level, semester</code>
           </p>
-          <p className="text-sm text-[#666666] mb-4">
-            Optional: <code className="bg-[#e8f7fc] px-2 py-0.5 rounded text-xs">teacher_id</code>
-          </p>
           <p className="text-xs text-[#666666] mb-4">semester must be <code className="bg-[#e8f7fc] px-1 rounded">1</code> or <code className="bg-[#e8f7fc] px-1 rounded">2</code>. teacher_id must be a valid profile UUID.</p>
           <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-8 text-center hover:border-[#00b4d8] transition-colors">
             <FileSpreadsheet className="w-12 h-12 mx-auto text-[#666666] mb-4" />
             <label className="cursor-pointer">
-              <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+              <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-transform active:scale-[0.96]">
                 {csvLoading ? 'Traitement...' : 'Sélectionner CSV'}
               </span>
               <input type="file" accept=".csv" onChange={handleSubjectCsvUpload} disabled={csvLoading} className="hidden" />
@@ -954,11 +921,11 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <div className="mt-4 space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
-                  <p className="text-2xl font-black text-[#00b4d8]">{csvResults.inserted}</p>
+                   <p className="text-2xl font-black text-[#00b4d8] nums-tabular">{csvResults.inserted}</p>
                   <p className="text-xs text-[#0077a8] font-semibold">Insérés</p>
                 </div>
                 <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
-                  <p className="text-2xl font-black text-[#c9902a]">{csvResults.skipped}</p>
+                   <p className="text-2xl font-black text-[#c9902a] nums-tabular">{csvResults.skipped}</p>
                   <p className="text-xs text-[#a07020] font-semibold">Ignorés</p>
                 </div>
               </div>
@@ -999,68 +966,61 @@ const CurriculumManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
                   <tr key={s.id} className="text-[#000000]">
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input value={subjectEditValues.name_fr} onChange={e => setSubjectEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                        <Input value={subjectEditValues.name_fr} onChange={e => setSubjectEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : <span className="font-semibold">{s.name_fr}</span>}
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input value={subjectEditValues.name_ar} onChange={e => setSubjectEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                        <Input value={subjectEditValues.name_ar} onChange={e => setSubjectEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                       ) : s.name_ar}
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input value={subjectEditValues.unit_name_fr} onChange={e => setSubjectEditValues((p: any) => ({ ...p, unit_name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                        <Input value={subjectEditValues.unit_name_fr} onChange={e => setSubjectEditValues((p: any) => ({ ...p, unit_name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : s.unit_name_fr}
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input type="number" step="0.01" min="0.01" value={subjectEditValues.credits} onChange={e => setSubjectEditValues((p: any) => ({ ...p, credits: e.target.value }))} className="w-16 px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                        <Input type="number" step="0.01" min="0.01" value={subjectEditValues.credits} onChange={e => setSubjectEditValues((p: any) => ({ ...p, credits: e.target.value }))} className="w-16 px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : s.credits}
                     </td>
                     <td className="py-2 pr-2">
-                      <select
+                      <Select
                         value={isEditing ? subjectEditValues.teacher_id : (s.teacher_id || '')}
-                        onChange={e => isEditing
-                          ? setSubjectEditValues((p: any) => ({ ...p, teacher_id: e.target.value }))
-                          : handleAssignTeacher(s.id, e.target.value)
+                        onValueChange={(v) => isEditing
+                          ? setSubjectEditValues((p: any) => ({ ...p, teacher_id: v || '' }))
+                          : handleAssignTeacher(s.id, v || '')
                         }
+                        options={[{value: '', label: '—'}, ...teachers.map(t => ({value: t.id, label: t.name_fr}))]}
                         className="w-full px-2 py-1 bg-white border border-[#d2d6db] rounded text-xs text-[#000000] focus:outline-none focus:ring-1 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8]"
-                      >
-                        <option value="">—</option>
-                        {teachers.map(t => <option key={t.id} value={t.id}>{t.name_fr}</option>)}
-                      </select>
+                      />
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <input value={subjectEditValues.section} onChange={e => setSubjectEditValues((p: any) => ({ ...p, section: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                        <Input value={subjectEditValues.section} onChange={e => setSubjectEditValues((p: any) => ({ ...p, section: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : s.section}
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <select value={subjectEditValues.level} onChange={e => setSubjectEditValues((p: any) => ({ ...p, level: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                          {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-                        </select>
+                        <Select value={subjectEditValues.level} onValueChange={(v) => setSubjectEditValues((p: any) => ({ ...p, level: v || '' }))} options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : s.level}
                     </td>
                     <td className="py-2 pr-2">
                       {isEditing ? (
-                        <select value={subjectEditValues.semester} onChange={e => setSubjectEditValues((p: any) => ({ ...p, semester: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                          <option value="1">S1</option>
-                          <option value="2">S2</option>
-                        </select>
+                        <Select value={String(subjectEditValues.semester)} onValueChange={(v) => setSubjectEditValues((p: any) => ({ ...p, semester: v || '' }))} options={[{value: '1', label: 'S1'}, {value: '2', label: 'S2'}]} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                       ) : `S${s.semester}`}
                     </td>
                     <td className="py-2">
                       <div className="flex space-x-1">
                         {isEditing ? (
                           <>
-                            <button onClick={saveEditSubject} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                            <button onClick={cancelEditSubject} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                            <Button variant="ghost" size="sm" onClick={saveEditSubject} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="sm" onClick={cancelEditSubject} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></Button>
                           </>
                         ) : (
                           <>
-                            <button onClick={() => startEditSubject(s)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
-                            <button onClick={() => handleDeleteSubject(s.id)} className="text-rose-500 hover:text-rose-700 cursor-pointer"><Trash2 className="w-4 h-4" /></button>
+                            <Button variant="ghost" size="sm" onClick={() => startEditSubject(s)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></Button>
+                            <Button variant="ghost" size="sm" onClick={() => handleDeleteSubject(s.id)} className="text-rose-500 hover:text-rose-700 cursor-pointer"><Trash2 className="w-4 h-4" /></Button>
                           </>
                         )}
                       </div>
@@ -1134,22 +1094,16 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div>
             <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Section</label>
-            <select value={selectedSection} onChange={e => setSelectedSection(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-              <option value="">Sélectionner</option>
-              {sections.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+            <Select value={selectedSection} onValueChange={(v) => setSelectedSection(v || '')} placeholder="Sélectionner" options={sections.map(s => ({value: s, label: s}))} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
           </div>
           <div>
             <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">Niveau Actuel</label>
-            <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-              <option value="">Sélectionner</option>
-              {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
+            <Select value={selectedLevel} onValueChange={(v) => setSelectedLevel(v || '')} placeholder="Sélectionner" options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
           </div>
           <div className="flex items-end">
-            <button onClick={searchStudents} className="w-full py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer transition-all">
+            <Button variant="primary" onClick={searchStudents} className="w-full py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer transition-transform active:scale-[0.96]">
               {t('Rechercher', 'بحث')}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -1158,15 +1112,12 @@ const PromotionManager: React.FC<{ facultyId: string }> = ({ facultyId }) => {
             <div className="mb-4 flex items-center space-x-4">
               <div className="flex-1">
                 <label className="block text-xs font-semibold text-[#666666] uppercase mb-1">{t('Nouveau Niveau', 'المستوى الجديد')} *</label>
-                <select value={newLevel} onChange={e => setNewLevel(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden">
-                  <option value="">Sélectionner</option>
-                  {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-                </select>
+                <Select value={newLevel} onValueChange={(v) => setNewLevel(v || '')} placeholder="Sélectionner" options={LEVELS.map(l => ({value: l, label: l}))} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
               </div>
               <div className="pt-5">
-                <button onClick={handlePromote} disabled={loading} className="px-6 py-2.5 bg-[#0099c2] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer transition-all">
+                <Button variant="primary" onClick={handlePromote} disabled={loading} className="px-6 py-2.5 bg-[#0099c2] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer transition-transform active:scale-[0.96]">
                   {loading ? 'Promotion...' : `Promouvoir (${selectedIds.size})`}
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -1238,11 +1189,11 @@ const AnnouncementsManager: React.FC<{ facultyId: string; profileId: string }> =
           <span>{t('Nouvelle Annonce', 'إعلان جديد')}</span>
         </h3>
         <form onSubmit={handleCreate} className="space-y-4">
-          <input type="text" required placeholder={t('Titre', 'العنوان')} value={title} onChange={e => setTitle(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
+          <Input type="text" required placeholder={t('Titre', 'العنوان')} value={title} onChange={e => setTitle(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden" />
           <textarea required rows={4} placeholder={t('Contenu', 'المحتوى')} value={content} onChange={e => setContent(e.target.value)} className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-sm text-[#000000] focus:outline-hidden resize-none" />
-          <button type="submit" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all">
+          <Button type="submit" variant="primary" disabled={loading} className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96]">
             {loading ? t('Publication...', 'نشر...') : t('Publier', 'نشر')}
-          </button>
+          </Button>
         </form>
       </div>
 
@@ -1254,7 +1205,7 @@ const AnnouncementsManager: React.FC<{ facultyId: string; profileId: string }> =
               <p className="text-xs text-[#666666] mt-1 whitespace-pre-wrap">{a.content}</p>
               <p className="text-[10px] text-[#666666] mt-2">{new Date(a.created_at).toLocaleString()}</p>
             </div>
-            <button onClick={() => handleDelete(a.id)} className="text-rose-500 hover:text-rose-700 cursor-pointer shrink-0"><Trash2 className="w-4 h-4" /></button>
+            <Button variant="ghost" size="sm" onClick={() => handleDelete(a.id)} className="text-rose-500 hover:text-rose-700 cursor-pointer shrink-0"><Trash2 className="w-4 h-4" /></Button>
           </div>
         ))}
         {announcements.length === 0 && <p className="text-sm text-[#666666] text-center py-8">{t('Aucune annonce', 'لا توجد إعلانات')}</p>}

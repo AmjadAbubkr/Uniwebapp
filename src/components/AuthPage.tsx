@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import logo from '../assets/logo.png';
-import { KeyRound, User, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
+import { KeyRound, User, ArrowRight } from 'lucide-react';
+import { Button, Input, Alert } from '../ui';
 
 export const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,12 +10,10 @@ export const AuthPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Input states
   const [uniId, setUniId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Form Submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -123,17 +122,14 @@ export const AuthPage: React.FC = () => {
   return (
     <div className="min-h-screen flex bg-white">
       
-      {/* LEFT PANEL: Branding & Visuals (Hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-[#0a0e1a] text-white overflow-hidden p-12 flex-col justify-between">
         
-        {/* Abstract Background Artwork */}
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-[#00b4d8] rounded-full blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#0077a8] rounded-full blur-[120px]" />
           <div className="absolute top-[30%] right-[10%] w-[40%] h-[40%] bg-[#0099c2] rounded-full blur-[100px]" />
         </div>
 
-        {/* Top Section: Header */}
         <div className="relative z-10 flex items-center space-x-3">
           <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/20 shadow-lg p-2">
             <img src={logo} alt="KF" className="w-full h-full object-contain" />
@@ -144,19 +140,17 @@ export const AuthPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Middle Section: Welcome & Features */}
         <div className="relative z-10 my-auto max-w-lg space-y-6">
           <span className="bg-[#00b4d8]/20 text-[#e8f7fc] border border-[#0099c2]/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
             Portail Académique / البوابة الأكاديمية
           </span>
-          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-balance">
             Système de Gestion des Notes et Etudiants
           </h1>
           <p className="text-lg text-[#0099c2] font-medium leading-relaxed">
             نظام إدارة الطلاب والدرجات - كلية العلوم والتقنيات الهندسية
           </p>
 
-          {/* Glassmorphism Widget */}
           <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-6 shadow-2xl mt-8">
             <h3 className="font-semibold text-white text-md mb-3 flex items-center">
               <span className="w-2.5 h-2.5 bg-[#0099c2] rounded-full mr-2.5 animate-pulse" />
@@ -168,18 +162,15 @@ export const AuthPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Section: Footer Info */}
         <div className="relative z-10 text-xs text-[#0099c2]/60 border-t border-white/10 pt-6 flex justify-between">
           <span>&copy; 2026 Université Roi Fayçal. Tous droits réservés.</span>
           <span>B.P. 582 N'Djamena, Tchad</span>
         </div>
       </div>
 
-      {/* RIGHT PANEL: Auth Card */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 lg:p-12">
         <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.10),0_1px_0_rgba(255,255,255,0.6)_inset] p-6 md:p-8">
           
-          {/* Logo / Header for Mobile */}
           <div className="flex flex-col items-center mb-8 lg:hidden">
             <div className="w-14 h-14 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-lg mb-3 p-2">
               <img src={logo} alt="KF" className="w-full h-full object-contain" />
@@ -188,43 +179,29 @@ export const AuthPage: React.FC = () => {
             <p className="text-sm text-[#666666]">جامعة الملك فيصل بتشاد</p>
           </div>
 
-          {/* Tab Selection */}
           <div className="flex p-1 bg-[#e8f7fc]/80 backdrop-blur-sm rounded-[14px] mb-6 md:mb-8">
             <button
               type="button"
-              className={`flex-1 py-3 text-sm font-semibold rounded-md transition-all duration-200 cursor-pointer ${
-                isLogin
-                  ? 'bg-white text-[#000000] shadow-sm'
-                  : 'text-[#666666] hover:text-[#000000]'
+              onClick={() => { setIsLogin(true); setError(null); setSuccess(null); }}
+              className={`flex-1 py-3 text-sm font-semibold rounded-md transition-colors duration-200 cursor-pointer ${
+                isLogin ? 'bg-white text-[#000000] shadow-sm' : 'text-[#666666] hover:text-[#000000]'
               }`}
-              onClick={() => {
-                setIsLogin(true);
-                setError(null);
-                setSuccess(null);
-              }}
             >
               <span className="block text-center">Connexion</span>
               <span className="block text-xs font-normal mt-0.5">تسجيل الدخول</span>
             </button>
             <button
               type="button"
-              className={`flex-1 py-3 text-sm font-semibold rounded-md transition-all duration-200 cursor-pointer ${
-                !isLogin
-                  ? 'bg-white text-[#000000] shadow-sm'
-                  : 'text-[#666666] hover:text-[#000000]'
+              onClick={() => { setIsLogin(false); setError(null); setSuccess(null); }}
+              className={`flex-1 py-3 text-sm font-semibold rounded-md transition-colors duration-200 cursor-pointer ${
+                !isLogin ? 'bg-white text-[#000000] shadow-sm' : 'text-[#666666] hover:text-[#000000]'
               }`}
-              onClick={() => {
-                setIsLogin(false);
-                setError(null);
-                setSuccess(null);
-              }}
             >
               <span className="block text-center">Activer Compte</span>
               <span className="block text-xs font-normal mt-0.5">تفعيل الحساب</span>
             </button>
           </div>
 
-          {/* Title and Descriptions */}
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-[#000000]">
               {isLogin ? 'Bon retour !' : 'Première connexion ?'}
@@ -236,22 +213,9 @@ export const AuthPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Alert messages */}
-          {error && (
-            <div className="mb-6 p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-md flex items-start space-x-2 text-rose-800 text-sm">
-              <AlertCircle className="w-5 h-5 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+          {error && <Alert variant="error" message={error} className="mb-6" />}
+          {success && <Alert variant="success" message={success} className="mb-6" />}
 
-          {success && (
-            <div className="mb-6 p-4 bg-[#e8f7fc] border-l-4 border-[#00b4d8] rounded-r-md flex items-start space-x-2 text-[#0077a8] text-sm">
-              <CheckCircle className="w-5 h-5 shrink-0" />
-              <span>{success}</span>
-            </div>
-          )}
-
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-2">
@@ -261,13 +225,12 @@ export const AuthPage: React.FC = () => {
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
                   <User className="w-5 h-5" />
                 </div>
-                <input
-                  type="text"
+                <Input
                   required
                   placeholder="Ex: 9193, admin"
                   value={uniId}
                   onChange={(e) => setUniId(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-white border border-[#d2d6db] rounded-md text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] transition-all"
+                  className="pl-11"
                 />
               </div>
             </div>
@@ -280,18 +243,17 @@ export const AuthPage: React.FC = () => {
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
                   <KeyRound className="w-5 h-5" />
                 </div>
-                <input
+                <Input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-white border border-[#d2d6db] rounded-md text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] transition-all"
+                  className="pl-11"
                 />
               </div>
             </div>
 
-            {/* Confirm Password for Activation */}
             {!isLogin && (
               <div>
                 <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-2">
@@ -301,26 +263,27 @@ export const AuthPage: React.FC = () => {
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
                     <KeyRound className="w-5 h-5" />
                   </div>
-                  <input
+                  <Input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 bg-white border border-[#d2d6db] rounded-md text-[#000000] focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] transition-all"
+                    className="pl-11"
                   />
                 </div>
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold rounded-md shadow-lg flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              size="lg"
+              className="w-full"
             >
               <span>{loading ? 'Traitement...' : isLogin ? 'Se Connecter' : 'Activer le Compte'}</span>
-              {!loading && <ArrowRight className="w-5 h-5" />}
-            </button>
+              {!loading && <ArrowRight className="w-5 h-5 ml-2" />}
+            </Button>
           </form>
         </div>
       </div>

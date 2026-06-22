@@ -4,14 +4,14 @@ import { useLang } from '../context/LanguageContext';
 import { LangToggle } from './LangToggle';
 import logo from '../assets/logo.png';
 import { supabase } from '../lib/supabase';
-import { 
-  LayoutDashboard, 
-  Building2, 
-  Users, 
-  LogOut, 
-  Plus, 
-  KeyRound, 
-  ShieldAlert,
+import { Button, Input, Select, Alert } from '../ui';
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  LogOut,
+  Plus,
+  KeyRound,
   GraduationCap,
   Briefcase,
   Activity,
@@ -438,7 +438,7 @@ export const AdminDashboard: React.FC = () => {
           {/* Logo Brand */}
           <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
             <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5">
-              <img src={logo} alt="KF" className="w-full h-full object-contain" />
+              <img src={logo} alt="KF" className="w-full h-full object-contain img-outline" />
             </div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
@@ -448,9 +448,10 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Nav Items */}
           <nav className="p-4 space-y-1">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab('home')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'home'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -458,11 +459,12 @@ export const AdminDashboard: React.FC = () => {
             >
               <LayoutDashboard className="w-5 h-5" />
               <span>{t('Tableau de Bord', 'الرئيسية')}</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab('faculties')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'faculties'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -470,11 +472,12 @@ export const AdminDashboard: React.FC = () => {
             >
               <Building2 className="w-5 h-5" />
               <span>{t('Facultés', 'إدارة الكليات')}</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab('deans')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'deans'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -482,11 +485,12 @@ export const AdminDashboard: React.FC = () => {
             >
               <Users className="w-5 h-5" />
               <span>{t('Doyens', 'إدارة العمداء')}</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab('profile')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'profile'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -494,7 +498,7 @@ export const AdminDashboard: React.FC = () => {
             >
               <KeyRound className="w-5 h-5" />
               <span>{t('Profil', 'الملف الشخصي')}</span>
-            </button>
+            </Button>
           </nav>
         </div>
 
@@ -509,13 +513,14 @@ export const AdminDashboard: React.FC = () => {
               <span className="text-[10px] text-[#0099c2] uppercase font-semibold">Administrateur</span>
             </div>
           </div>
-          <button
+          <Button
+            variant="danger"
             onClick={logout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold cursor-pointer transition-all"
+            className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold transition-colors active:scale-[0.96]"
           >
             <LogOut className="w-5 h-5" />
             <span>{t('Déconnexion', 'خروج')}</span>
-          </button>
+          </Button>
         </div>
       </aside>
 
@@ -524,7 +529,7 @@ export const AdminDashboard: React.FC = () => {
         {/* Header bar */}
         <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#e8f7fc]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
           <div>
-            <h1 className="text-xl font-extrabold text-[#000000]">
+            <h1 className="text-xl font-extrabold text-[#000000] text-balance">
               {activeTab === 'home' && t('Tableau de Bord', 'لوحة التحكم')}
               {activeTab === 'faculties' && t('Gestion des Facultés', 'إدارة الكليات')}
               {activeTab === 'deans' && t('Gestion des Doyens', 'إدارة العمداء')}
@@ -534,32 +539,23 @@ export const AdminDashboard: React.FC = () => {
               Content and database controls updated in real-time
             </p>
           </div>
-          <button
+          <Button
+            variant="ghost"
             onClick={logout}
-            className="flex items-center space-x-2 px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold cursor-pointer transition-all"
+            className="flex items-center space-x-2 px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Déconnexion</span>
-          </button>
+          </Button>
         </header>
 
         {/* Dynamic Inner Page */}
         <div className="p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-4 lg:space-y-8">
           
           {/* Alerts */}
-          {error && (
-            <div className="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-md flex items-start space-x-2 text-rose-800 text-sm">
-              <ShieldAlert className="w-5 h-5 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+          {error && <Alert variant="error" message={error} />}
 
-          {success && (
-            <div className="p-4 bg-[#e8f7fc] border-l-4 border-[#00b4d8] rounded-r-md flex items-start space-x-2 text-[#0077a8] text-sm">
-              <Activity className="w-5 h-5 shrink-0" />
-              <span>{success}</span>
-            </div>
-          )}
+          {success && <Alert variant="success" message={success} />}
 
           <div key={pageKey} className="animate-page-in">
           {/* ==========================================
@@ -572,11 +568,11 @@ export const AdminDashboard: React.FC = () => {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
                 
                 {/* Faculties */}
-                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Facultés', 'الكليات')}</p>
-                      <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.faculties}</h3>
+                      <h3 className="text-3xl font-black text-[#000000] mt-2 nums-tabular">{stats.faculties}</h3>
                     </div>
                     <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8]">
                       <Building2 className="w-6 h-6" />
@@ -585,11 +581,11 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Deans */}
-                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Doyens', 'العمداء')}</p>
-                      <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.deans}</h3>
+                      <h3 className="text-3xl font-black text-[#000000] mt-2 nums-tabular">{stats.deans}</h3>
                     </div>
                     <div className="w-12 h-12 bg-[#fdf3e0] rounded-lg flex items-center justify-center text-[#c9902a]">
                       <Briefcase className="w-6 h-6" />
@@ -598,11 +594,11 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Teachers */}
-                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Professeurs', 'الأساتذة')}</p>
-                      <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.teachers}</h3>
+                      <h3 className="text-3xl font-black text-[#000000] mt-2 nums-tabular">{stats.teachers}</h3>
                     </div>
                     <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#00b4d8]">
                       <Users className="w-6 h-6" />
@@ -611,11 +607,11 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Students */}
-                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-200">
+                <div className="bg-white/70 backdrop-blur-sm p-5 lg:p-6 rounded-[20px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-200">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-semibold text-[#666666] uppercase tracking-wider">{t('Étudiants', 'الطلاب')}</p>
-                      <h3 className="text-3xl font-black text-[#000000] mt-2">{stats.students}</h3>
+                      <h3 className="text-3xl font-black text-[#000000] mt-2 nums-tabular">{stats.students}</h3>
                     </div>
                     <div className="w-12 h-12 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#0099c2]">
                       <GraduationCap className="w-6 h-6" />
@@ -682,7 +678,7 @@ export const AdminDashboard: React.FC = () => {
                         <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                           Nom de la Faculté (French)
                         </label>
-                        <input
+                        <Input
                           type="text"
                           required
                           placeholder="Ex: Faculté des Sciences"
@@ -695,7 +691,7 @@ export const AdminDashboard: React.FC = () => {
                         <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                           اسم الكلية (Arabic)
                         </label>
-                        <input
+                        <Input
                           type="text"
                           required
                           placeholder="مثال: كلية العلوم"
@@ -704,13 +700,14 @@ export const AdminDashboard: React.FC = () => {
                           className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden focus:ring-2 focus:ring-[#00b4d8]/20 focus:border-[#00b4d8] text-right"
                         />
                       </div>
-                      <button
+                      <Button
                         type="submit"
+                        variant="primary"
                         disabled={loading}
-                        className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                        className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md transition-transform active:scale-[0.96]"
                       >
                         {loading ? 'Création...' : 'Créer Faculté'}
-                      </button>
+                      </Button>
                     </form>
                   </div>
 
@@ -726,7 +723,7 @@ export const AdminDashboard: React.FC = () => {
                     <p className="text-xs text-[#666666] mb-4">Duplicates are skipped by matching <code className="bg-[#e8f7fc] px-1 rounded">name_fr</code>.</p>
                     <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
                       <label className="cursor-pointer">
-                        <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+                        <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-transform active:scale-[0.96]">
                           {facultyCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
                         </span>
                         <input type="file" accept=".csv" onChange={handleFacultyCsvUpload} disabled={facultyCsvLoading} className="hidden" />
@@ -736,11 +733,11 @@ export const AdminDashboard: React.FC = () => {
                       <div className="mt-4 space-y-3">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#00b4d8]">{facultyCsvResults.inserted}</p>
+                            <p className="text-2xl font-black text-[#00b4d8] nums-tabular">{facultyCsvResults.inserted}</p>
                             <p className="text-xs text-[#0077a8] font-semibold">{t('Insérées', 'مدرجة')}</p>
                           </div>
                           <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
-                            <p className="text-2xl font-black text-[#c9902a]">{facultyCsvResults.skipped}</p>
+                            <p className="text-2xl font-black text-[#c9902a] nums-tabular">{facultyCsvResults.skipped}</p>
                             <p className="text-xs text-[#a07020] font-semibold">{t('Ignorées', 'متجاهلة')}</p>
                           </div>
                         </div>
@@ -796,7 +793,7 @@ export const AdminDashboard: React.FC = () => {
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         {t('Identifiant (ID)', 'معرف الحساب (ID)')} *
                       </label>
-                      <input
+                      <Input
                         type="text"
                         required
                         placeholder="Ex: dean01, dean_assistant"
@@ -810,24 +807,20 @@ export const AdminDashboard: React.FC = () => {
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         {t('Faculté', 'الكلية المعين بها')} *
                       </label>
-                      <select
+                      <Select
                         required
                         value={selectedFacultyId}
-                        onChange={(e) => setSelectedFacultyId(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                      >
-                        <option value="">Sélectionner Faculté</option>
-                        {facultiesList.map((f, i) => (
-                          <option key={i} value={f.id}>{f.name_fr}</option>
-                        ))}
-                      </select>
+                        onValueChange={setSelectedFacultyId}
+                        options={facultiesList.map(f => ({ value: f.id, label: f.name_fr }))}
+                        placeholder="Sélectionner Faculté"
+                      />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         Nom et Prénom (French/English) *
                       </label>
-                      <input
+                      <Input
                         type="text"
                         required
                         placeholder="Ex: Dr. Ahmed Mohamed"
@@ -841,7 +834,7 @@ export const AdminDashboard: React.FC = () => {
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1 text-right">
                         الاسم واللقب (بالعربية) *
                       </label>
-                      <input
+                      <Input
                         type="text"
                         required
                         placeholder="مثال: د. أحمد محمد"
@@ -855,37 +848,37 @@ export const AdminDashboard: React.FC = () => {
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         {t('Rôle', 'الدور الوظيفي')} *
                       </label>
-                      <select
+                      <Select
                         required
                         value={deanRole}
-                        onChange={(e) => setDeanRole(e.target.value as any)}
-                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                      >
-                        <option value="dean">Doyen (عميد)</option>
-                        <option value="assistant_dean">Assistant Doyen (مساعد العميد)</option>
-                      </select>
+                        onValueChange={(val) => setDeanRole(val as 'dean' | 'assistant_dean')}
+                        options={[
+                          { value: 'dean', label: 'Doyen (عميد)' },
+                          { value: 'assistant_dean', label: 'Assistant Doyen (مساعد العميد)' }
+                        ]}
+                      />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         {t('Rôle', 'الدور الوظيفي')} *
                       </label>
-                      <select
+                      <Select
                         required
                         value={deanRole}
-                        onChange={(e) => setDeanRole(e.target.value as any)}
-                        className="w-full px-4 py-2.5 bg-white border border-[#d2d6db] rounded-md text-[#000000] text-sm focus:outline-hidden"
-                      >
-                        <option value="dean">Doyen (عميد)</option>
-                        <option value="assistant_dean">Assistant Doyen (مساعد العميد)</option>
-                      </select>
+                        onValueChange={(val) => setDeanRole(val as 'dean' | 'assistant_dean')}
+                        options={[
+                          { value: 'dean', label: 'Doyen (عميد)' },
+                          { value: 'assistant_dean', label: 'Assistant Doyen (مساعد العميد)' }
+                        ]}
+                      />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                         {t('Département', 'القسم')} (Optional)
                       </label>
-                      <input
+                      <Input
                         type="text"
                         placeholder="Ex: Informatique"
                         value={deanDepartment}
@@ -894,13 +887,14 @@ export const AdminDashboard: React.FC = () => {
                       />
                     </div>
 
-                    <button
+                    <Button
                       type="submit"
+                      variant="primary"
                       disabled={loading}
-                      className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                      className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md transition-transform active:scale-[0.96]"
                     >
                       {loading ? t('Inscription...', 'تسجيل...') : t('Enregistrer', 'تسجيل')}
-                    </button>
+                    </Button>
                   </form>
                 </div>
 
@@ -917,7 +911,7 @@ export const AdminDashboard: React.FC = () => {
                   <p className="text-xs text-[#666666] mb-4">Role must be <code className="bg-[#e8f7fc] px-1 rounded">dean</code> or <code className="bg-[#e8f7fc] px-1 rounded">assistant_dean</code>. faculty_id must be a valid UUID.</p>
                   <div className="border-2 border-dashed border-[#d2d6db] rounded-lg p-6 text-center hover:border-[#00b4d8] transition-colors">
                     <label className="cursor-pointer">
-                      <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-all">
+                      <span className="px-6 py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md inline-block transition-transform active:scale-[0.96]">
                         {deanCsvLoading ? 'Traitement...' : 'Sélectionner CSV'}
                       </span>
                       <input type="file" accept=".csv" onChange={handleDeanCsvUpload} disabled={deanCsvLoading} className="hidden" />
@@ -927,11 +921,11 @@ export const AdminDashboard: React.FC = () => {
                     <div className="mt-4 space-y-3">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="p-4 bg-[#e8f7fc] rounded-md text-center">
-                          <p className="text-2xl font-black text-[#00b4d8]">{deanCsvResults.inserted}</p>
+                          <p className="text-2xl font-black text-[#00b4d8] nums-tabular">{deanCsvResults.inserted}</p>
                           <p className="text-xs text-[#0077a8] font-semibold">{t('Insérés', 'مسجلون')}</p>
                         </div>
                         <div className="p-4 bg-[#fdf3e0] rounded-md text-center">
-                          <p className="text-2xl font-black text-[#c9902a]">{deanCsvResults.skipped}</p>
+                          <p className="text-2xl font-black text-[#c9902a] nums-tabular">{deanCsvResults.skipped}</p>
                           <p className="text-xs text-[#a07020] font-semibold">Ignorés</p>
                         </div>
                       </div>
@@ -984,37 +978,32 @@ export const AdminDashboard: React.FC = () => {
                                    <td className="py-2 font-semibold font-mono">{d.university_id}</td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                                       <Input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                                      ) : d.name_fr}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                                       <Input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                                      ) : d.name_ar}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                         {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
-                                       </select>
+                                       <Select value={deanEditValues.faculty_id} onValueChange={val => setDeanEditValues((p: any) => ({ ...p, faculty_id: val }))} options={facultiesList.map(f => ({ value: f.id, label: f.name_fr }))} />
                                      ) : d.faculties?.name_fr}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                         <option value="dean">dean</option>
-                                         <option value="assistant_dean">assistant_dean</option>
-                                       </select>
+                                       <Select value={deanEditValues.role} onValueChange={val => setDeanEditValues((p: any) => ({ ...p, role: val }))} options={[{ value: 'dean', label: 'dean' }, { value: 'assistant_dean', label: 'assistant_dean' }]} />
                                      ) : <span className="font-bold uppercase text-[10px] text-[#00b4d8]">{d.role}</span>}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
                                        <div className="flex space-x-1">
-                                         <button onClick={saveEditDean} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                                         <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                                         <Button variant="ghost" onClick={saveEditDean} className="text-[#00b4d8] hover:text-[#0077a8]"><Check className="w-4 h-4" /></Button>
+                                         <Button variant="ghost" onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700"><X className="w-4 h-4" /></Button>
                                        </div>
                                      ) : (
-                                       <button onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                       <Button variant="ghost" onClick={() => startEditDean(d)} className="text-[#666666] hover:text-[#00b4d8]"><Pencil className="w-3.5 h-3.5" /></Button>
                                      )}
                                    </td>
                                  </tr>
@@ -1055,37 +1044,32 @@ export const AdminDashboard: React.FC = () => {
                                    <td className="py-2 font-semibold font-mono">{d.university_id}</td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
+                                       <Input value={deanEditValues.name_fr} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_fr: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none" />
                                      ) : d.name_fr}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
+                                       <Input value={deanEditValues.name_ar} onChange={e => setDeanEditValues((p: any) => ({ ...p, name_ar: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs text-right focus:outline-none" />
                                      ) : d.name_ar}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <select value={deanEditValues.faculty_id} onChange={e => setDeanEditValues((p: any) => ({ ...p, faculty_id: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                         {facultiesList.map(f => <option key={f.id} value={f.id}>{f.name_fr}</option>)}
-                                       </select>
+                                       <Select value={deanEditValues.faculty_id} onValueChange={val => setDeanEditValues((p: any) => ({ ...p, faculty_id: val }))} options={facultiesList.map(f => ({ value: f.id, label: f.name_fr }))} />
                                      ) : d.faculties?.name_fr}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
-                                       <select value={deanEditValues.role} onChange={e => setDeanEditValues((p: any) => ({ ...p, role: e.target.value }))} className="w-full px-2 py-1 border border-[#00b4d8] rounded text-xs focus:outline-none">
-                                         <option value="dean">dean</option>
-                                         <option value="assistant_dean">assistant_dean</option>
-                                       </select>
+                                       <Select value={deanEditValues.role} onValueChange={val => setDeanEditValues((p: any) => ({ ...p, role: val }))} options={[{ value: 'dean', label: 'dean' }, { value: 'assistant_dean', label: 'assistant_dean' }]} />
                                      ) : <span className="font-bold uppercase text-[10px] text-[#c9902a]">{d.role}</span>}
                                    </td>
                                    <td className="py-2">
                                      {isEditing ? (
                                        <div className="flex space-x-1">
-                                         <button onClick={saveEditPending} className="text-[#00b4d8] hover:text-[#0077a8] cursor-pointer"><Check className="w-4 h-4" /></button>
-                                         <button onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700 cursor-pointer"><X className="w-4 h-4" /></button>
+                                         <Button variant="ghost" onClick={saveEditPending} className="text-[#00b4d8] hover:text-[#0077a8]"><Check className="w-4 h-4" /></Button>
+                                         <Button variant="ghost" onClick={cancelEditDean} className="text-rose-500 hover:text-rose-700"><X className="w-4 h-4" /></Button>
                                        </div>
                                      ) : (
-                                       <button onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#00b4d8] cursor-pointer"><Pencil className="w-3.5 h-3.5" /></button>
+                                       <Button variant="ghost" onClick={() => startEditPending(d)} className="text-[#666666] hover:text-[#00b4d8]"><Pencil className="w-3.5 h-3.5" /></Button>
                                      )}
                                    </td>
                                  </tr>
@@ -1123,7 +1107,7 @@ export const AdminDashboard: React.FC = () => {
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                       {t('Nouveau Mot de Passe', 'كلمة المرور الجديدة')}
                     </label>
-                    <input
+                    <Input
                       type="password"
                       required
                       placeholder="••••••••"
@@ -1137,7 +1121,7 @@ export const AdminDashboard: React.FC = () => {
                     <label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
                       {t('Confirmer le Mot de Passe', 'تأكيد كلمة المرور')}
                     </label>
-                    <input
+                    <Input
                       type="password"
                       required
                       placeholder="••••••••"
@@ -1147,13 +1131,14 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
 
-                  <button
+                  <Button
                     type="submit"
+                    variant="primary"
                     disabled={loading}
-                    className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-all"
+                    className="w-full py-3 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md shadow-md transition-transform active:scale-[0.96]"
                   >
                     {loading ? t('Mise à jour...', 'تحديث...') : t('Mettre à jour', 'تحديث كلمة المرور')}
-                  </button>
+                  </Button>
                 </form>
               </div>
             </div>
@@ -1174,10 +1159,11 @@ export const AdminDashboard: React.FC = () => {
           { key: 'deans', icon: Users, label: 'العمداء' },
           { key: 'profile', icon: KeyRound, label: 'الملف' },
         ].map(({ key, icon: Icon, label }) => (
-          <button
+          <Button
             key={key}
+            variant="ghost"
             onClick={() => setActiveTab(key as any)}
-            className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 cursor-pointer active:scale-95"
+            className="relative flex flex-col items-center justify-center w-full h-full rounded-[16px] transition-all duration-200 active:scale-95"
           >
             <Icon className={`w-5 h-5 transition-colors ${activeTab === key ? 'text-[#00b4d8]' : 'text-[#666666]'}`} />
             <span className={`text-[9px] mt-0.5 leading-tight ${activeTab === key ? 'text-[#00b4d8] font-semibold' : 'text-[#666666]'}`}>
@@ -1186,7 +1172,7 @@ export const AdminDashboard: React.FC = () => {
             {activeTab === key && (
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#00b4d8] rounded-full opacity-90" />
             )}
-          </button>
+          </Button>
         ))}
       </nav>
 

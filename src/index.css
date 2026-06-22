@@ -37,6 +37,10 @@ body {
   font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
+  text-rendering: optimizeLegibility;
 }
 
 /* Focus ring: green accent instead of indigo */
@@ -115,6 +119,35 @@ body {
 
 .animate-page-in {
   animation: fadeSlideIn 0.3s ease-out;
+}
+
+/* Tabular nums for dynamically-updating numbers */
+.nums-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Text wrap utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Press feedback: scale down slightly on active */
+.press-scale {
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.press-scale:active {
+  transform: scale(0.96);
+}
+
+/* Image outline for logo/hero images */
+.img-outline {
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  outline-offset: -1px;
 }
 
 /* Safe area insets for notched devices (Dynamic Island, home indicator) */
