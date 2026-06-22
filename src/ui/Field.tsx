@@ -1,4 +1,4 @@
-import type { ReactNode, ElementType } from 'react';
+import type { ReactNode } from 'react';
 import { Field as BaseField } from '@base-ui/react/field';
 
 export { Field } from '@base-ui/react/field';
@@ -14,7 +14,7 @@ export interface FormFieldProps {
 
 export function FormField({ label, error, description, required, children, className = '' }: FormFieldProps) {
   return (
-    <BaseField.Root className={className} required={required}>
+    <BaseField.Root className={className}>
       <BaseField.Label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
         {label}
       </BaseField.Label>
