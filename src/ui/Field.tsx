@@ -7,12 +7,11 @@ export interface FormFieldProps {
   label: string;
   error?: string | null;
   description?: string;
-  required?: boolean;
   children: ReactNode;
   className?: string;
 }
 
-export function FormField({ label, error, description, required, children, className = '' }: FormFieldProps) {
+export function FormField({ label, error, description, children, className = '' }: FormFieldProps) {
   return (
     <BaseField.Root className={className}>
       <BaseField.Label className="block text-xs font-semibold text-[#666666] uppercase tracking-wider mb-1">
