@@ -4,8 +4,6 @@ import { useLang } from '../context/LanguageContext';
 import { LangToggle } from './LangToggle';
 import logo from '../assets/logo.png';
 import { supabase } from '../lib/supabase';
-import jsPDF from 'jspdf';
-import { toPng } from 'html-to-image';
 import {
   Megaphone, GraduationCap, KeyRound, LogOut,
   Download, ArrowLeft, FileText
@@ -267,8 +265,51 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   
   const [activeLevelForDetail, setActiveLevelForDetail] = useState<string | null>(null);
   
-  const [pdfLevelToRender, setPdfLevelToRender] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  const handleDownloadPdf = async (level: string) => {
+    setPdfLoading(true);
+    setPdfError(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token || SUPABASE_ANON_KEY;
+      const res = await fetch(
+        `${SUPABASE_URL}/functions/v1/generate-report-pdf`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ studentId, level }),
+        }
+      );
+      if (!res.ok) {
+        let detail = `HTTP ${res.status}`;
+        try {
+          const errBody = await res.json();
+          if (errBody.error) detail = errBody.error;
+        } catch { /* not JSON */ }
+        throw new Error(detail);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `releve-notes-${level}-${profile?.university_id || "etudiant"}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error("PDF generation failed:", err);
+      setPdfError(`PDF: ${err.message}`);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -344,60 +385,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
     return { totalCredits, earnedCredits, avg, subjectsCount };
   };
 
-  const handleDownloadPdf = async (level: string) => {
-    setPdfLevelToRender(level);
-    setPdfLoading(true);
-    
-    setTimeout(async () => {
-      try {
-        const element = document.getElementById(`grades-report-${level}`);
-        if (!element) {
-          console.error("PDF generation failed: transcript element not found in DOM");
-          setPdfLoading(false);
-          setPdfLevelToRender(null);
-          return;
-        }
 
-        const dataUrl = await toPng(element, {
-          pixelRatio: 2,
-          backgroundColor: '#ffffff',
-        });
-
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4',
-        });
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const img = new Image();
-        img.src = dataUrl;
-        await img.decode();
-        const imgWidth = pageWidth;
-        const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
-
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-
-        pdf.save(`releve-notes-${level}-${profile?.university_id || 'etudiant'}.pdf`);
-      } catch (err) {
-        console.error('PDF generation failed:', err);
-      } finally {
-        setPdfLoading(false);
-        setPdfLevelToRender(null);
-      }
-    }, 300);
-  };
 
   if (gradesLoading) {
     return (
@@ -420,6 +408,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   if (activeLevelForDetail !== null) {
     return (
       <div className="space-y-6">
+        {pdfError && <Alert variant="error" message={pdfError} className="no-print" />}
         <div className="flex items-center justify-between no-print">
           <Button
             variant="ghost"
@@ -440,7 +429,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
           </Button>
         </div>
 
-        <div id={`grades-report-${activeLevelForDetail}`} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-8">
+        <div className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] p-4 sm:p-8 overflow-hidden">
           <GradesReportContent
             level={activeLevelForDetail}
             enrollments={enrollments}
@@ -454,21 +443,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
 
   return (
     <div className="space-y-6">
-      {pdfLevelToRender && (
-        <div
-          id={`grades-report-${pdfLevelToRender}`}
-          className="absolute -left-[9999px] top-0 w-[1000px] bg-white p-8"
-          style={{ zIndex: -9999 }}
-        >
-          <GradesReportContent
-            level={pdfLevelToRender}
-            enrollments={enrollments}
-            facultyName={facultyName}
-            profile={profile}
-          />
-        </div>
-      )}
-
+      {pdfError && <Alert variant="error" message={pdfError} className="no-print" />}
       {currentLevel && (() => {
         const stats = getLevelStats(currentLevel);
         return stats.subjectsCount > 0 ? (
@@ -611,7 +586,8 @@ const GradesReportContent: React.FC<{
   const renderSemesterTable = (subs: EnrollmentRow[], semesterNum: number, stats: ReturnType<typeof calcSemesterStats>) => (
     <div className="mb-8">
       <h3 className="text-md font-bold text-[#000000] mb-3">Semestre {semesterNum} / الفصل {semesterNum === 1 ? 'الأول' : 'الثاني'}</h3>
-      <table className="w-full text-left text-xs border-collapse border border-[#d2d6db]">
+      <div className="w-full overflow-x-auto -mx-2 px-2">
+      <table className="w-full min-w-[640px] text-left text-[10px] sm:text-xs border-collapse border border-[#d2d6db]">
         <thead className="bg-[#e8f7fc]">
           <tr className="text-[#666666] font-bold border-b border-[#d2d6db]">
             <th className="p-3 border-r border-[#d2d6db]">المادة (FR)</th>
@@ -655,11 +631,12 @@ const GradesReportContent: React.FC<{
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   );
 
   return (
-    <>
+    <div className="text-[10px] [&_*]:!text-[10px] [&_p]:!text-[10px] [&_span]:!text-[10px] [&_td]:!text-[10px] [&_th]:!text-[10px] [&_h2]:!text-[10px] [&_h3]:!text-[10px]">
       <div className="print-header mb-8 text-center border-b-2 border-[#e8f7fc] pb-6">
         <div className="flex justify-between items-start mb-4">
           <div className="text-left">
@@ -720,6 +697,6 @@ const GradesReportContent: React.FC<{
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
