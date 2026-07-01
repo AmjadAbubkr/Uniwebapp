@@ -267,6 +267,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [gradesError, setGradesError] = useState<string | null>(null);
 
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
   const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -322,6 +323,9 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
 
         if (error) {
           console.error('Error fetching enrollments:', error);
+          setGradesError(error.message);
+        } else {
+          setGradesError(null);
         }
 
         const normalized = ((data as EnrollmentRow[]) || []);
@@ -335,6 +339,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
         }
       } catch (err) {
         console.error('Error loading grades:', err);
+        setGradesError(err instanceof Error ? err.message : String(err));
       } finally {
         setGradesLoading(false);
       }
@@ -408,6 +413,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
   if (activeLevelForDetail !== null) {
     return (
       <div className="space-y-6">
+        {gradesError && <Alert variant="error" message={gradesError} className="no-print" />}
         {pdfError && <Alert variant="error" message={pdfError} className="no-print" />}
         <div className="flex items-center justify-between no-print">
           <Button
@@ -443,6 +449,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
 
   return (
     <div className="space-y-6">
+      {gradesError && <Alert variant="error" message={gradesError} className="no-print" />}
       {pdfError && <Alert variant="error" message={pdfError} className="no-print" />}
       {currentLevel && (() => {
         const stats = getLevelStats(currentLevel);

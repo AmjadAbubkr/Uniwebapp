@@ -2,6 +2,7 @@ import { jsPDF } from "npm:jspdf@2.5.2";
 import "npm:jspdf-autotable@3.8.4";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { shape } from "./_arabic.ts";
+import { AMIRI_REGULAR_BASE64 } from "./_fontAmiri.ts";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -20,6 +21,14 @@ function errorResponse(message: string, status: number) {
   return corsResponse(JSON.stringify({ error: message }), status, {
     "Content-Type": "application/json",
   });
+}
+
+const FONT_NAME = "Amiri";
+
+function registerFont(doc: jsPDF) {
+  doc.addFileToVFS("Amiri-Regular.ttf", AMIRI_REGULAR_BASE64);
+  doc.addFont("Amiri-Regular.ttf", FONT_NAME, "normal");
+  doc.setFont(FONT_NAME);
 }
 
 Deno.serve(async (req) => {
@@ -121,10 +130,22 @@ Deno.serve(async (req) => {
     const s2Stats = calcSemStats(semester2);
 
     const doc = new jsPDF({ unit: "mm", format: "a4" });
+    registerFont(doc);
     const pageW = doc.internal.pageSize.getWidth();
 
     const ar = (txt: string, x: number, yC: number, opts?: any) => {
+      doc.setFont(FONT_NAME);
       doc.text(shape(txt), x, yC, opts);
+    };
+
+    const fr = (txt: string, x: number, yC: number, opts?: any) => {
+      doc.setFont("helvetica");
+      doc.text(txt, x, yC, opts);
+    };
+
+    const arCell = (txt: string) => {
+      doc.setFont(FONT_NAME);
+      return shape(txt);
     };
 
     let y = 14;
@@ -135,17 +156,17 @@ Deno.serve(async (req) => {
     });
     y += 4;
     doc.setFontSize(8);
-    doc.text("Republique du Tchad", 14, y);
+    fr("Republique du Tchad", 14, y);
     y += 4;
 
     ar(
-      "\u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u062A\u0631\u0628\u064A\u0629 \u0648\u0627\u0644\u062A\u0639\u0644\u064A\u0645 \u0648\u0627\u0644\u0628\u062D\u062A \u0648\u0627\u0644\u062A\u0643\u0648\u064A\u0646 \u0627\u0644\u0639\u0644\u0645\u064A",
+      "\u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u062A\u0631\u0628\u064A\u0629 \u0648\u0627\u0644\u062A\u0639\u0644\u064A\u0645 \u0648\u0627\u0644\u0628\u062D\u062B \u0648\u0627\u0644\u062A\u0643\u0648\u064A\u0646 \u0627\u0644\u0639\u0644\u0645\u064A",
       pageW - 14,
       y,
       { align: "right" }
     );
     y += 4;
-    doc.text(
+    fr(
       "Ministere de l'Enseignement Superieur de la recherche",
       14,
       y
@@ -159,10 +180,10 @@ Deno.serve(async (req) => {
       { align: "right" }
     );
     y += 4;
-    doc.text("Universite du Roi Faycal du Tchad", 14, y);
+    fr("Universite du Roi Faycal du Tchad", 14, y);
     y += 4;
 
-    if (faculty.name_fr) doc.text(faculty.name_fr, 14, y);
+    if (faculty.name_fr) fr(faculty.name_fr, 14, y);
     if (faculty.name_ar)
       ar(faculty.name_ar, pageW - 14, y, { align: "right" });
     y += 6;
@@ -177,7 +198,7 @@ Deno.serve(async (req) => {
     });
     y += 2;
     doc.setFontSize(10);
-    doc.text("Releve de Notes", pageW / 2, y, { align: "center" });
+    fr("Releve de Notes", pageW / 2, y, { align: "center" });
     y += 8;
 
     doc.setFontSize(9);
@@ -190,7 +211,7 @@ Deno.serve(async (req) => {
       valFr: string
     ) => {
       ar(labelAr + " " + valAr, labelColR, y, { align: "right" });
-      doc.text(labelFr + " " + valFr, 14, y);
+      fr(labelFr + " " + valFr, 14, y);
       y += 5;
     };
 
@@ -238,27 +259,27 @@ Deno.serve(async (req) => {
       const semTitleAr = `\u0627\u0644\u0641\u0635\u0644 ${
         semNum === 1 ? "\u0627\u0644\u0623\u0648\u0644" : "\u0627\u0644\u062B\u0627\u0646\u064A"
       }`;
-      doc.text(semTitle, 14, y);
+      fr(semTitle, 14, y);
       ar(semTitleAr, pageW - 14, y, { align: "right" });
       y += 3;
 
       const head = [
         [
           "Matiere (FR)",
-          shape("\u0627\u0644\u0645\u0627\u062F\u0629 (AR)"),
-          shape("\u0627\u0644\u0648\u062D\u062F\u0629"),
-          shape("\u0627\u0644\u0648\u062D\u062F\u0627\u062A"),
-          shape("\u0623\u0639\u0645\u0627\u0644"),
-          shape("\u0627\u0645\u062A\u062D\u0627\u0646 \u0661"),
-          shape("\u0627\u0645\u062A\u062D\u0627\u0646 \u0662"),
-          shape("\u0627\u0644\u0645\u0639\u062F\u0644"),
-          shape("\u0627\u0644\u0648\u062D\u062F\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629"),
+          arCell("\u0627\u0644\u0645\u0627\u062F\u0629 (AR)"),
+          arCell("\u0627\u0644\u0648\u062D\u062F\u0629"),
+          arCell("\u0627\u0644\u0648\u062D\u062F\u0627\u062A"),
+          arCell("\u0623\u0639\u0645\u0627\u0644"),
+          arCell("\u0627\u0645\u062A\u062D\u0627\u0646 \u0661"),
+          arCell("\u0627\u0645\u062A\u062D\u0627\u0646 \u0662"),
+          arCell("\u0627\u0644\u0645\u0639\u062F\u0644"),
+          arCell("\u0627\u0644\u0648\u062D\u062F\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629"),
         ],
       ];
 
       const body = subs.map((e: any) => [
         e.subjects?.name_fr || "",
-        shape(e.subjects?.name_ar || ""),
+        arCell(e.subjects?.name_ar || ""),
         e.subjects?.unit_name_fr || "",
         e.subjects?.credits || 0,
         fmt(e.classwork),
@@ -295,20 +316,22 @@ Deno.serve(async (req) => {
         head,
         body,
         foot: [footRow],
-        styles: { fontSize: 8, cellPadding: 2 },
+        styles: { fontSize: 8, cellPadding: 2, font: FONT_NAME },
         headStyles: {
           fillColor: [232, 247, 252],
           textColor: [0, 0, 0],
           fontStyle: "bold",
+          font: FONT_NAME,
         },
         footStyles: {
           fillColor: [232, 247, 252],
           textColor: [0, 0, 0],
+          font: FONT_NAME,
         },
         columnStyles: {
-          0: { cellWidth: 30 },
-          1: { cellWidth: 30 },
-          2: { cellWidth: 22 },
+          0: { cellWidth: 30, halign: "left" },
+          1: { cellWidth: 30, halign: "right" },
+          2: { cellWidth: 22, halign: "left" },
           3: { cellWidth: 14, halign: "center" },
           4: { cellWidth: 16, halign: "center" },
           5: { cellWidth: 16, halign: "center" },
@@ -317,6 +340,13 @@ Deno.serve(async (req) => {
           8: { cellWidth: 18, halign: "center" },
         },
         margin: { left: 14, right: 14 },
+        didParseCell: (data: any) => {
+          const raw = data.cell?.raw;
+          if (typeof raw === "string" &&
+              /[\u0600-\u06FF\uFE70-\uFEFF]/.test(raw)) {
+            data.cell.styles.halign = "right";
+          }
+        },
         didDrawPage: () => {
           y = (doc as any).lastAutoTable.finalY + 8;
         },
@@ -357,13 +387,13 @@ Deno.serve(async (req) => {
             styles: { halign: "center", fontStyle: "bold" },
           },
           {
-            content: shape(
+            content: arCell(
               "\u0627\u0644\u0648\u062D\u062F\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629 / Credits Obtenus"
             ),
             styles: { halign: "center", fontStyle: "bold" },
           },
           {
-            content: shape(
+            content: arCell(
               "\u0627\u0644\u0645\u0639\u062F\u0644 \u0627\u0644\u0639\u0627\u0645 / Moyenne Generale"
             ),
             styles: { halign: "center", fontStyle: "bold" },
@@ -385,7 +415,7 @@ Deno.serve(async (req) => {
           },
         ],
       ],
-      styles: { fontSize: 9, cellPadding: 3 },
+      styles: { fontSize: 9, cellPadding: 3, font: FONT_NAME },
       headStyles: { fillColor: [232, 247, 252] },
       margin: { left: 14, right: 14 },
     });
@@ -396,7 +426,7 @@ Deno.serve(async (req) => {
       headers: {
         ...CORS_HEADERS,
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename=releve-notes-${level}-${
+        "Content-Disposition": `attachment; filename*=UTF-8''releve-notes-${encodeURIComponent(level)}-${
           profile?.university_id || "etudiant"
         }.pdf`,
       },
