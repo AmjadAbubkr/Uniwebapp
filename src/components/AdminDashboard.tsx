@@ -24,7 +24,7 @@ import {
 
 export const AdminDashboard: React.FC = () => {
   const { logout, profile } = useAuth();
-  const { t } = useLang();
+  const { t, isRTL } = useLang();
   const [pageKey, setPageKey] = useState(0);
   const [activeTab, setActiveTab] = useState<'home' | 'faculties' | 'deans' | 'profile'>('home');
   const [loading, setLoading] = useState(false);
@@ -436,7 +436,7 @@ export const AdminDashboard: React.FC = () => {
       <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
           {/* Logo Brand */}
-          <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
+          <div className={`p-6 border-b border-[#0077a8] flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5">
               <img src={logo} alt="KF" className="w-full h-full object-contain img-outline" />
             </div>
@@ -451,7 +451,7 @@ export const AdminDashboard: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => setActiveTab('home')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
+              className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'home'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -464,7 +464,7 @@ export const AdminDashboard: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => setActiveTab('faculties')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
+              className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'faculties'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -477,7 +477,7 @@ export const AdminDashboard: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => setActiveTab('deans')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
+              className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'deans'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -490,7 +490,7 @@ export const AdminDashboard: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => setActiveTab('profile')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
+              className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'profile'
                   ? 'bg-[#00b4d8] text-white shadow-lg'
                   : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -504,7 +504,7 @@ export const AdminDashboard: React.FC = () => {
 
         {/* User Info & Logout */}
         <div className="p-4 border-t border-[#0077a8] space-y-3">
-          <div className="px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center space-x-3">
+          <div className={`px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <div className="w-8 h-8 rounded-full bg-[#00b4d8]/20 text-[#0099c2] flex items-center justify-center font-bold">
               A
             </div>
@@ -516,7 +516,7 @@ export const AdminDashboard: React.FC = () => {
           <Button
             variant="danger"
             onClick={logout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold transition-colors active:scale-[0.96]"
+            className={`w-full flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} px-4 py-3 bg-rose-600/15 hover:bg-rose-600 text-rose-400 hover:text-white rounded-lg text-sm font-semibold transition-colors active:scale-[0.96]`}
           >
             <LogOut className="w-5 h-5" />
             <span>{t('Déconnexion', 'خروج')}</span>
@@ -1150,7 +1150,7 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        className={`lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden ${isRTL ? 'rtl-flex-row' : ''}`}
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[

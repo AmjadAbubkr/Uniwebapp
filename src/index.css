@@ -34,13 +34,69 @@
 }
 
 body {
-  font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Noto Naskh Arabic', system-ui, -apple-system, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-variant-numeric: tabular-nums;
   text-rendering: optimizeLegibility;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* When body is set to RTL (controlled by LanguageContext), apply proper alignment */
+body[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+body[dir="rtl"] * {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+/* Preserve LTR for explicit French/Latin text blocks */
+.ltr-block {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: normal;
+}
+
+/* Ensure Arabic text inside mixed containers is correctly shaped */
+.arabic-text {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: embed;
+}
+
+/* Prevent flexbox spacing issues in RTL */
+body[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* RTL flex row utility class for mobile bottom nav */
+.rtl-flex-row {
+  flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .rtl-flex-row {
+  flex-direction: row-reverse;
+}
+
+/* Fix table alignment for RTL */
+body[dir="rtl"] table {
+  text-align: right;
+}
+
+body[dir="rtl"] th,
+body[dir="rtl"] td {
+  text-align: right;
+}
+
+body[dir="rtl"] th.text-center,
+body[dir="rtl"] td.text-center {
+  text-align: center;
 }
 
 /* Focus ring: green accent instead of indigo */

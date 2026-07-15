@@ -41,7 +41,7 @@ interface AnnouncementRow {
 
 export const TeacherDashboard: React.FC = () => {
   const { logout, profile } = useAuth();
-  const { t } = useLang();
+  const { t, isRTL } = useLang();
   const [pageKey, setPageKey] = useState(0);
   const [activeTab, setActiveTab] = useState<'home' | 'subjects' | 'profile'>('home');
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export const TeacherDashboard: React.FC = () => {
     <div className="min-h-screen flex bg-white safe-top">
       <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
-          <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
+          <div className={`p-6 border-b border-[#0077a8] flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain img-outline" /></div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
@@ -94,7 +94,7 @@ export const TeacherDashboard: React.FC = () => {
                 key={key}
                 variant="ghost"
                 onClick={() => setActiveTab(key as any)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
                   activeTab === key
                     ? 'bg-[#00b4d8] text-white shadow-lg'
                     : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -107,14 +107,14 @@ export const TeacherDashboard: React.FC = () => {
           </nav>
         </div>
         <div className="p-4 border-t border-[#0077a8] space-y-3">
-          <div className="px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center space-x-3">
+          <div className={`px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <div className="w-8 h-8 rounded-full bg-[#00b4d8]/20 text-[#0099c2] flex items-center justify-center font-bold">P</div>
             <div className="truncate">
               <p className="text-xs font-bold truncate">{profile?.name_fr || 'Teacher'}</p>
               <span className="text-[10px] text-[#0099c2] uppercase font-semibold">Enseignant</span>
             </div>
           </div>
-           <Button onClick={logout} variant="danger" className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-sm font-semibold cursor-pointer transition-colors active:scale-[0.96]">
+           <Button onClick={logout} variant="danger" className={`w-full flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} px-4 py-3 text-sm font-semibold cursor-pointer transition-colors active:scale-[0.96]`}>
             <LogOut className="w-5 h-5" />
             <span>{t('Déconnexion', 'خروج')}</span>
           </Button>
@@ -182,7 +182,7 @@ export const TeacherDashboard: React.FC = () => {
       </main>
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        className={`lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden ${isRTL ? 'rtl-flex-row' : ''}`}
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[

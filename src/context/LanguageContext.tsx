@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Lang = 'fr' | 'ar';
 
@@ -6,12 +6,20 @@ interface LanguageContextType {
   lang: Lang;
   toggleLang: () => void;
   t: (fr: string, ar: string) => string;
+  isRTL: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem('lang') as Lang) || 'fr');
+
+  useEffect(() => {
+    // Keep <html> and <body> in sync for global direction and lang
+    document.documentElement.lang = lang === 'ar' ? 'ar' : 'fr';
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  }, [lang]);
 
   const toggleLang = () => {
     setLang(prev => {
@@ -21,13 +29,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   };
 
-  const t = (fr: string, ar: string) => lang === 'fr' ? fr : ar;
+  const t = (fr: string, ar: string) => (lang === 'fr' ? fr : ar);
 
   return (
-    <LanguageContext.Provider value={{ lang, toggleLang, t }}>
-      <div dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-        {children}
-      </div>
+    <LanguageContext.Provider value={{ lang, toggleLang, t, isRTL: lang === 'ar' }}>
+      {children}
     </LanguageContext.Provider>
   );
 };

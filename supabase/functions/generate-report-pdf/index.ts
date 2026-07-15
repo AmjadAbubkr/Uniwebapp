@@ -1,16 +1,16 @@
 import { jsPDF } from "npm:jspdf@2.5.2";
-import "npm:jspdf-autotable@3.8.4";
+import { autoTable } from "npm:jspdf-autotable@5.0.8";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { shape } from "./_arabic.ts";
 import { AMIRI_REGULAR_BASE64 } from "./_fontAmiri.ts";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, content-type, apikey",
+  "Access-Control-Allow-Headers": "authorization, content-type, apikey, x-client-info",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-function corsResponse(body: string, status: number, extraHeaders: Record<string, string> = {}) {
+function corsResponse(body: BodyInit | string, status: number, extraHeaders: Record<string, string> = {}) {
   return new Response(body, {
     status,
     headers: { ...CORS_HEADERS, ...extraHeaders },
@@ -19,16 +19,24 @@ function corsResponse(body: string, status: number, extraHeaders: Record<string,
 
 function errorResponse(message: string, status: number) {
   return corsResponse(JSON.stringify({ error: message }), status, {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
   });
 }
 
 const FONT_NAME = "Amiri";
+const FONT_FILE = "Amiri-Regular.ttf";
 
 function registerFont(doc: jsPDF) {
-  doc.addFileToVFS("Amiri-Regular.ttf", AMIRI_REGULAR_BASE64);
-  doc.addFont("Amiri-Regular.ttf", FONT_NAME, "normal");
+  doc.addFileToVFS(FONT_FILE, AMIRI_REGULAR_BASE64);
+  doc.addFont(FONT_FILE, FONT_NAME, "normal", "Identity-H");
   doc.setFont(FONT_NAME);
+}
+
+function redactFilename(name: string): string {
+  return (name || "etudiant")
+    .normalize("NFC")
+    .replace(/[\\/:*?"<>|\u0000-\u001f]+/g, "_")
+    .trim();
 }
 
 Deno.serve(async (req) => {
@@ -57,7 +65,9 @@ Deno.serve(async (req) => {
       return errorResponse("Server misconfiguration: missing environment variables", 500);
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
 
     const profileRes = await supabase
       .from("profiles")
@@ -108,7 +118,7 @@ Deno.serve(async (req) => {
         0
       );
       const earnedCredits = subs.reduce(
-        (a: number, e: any) => a + e.credits_earned,
+        (a: number, e: any) => a + (e.credits_earned || 0),
         0
       );
       const avg =
@@ -134,18 +144,23 @@ Deno.serve(async (req) => {
     const pageW = doc.internal.pageSize.getWidth();
 
     const ar = (txt: string, x: number, yC: number, opts?: any) => {
+      const value = txt ?? "";
+      if (!value) return;
       doc.setFont(FONT_NAME);
-      doc.text(shape(txt), x, yC, opts);
+      doc.text(shape(value), x, yC, opts);
     };
 
     const fr = (txt: string, x: number, yC: number, opts?: any) => {
+      const value = txt ?? "";
+      if (!value) return;
       doc.setFont("helvetica");
-      doc.text(txt, x, yC, opts);
+      doc.text(value, x, yC, opts);
     };
 
     const arCell = (txt: string) => {
+      const value = txt ?? "";
       doc.setFont(FONT_NAME);
-      return shape(txt);
+      return shape(value);
     };
 
     let y = 14;
@@ -154,7 +169,6 @@ Deno.serve(async (req) => {
     ar("\u062C\u0645\u0647\u0648\u0631\u064A\u0629 \u062A\u0634\u0627\u062F", pageW - 14, y, {
       align: "right",
     });
-    y += 4;
     doc.setFontSize(8);
     fr("Republique du Tchad", 14, y);
     y += 4;
@@ -165,9 +179,8 @@ Deno.serve(async (req) => {
       y,
       { align: "right" }
     );
-    y += 4;
     fr(
-      "Ministere de l'Enseignement Superieur de la recherche",
+      "Ministere de l'Enseignement Superieur, de la Recherche et de la Formation",
       14,
       y
     );
@@ -179,13 +192,11 @@ Deno.serve(async (req) => {
       y,
       { align: "right" }
     );
-    y += 4;
     fr("Universite du Roi Faycal du Tchad", 14, y);
     y += 4;
 
     if (faculty.name_fr) fr(faculty.name_fr, 14, y);
-    if (faculty.name_ar)
-      ar(faculty.name_ar, pageW - 14, y, { align: "right" });
+    if (faculty.name_ar) ar(faculty.name_ar, pageW - 14, y, { align: "right" });
     y += 6;
 
     doc.setDrawColor(200, 200, 200);
@@ -196,10 +207,9 @@ Deno.serve(async (req) => {
     ar("\u0643\u0634\u0641 \u0627\u0644\u062F\u0631\u062C\u0627\u062A", pageW / 2, y, {
       align: "center",
     });
-    y += 2;
     doc.setFontSize(10);
-    fr("Releve de Notes", pageW / 2, y, { align: "center" });
-    y += 8;
+    fr("Releve de Notes", pageW / 2, y + 5, { align: "center" });
+    y += 12;
 
     doc.setFontSize(9);
     const labelColR = pageW - 14;
@@ -210,8 +220,8 @@ Deno.serve(async (req) => {
       labelFr: string,
       valFr: string
     ) => {
-      ar(labelAr + " " + valAr, labelColR, y, { align: "right" });
-      fr(labelFr + " " + valFr, 14, y);
+      ar(labelAr + " " + (valAr || ""), labelColR, y, { align: "right" });
+      fr(labelFr + " " + (valFr || ""), 14, y);
       y += 5;
     };
 
@@ -261,7 +271,7 @@ Deno.serve(async (req) => {
       }`;
       fr(semTitle, 14, y);
       ar(semTitleAr, pageW - 14, y, { align: "right" });
-      y += 3;
+      y += 5;
 
       const head = [
         [
@@ -281,78 +291,97 @@ Deno.serve(async (req) => {
         e.subjects?.name_fr || "",
         arCell(e.subjects?.name_ar || ""),
         e.subjects?.unit_name_fr || "",
-        e.subjects?.credits || 0,
+        e.subjects?.credits ?? 0,
         fmt(e.classwork),
         fmt(e.exam_session_1),
         fmt(e.exam_session_2),
         fmt(e.subject_average),
-        e.credits_earned,
+        e.credits_earned ?? 0,
       ]);
+
+      const total: typeof stats = {
+        totalCredits: stats.totalCredits,
+        earnedCredits: stats.earnedCredits,
+        avg: stats.avg !== null ? Number(stats.avg.toFixed(2)) : null,
+      };
 
       const footRow = [
         {
-          content: "Total",
+          content: arCell("\u0627\u0644\u0645\u062C\u0645\u0648\u0639 / Total"),
           colSpan: 3,
-          styles: { halign: "right", fontStyle: "bold" },
+          styles: { halign: "right" },
         },
         {
-          content: String(stats.totalCredits),
-          styles: { halign: "center", fontStyle: "bold" },
+          content: String(total.totalCredits),
+          styles: { halign: "center" },
         },
         {
           content:
-            stats.avg !== null ? stats.avg.toFixed(2) : "\u2014",
+            total.avg !== null ? total.avg.toFixed(2) : "\u2014",
           colSpan: 4,
-          styles: { halign: "center", fontStyle: "bold" },
+          styles: { halign: "center" },
         },
         {
-          content: String(stats.earnedCredits),
-          styles: { halign: "center", fontStyle: "bold" },
+          content: String(total.earnedCredits),
+          styles: { halign: "center" },
         },
       ];
 
-      (doc as any).autoTable({
+      autoTable(doc, {
         startY: y,
         head,
         body,
         foot: [footRow],
-        styles: { fontSize: 8, cellPadding: 2, font: FONT_NAME },
+        styles: { fontSize: 8, cellPadding: 2, font: FONT_NAME, fontStyle: "normal" },
         headStyles: {
           fillColor: [232, 247, 252],
           textColor: [0, 0, 0],
-          fontStyle: "bold",
           font: FONT_NAME,
+          fontStyle: "normal",
         },
         footStyles: {
           fillColor: [232, 247, 252],
           textColor: [0, 0, 0],
           font: FONT_NAME,
+          fontStyle: "normal",
         },
         columnStyles: {
-          0: { cellWidth: 30, halign: "left" },
-          1: { cellWidth: 30, halign: "right" },
-          2: { cellWidth: 22, halign: "left" },
-          3: { cellWidth: 14, halign: "center" },
-          4: { cellWidth: 16, halign: "center" },
-          5: { cellWidth: 16, halign: "center" },
-          6: { cellWidth: 16, halign: "center" },
-          7: { cellWidth: 16, halign: "center" },
-          8: { cellWidth: 18, halign: "center" },
+          0: { cellWidth: 30, halign: "left", font: "helvetica" },
+          1: { cellWidth: 30, halign: "right", font: FONT_NAME },
+          2: { cellWidth: 22, halign: "left", font: "helvetica" },
+          3: { cellWidth: 14, halign: "center", font: "helvetica" },
+          4: { cellWidth: 16, halign: "center", font: "helvetica" },
+          5: { cellWidth: 16, halign: "center", font: "helvetica" },
+          6: { cellWidth: 16, halign: "center", font: "helvetica" },
+          7: { cellWidth: 16, halign: "center", font: "helvetica" },
+          8: { cellWidth: 18, halign: "center", font: "helvetica" },
         },
         margin: { left: 14, right: 14 },
         didParseCell: (data: any) => {
           const raw = data.cell?.raw;
-          if (typeof raw === "string" &&
-              /[\u0600-\u06FF\uFE70-\uFEFF]/.test(raw)) {
+          if (
+            typeof raw === "string" &&
+            /[\u0600-\u06FF\uFE70-\uFEFF]/.test(raw)
+          ) {
             data.cell.styles.halign = "right";
+            data.cell.styles.font = FONT_NAME;
+            data.cell.styles.fontStyle = "normal";
+          } else if (data.section === "head" || data.section === "foot") {
+            data.cell.styles.font = FONT_NAME;
+            data.cell.styles.fontStyle = "normal";
           }
         },
         didDrawPage: () => {
-          y = (doc as any).lastAutoTable.finalY + 8;
+          doc.setFont(FONT_NAME);
         },
       });
 
-      y = (doc as any).lastAutoTable.finalY + 8;
+      const lastY = (doc as any).lastAutoTable?.finalY;
+      if (typeof lastY === "number") {
+        y = lastY + 8;
+      } else {
+        y += 80;
+      }
     };
 
     if (semester1.length > 0) buildTable(semester1, 1, s1Stats);
@@ -377,62 +406,70 @@ Deno.serve(async (req) => {
           )
         : null;
 
-    (doc as any).autoTable({
+    autoTable(doc, {
       startY: y,
       head: [[]],
       body: [
         [
           {
-            content: "Total Credits",
-            styles: { halign: "center", fontStyle: "bold" },
+            content: arCell("\u0627\u0644\u0648\u062D\u062F\u0627\u062A \u0627\u0644\u0643\u0644\u064A\u0629 / Total Credits"),
+            styles: { halign: "center", font: FONT_NAME },
           },
           {
             content: arCell(
               "\u0627\u0644\u0648\u062D\u062F\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629 / Credits Obtenus"
             ),
-            styles: { halign: "center", fontStyle: "bold" },
+            styles: { halign: "center", font: FONT_NAME },
           },
           {
             content: arCell(
               "\u0627\u0644\u0645\u0639\u062F\u0644 \u0627\u0644\u0639\u0627\u0645 / Moyenne Generale"
             ),
-            styles: { halign: "center", fontStyle: "bold" },
+            styles: { halign: "center", font: FONT_NAME },
           },
         ],
         [
           {
             content: String(totalCredits),
-            styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
+            styles: { halign: "center", fontSize: 12, fontStyle: "bold", font: "helvetica" },
           },
           {
             content: String(totalEarned),
-            styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
+            styles: { halign: "center", fontSize: 12, fontStyle: "bold", font: "helvetica" },
           },
           {
             content:
               overallAvg !== null ? overallAvg.toFixed(2) : "\u2014",
-            styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
+            styles: { halign: "center", fontSize: 12, fontStyle: "bold", font: "helvetica" },
           },
         ],
       ],
-      styles: { fontSize: 9, cellPadding: 3, font: FONT_NAME },
-      headStyles: { fillColor: [232, 247, 252] },
+      styles: { fontSize: 9, cellPadding: 3, font: FONT_NAME, fontStyle: "normal" },
+      headStyles: { fillColor: [232, 247, 252], fontStyle: "normal" },
       margin: { left: 14, right: 14 },
     });
 
-    const pdfBytes = doc.output("arraybuffer");
+    const raw = doc.output("arraybuffer");
+    const pdfBytes = raw instanceof Uint8Array ? raw : new Uint8Array(raw as ArrayBuffer);
+
+    const levelSlug = level.replace(/[^\p{L}\p{N}_\-]+/gu, "_");
+    const idSlug = redactFilename(profile?.university_id || "etudiant");
+    const filename = `releve-notes-${levelSlug}-${idSlug}.pdf`;
 
     return new Response(pdfBytes, {
       headers: {
         ...CORS_HEADERS,
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename*=UTF-8''releve-notes-${encodeURIComponent(level)}-${
-          profile?.university_id || "etudiant"
-        }.pdf`,
+        "Content-Length": String((pdfBytes as Uint8Array).byteLength),
+        "Content-Disposition": `attachment; filename="${filename.replace(/"/g, '')}"; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        "Cache-Control": "no-store",
       },
     });
   } catch (err) {
-    console.error("generate-report-pdf unhandled error:", err instanceof Error ? err.stack : err);
+    console.error(
+      "generate-report-pdf unhandled error:",
+      err instanceof Error ? err.stack : err
+    );
     return errorResponse(
       err instanceof Error ? err.message : String(err),
       500

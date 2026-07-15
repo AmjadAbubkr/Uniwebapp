@@ -39,7 +39,7 @@ interface AnnouncementRow {
 
 export const StudentDashboard: React.FC = () => {
   const { logout, profile } = useAuth();
-  const { t } = useLang();
+  const { t, isRTL } = useLang();
   const [pageKey, setPageKey] = useState(0);
   const [activeTab, setActiveTab] = useState<'home' | 'grades' | 'profile'>('home');
   const [loading, setLoading] = useState(false);
@@ -75,8 +75,8 @@ export const StudentDashboard: React.FC = () => {
     <div className="min-h-screen flex bg-white safe-top">
       <aside className="hidden lg:flex w-64 bg-[#0a0e1a] text-[#e8f7fc] flex flex-col justify-between shrink-0 shadow-xl border-r border-[#0077a8]">
         <div>
-          <div className="p-6 border-b border-[#0077a8] flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain img-outline" /></div>
+          <div className={`p-6 border-b border-[#0077a8] flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+            <div className="w-10 h-10 bg-[#00b4d8] rounded-lg flex items-center justify-center shadow-md p-1.5"><img src={logo} alt="KF" className="w-full h-full object-contain img-outline" detached-style="" /></div>
             <div>
               <h2 className="text-sm font-semibold tracking-wide">Univ Roi Fayçal</h2>
               <span className="text-xs text-[#0099c2] font-semibold uppercase">Student Portal</span>
@@ -92,7 +92,7 @@ export const StudentDashboard: React.FC = () => {
                 key={key}
                 variant="ghost"
                 onClick={() => setActiveTab(key as any)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
+                className={`w-full flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                   activeTab === key
                     ? 'bg-[#00b4d8] text-white shadow-lg'
                     : 'text-[#0099c2] hover:bg-[#0077a8] hover:text-white'
@@ -105,14 +105,14 @@ export const StudentDashboard: React.FC = () => {
           </nav>
         </div>
         <div className="p-4 border-t border-[#0077a8] space-y-3">
-          <div className="px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center space-x-3">
+          <div className={`px-4 py-3 bg-[#0077a8]/50 rounded-lg flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <div className="w-8 h-8 rounded-full bg-[#00b4d8]/20 text-[#0099c2] flex items-center justify-center font-bold">S</div>
             <div className="truncate">
               <p className="text-xs font-bold truncate">{profile?.name_fr || 'Student'}</p>
               <span className="text-[10px] text-[#0099c2] uppercase font-semibold">Étudiant</span>
             </div>
           </div>
-          <Button variant="danger" onClick={logout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer transition-colors active:scale-[0.96]">
+          <Button variant="danger" onClick={logout} className={`w-full flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer transition-colors active:scale-[0.96]`}>
             <LogOut className="w-5 h-5" />
             <span>{t('Déconnexion', 'خروج')}</span>
           </Button>
@@ -121,8 +121,8 @@ export const StudentDashboard: React.FC = () => {
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-28 lg:pb-0">
         <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-[#e8f7fc]/60 flex items-center justify-between px-4 lg:px-8 py-3 lg:py-0 lg:h-20">
-          <div>
-            <h1 className="text-xl font-extrabold text-[#000000] text-balance">
+          <div dir={isRTL ? 'rtl' : 'ltr'}>
+            <h1 className={`text-xl font-extrabold text-[#000000] text-balance ${isRTL ? 'text-right' : 'text-left'}`}>
               {activeTab === 'home' && t('Annonces', 'الإعلانات')}
               {activeTab === 'grades' && t('Relevé de Notes', 'كشف الدرجات')}
               {activeTab === 'profile' && t('Paramètres du Profil', 'إعدادات الحساب')}
@@ -131,7 +131,7 @@ export const StudentDashboard: React.FC = () => {
           <Button
             variant="danger"
             onClick={logout}
-            className="flex items-center space-x-2 px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+            className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} px-3 py-2 text-[#666666] hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold cursor-pointer transition-colors`}
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Déconnexion</span>
@@ -180,7 +180,7 @@ export const StudentDashboard: React.FC = () => {
       </main>
       {/* Bottom Navigation (mobile only) — floating pill */}
       <nav
-        className="lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden"
+        className={`lg:hidden fixed left-4 right-4 z-50 flex justify-around items-center backdrop-blur-2xl bg-white/50 border border-white/35 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] rounded-[20px] h-16 overflow-hidden ${isRTL ? 'rtl-flex-row' : ''}`}
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         {[
@@ -258,6 +258,7 @@ const StudentHome: React.FC<{ facultyId: string }> = ({ facultyId }) => {
 const LEVELS_ORDER = ['1ère Année', '2ème Année', '3ème Année', '4ème Année'];
 
 const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentId, profile }) => {
+  const { isRTL } = useLang();
   const [enrollments, setEnrollments] = useState<EnrollmentRow[]>([]);
   const [facultyName, setFacultyName] = useState({ name_fr: '', name_ar: '' });
   
@@ -276,19 +277,30 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
     setPdfLoading(true);
     setPdfError(null);
     try {
+      if (!SUPABASE_URL) {
+        throw new Error("Supabase URL is not configured.");
+      }
       const { data: { session } } = await supabase.auth.getSession();
       const accessToken = session?.access_token || SUPABASE_ANON_KEY;
-      const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/generate-report-pdf`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ studentId, level }),
-        }
-      );
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 60_000);
+      let res: Response;
+      try {
+        res = await fetch(
+          `${SUPABASE_URL}/functions/v1/generate-report-pdf`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ studentId, level }),
+            signal: controller.signal,
+          }
+        );
+      } finally {
+        clearTimeout(timeout);
+      }
       if (!res.ok) {
         let detail = `HTTP ${res.status}`;
         try {
@@ -298,15 +310,23 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
         throw new Error(detail);
       }
       const blob = await res.blob();
+      if (blob.size === 0) {
+        throw new Error("Received empty PDF response.");
+      }
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `releve-notes-${level}-${profile?.university_id || "etudiant"}.pdf`;
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
     } catch (err: any) {
       console.error("PDF generation failed:", err);
-      setPdfError(`PDF: ${err.message}`);
+      const message = err.name === "AbortError"
+        ? "PDF generation timed out. Please try again."
+        : `PDF: ${err.message}`;
+      setPdfError(message);
     } finally {
       setPdfLoading(false);
     }
@@ -415,20 +435,20 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
       <div className="space-y-6">
         {gradesError && <Alert variant="error" message={gradesError} className="no-print" />}
         {pdfError && <Alert variant="error" message={pdfError} className="no-print" />}
-        <div className="flex items-center justify-between no-print">
+        <div className={`flex items-center justify-between no-print ${isRTL ? 'flex-row-reverse' : ''}`}>
           <Button
             variant="ghost"
             onClick={() => setActiveLevelForDetail(null)}
-            className="px-4 py-2 bg-[#e8f7fc] hover:bg-[#00b4d8]/20 text-[#0077a8] font-bold text-sm rounded-md transition-colors active:scale-[0.96] flex items-center space-x-2 cursor-pointer"
+            className={`px-4 py-2 bg-[#e8f7fc] hover:bg-[#00b4d8]/20 text-[#0077a8] font-bold text-sm rounded-md transition-colors active:scale-[0.96] flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} cursor-pointer`}
           >
-            <ArrowLeft className="w-4 h-4" />
+            {isRTL ? <ArrowLeft className="w-4 h-4 rtl:rotate-180" /> : <ArrowLeft className="w-4 h-4" />}
             <span>Retour / رجوع</span>
           </Button>
           <Button
             variant="primary"
             onClick={() => handleDownloadPdf(activeLevelForDetail)}
             disabled={pdfLoading}
-            className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96] flex items-center space-x-2 disabled:opacity-50"
+            className={`px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96] flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} disabled:opacity-50`}
           >
             <Download className="w-4 h-4" />
             <span>{pdfLoading ? 'Génération...' : `Télécharger PDF (${activeLevelForDetail})`}</span>
@@ -459,7 +479,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
               Niveau Actuel / المستوى الحالي
             </h3>
             <div className="bg-gradient-to-br from-[#e8f7fc]/40 to-white border-2 border-[#00b4d8]/30 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[20px] p-6 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-              <div className="flex items-center space-x-4">
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                 <div className="w-12 h-12 bg-[#00b4d8]/10 rounded-xl flex items-center justify-center text-[#00b4d8] shrink-0">
                   <FileText className="w-6 h-6" />
                 </div>
@@ -482,7 +502,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 shrink-0">
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} shrink-0`}>
                 <Button
                   variant="secondary"
                   onClick={() => setActiveLevelForDetail(currentLevel)}
@@ -494,7 +514,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
                   variant="primary"
                   onClick={() => handleDownloadPdf(currentLevel)}
                   disabled={pdfLoading}
-                  className="px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96] flex items-center space-x-2 disabled:opacity-50"
+                  className={`px-4 py-2.5 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-sm rounded-md cursor-pointer shadow-md transition-transform active:scale-[0.96] flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} disabled:opacity-50`}
                 >
                   <Download className="w-4 h-4" />
                   <span>{pdfLoading ? '...' : 'PDF'}</span>
@@ -515,7 +535,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
               const stats = getLevelStats(level);
               return (
                 <div key={level} className="bg-white border border-[#e8f7fc] shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[20px] p-6 flex flex-col justify-between space-y-4">
-                  <div className="flex items-center space-x-4">
+                  <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                     <div className="w-10 h-10 bg-[#e8f7fc] rounded-lg flex items-center justify-center text-[#666666] shrink-0">
                       <FileText className="w-5 h-5" />
                     </div>
@@ -535,7 +555,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3 pt-2 border-t border-[#e8f7fc]">
+                  <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} pt-2 border-t border-[#e8f7fc]`}>
                     <Button
                       variant="secondary"
                       onClick={() => setActiveLevelForDetail(level)}
@@ -547,7 +567,7 @@ const StudentGrades: React.FC<{ studentId: string; profile: any }> = ({ studentI
                       variant="primary"
                       onClick={() => handleDownloadPdf(level)}
                       disabled={pdfLoading}
-                      className="flex-1 px-3 py-2 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-xs rounded-md cursor-pointer transition-transform active:scale-[0.96] flex items-center justify-center space-x-1.5 disabled:opacity-50"
+                      className={`flex-1 px-3 py-2 bg-[#00b4d8] hover:bg-[#0077a8] text-white font-semibold text-xs rounded-md cursor-pointer transition-transform active:scale-[0.96] flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-1.5' : 'space-x-1.5'} disabled:opacity-50`}
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>{pdfLoading ? '...' : 'PDF'}</span>
@@ -592,13 +612,13 @@ const GradesReportContent: React.FC<{
 
   const renderSemesterTable = (subs: EnrollmentRow[], semesterNum: number, stats: ReturnType<typeof calcSemesterStats>) => (
     <div className="mb-8">
-      <h3 className="text-md font-bold text-[#000000] mb-3">Semestre {semesterNum} / الفصل {semesterNum === 1 ? 'الأول' : 'الثاني'}</h3>
+      <h3 className="text-md font-bold text-[#000000] mb-3" dir="rtl">Semestre {semesterNum} / الفصل {semesterNum === 1 ? 'الأول' : 'الثاني'}</h3>
       <div className="w-full overflow-x-auto -mx-2 px-2">
-      <table className="w-full min-w-[640px] text-left text-[10px] sm:text-xs border-collapse border border-[#d2d6db]">
+      <table className={`w-full min-w-[640px] text-right text-[10px] sm:text-xs border-collapse border border-[#d2d6db]`} dir="rtl">
         <thead className="bg-[#e8f7fc]">
           <tr className="text-[#666666] font-bold border-b border-[#d2d6db]">
-            <th className="p-3 border-r border-[#d2d6db]">المادة (FR)</th>
             <th className="p-3 border-r border-[#d2d6db] text-right">المادة (AR)</th>
+            <th className="p-3 border-r border-[#d2d6db]">المادة (FR)</th>
             <th className="p-3 border-r border-[#d2d6db]">الوحدة</th>
             <th className="p-3 border-r border-[#d2d6db] text-center">الوحدات</th>
             <th className="p-3 border-r border-[#d2d6db] text-center">أعمال</th>
@@ -611,9 +631,9 @@ const GradesReportContent: React.FC<{
         <tbody className="divide-y divide-[#d2d6db]">
           {subs.map(en => (
             <tr key={en.id} className="text-[#000000] hover:bg-[#e8f7fc]">
-              <td className="p-3 border-r border-[#d2d6db] font-medium">{en.subjects?.name_fr}</td>
-              <td className="p-3 border-r border-[#d2d6db] text-right">{en.subjects?.name_ar}</td>
-              <td className="p-3 border-r border-[#d2d6db] text-xs">{en.subjects?.unit_name_fr}</td>
+              <td className="p-3 border-r border-[#d2d6db] text-right" dir="rtl">{en.subjects?.name_ar}</td>
+              <td className="p-3 border-r border-[#d2d6db] font-medium" dir="ltr">{en.subjects?.name_fr}</td>
+              <td className="p-3 border-r border-[#d2d6db] text-xs" dir="ltr">{en.subjects?.unit_name_fr}</td>
               <td className="p-3 border-r border-[#d2d6db] text-center font-semibold nums-tabular">{en.subjects?.credits}</td>
               <td className="p-3 border-r border-[#d2d6db] text-center nums-tabular">{en.classwork !== null ? en.classwork.toFixed(2) : '—'}</td>
               <td className="p-3 border-r border-[#d2d6db] text-center nums-tabular">{en.exam_session_1 !== null ? en.exam_session_1.toFixed(2) : '—'}</td>
@@ -627,9 +647,9 @@ const GradesReportContent: React.FC<{
         </tbody>
         <tfoot className="bg-[#e8f7fc] border-t border-[#d2d6db]">
           <tr className="font-bold text-[#000000]">
-            <td colSpan={3} className="p-3 text-right">المجموع / Total</td>
+            <td colSpan={3} className="p-3 text-right" dir="rtl">المجموع / Total</td>
             <td className="p-3 text-center nums-tabular">{stats.totalCredits}</td>
-            <td colSpan={4} className="p-3 text-center">
+            <td colSpan={4} className="p-3 text-center" dir="rtl">
               المعدل الفصلي: <span className={`nums-tabular ${stats.avg !== null && stats.avg >= 10 ? 'text-emerald-600' : 'text-rose-600'}`}>
                 {stats.avg !== null ? stats.avg.toFixed(2) : '—'}
               </span>
@@ -646,33 +666,33 @@ const GradesReportContent: React.FC<{
     <div className="text-[10px] [&_*]:!text-[10px] [&_p]:!text-[10px] [&_span]:!text-[10px] [&_td]:!text-[10px] [&_th]:!text-[10px] [&_h2]:!text-[10px] [&_h3]:!text-[10px]">
       <div className="print-header mb-8 text-center border-b-2 border-[#e8f7fc] pb-6">
         <div className="flex justify-between items-start mb-4">
-          <div className="text-left">
-            <p className="text-sm font-bold text-[#000000]">المستوى: {level}</p>
+          <div className="text-left" dir="ltr">
+            <p className="text-sm font-bold text-[#000000]" dir="rtl">المستوى: {level}</p>
             <p className="text-xs text-[#666666]">Niveau: {level}</p>
           </div>
-          <div className="text-right font-capitalized">
+          <div className="text-right font-capitalized" dir="rtl">
             <p className="text-sm font-bold text-[#666666]">جمهورية تشاد</p>
-            <p className="text-xs text-[#666666]">République du Tchad</p>
+            <p className="text-xs text-[#666666]" dir="ltr">République du Tchad</p>
             <p className="text-sm font-bold text-[#666666]">وزارة التربية والتعليم والبحت والتكوين العلمي</p>
-            <p className="text-xs text-[#666666]">Ministere de l'Enseignement Supérieur de la recherche et de la formation supérieure</p>
+            <p className="text-xs text-[#666666]" dir="ltr">Ministere de l'Enseignement Supérieur de la recherche et de la formation supérieure</p>
             <p className="text-sm font-bold text-[#666666] mt-1">جامعة الملك فيصل بتشاد</p>
-            <p className="text-sm font-bold text-[#666666] mt-1">universte du roi faycal du tchad</p>
-            <p className="text-xs text-[#666666]">{facultyName.name_fr}</p>
+            <p className="text-sm font-bold text-[#666666] mt-1" dir="ltr">universte du roi faycal du tchad</p>
+            <p className="text-xs text-[#666666]" dir="ltr">{facultyName.name_fr}</p>
             <p className="text-xs text-[#666666]">{facultyName.name_ar}</p>
           </div>
         </div>
-        <h2 className="text-xl font-black text-[#000000]">كشف الدرجات / Relevé de Notes</h2>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-1 mt-4 text-xs text-[#000000] max-w-lg mx-auto">
-          <div className="flex justify-between"><span className="font-semibold">الاسم واللقب:</span><span>{profile?.name_ar}</span></div>
-          <div className="flex justify-between"><span className="font-semibold">Nom & Prénom:</span><span>{profile?.name_fr}</span></div>
-          <div className="flex justify-between"><span className="font-semibold">الرقم الجامعي:</span><span>{profile?.university_id}</span></div>
-          <div className="flex justify-between"><span className="font-semibold">القسم:</span><span>{profile?.section || '—'}</span></div>
-          <div className="flex justify-between"><span className="font-semibold">المستوى:</span><span>{profile?.level || '—'}</span></div>
+        <h2 className="text-xl font-black text-[#000000]" dir="rtl" style={{ direction: 'rtl', unicodeBidi: 'isolate' }}>كشف الدرجات / Relevé de Notes</h2>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-1 mt-4 text-xs text-[#000000] max-w-lg mx-auto" dir="rtl">
+          <div className="flex justify-between" dir="rtl"><span className="font-semibold">الاسم واللقب:</span><span>{profile?.name_ar}</span></div>
+          <div className="flex justify-between" dir="ltr"><span className="font-semibold">Nom & Prénom:</span><span>{profile?.name_fr}</span></div>
+          <div className="flex justify-between" dir="rtl"><span className="font-semibold">الرقم الجامعي:</span><span>{profile?.university_id}</span></div>
+          <div className="flex justify-between" dir="rtl"><span className="font-semibold">القسم:</span><span>{profile?.section || '—'}</span></div>
+          <div className="flex justify-between" dir="rtl"><span className="font-semibold">المستوى:</span><span>{profile?.level || '—'}</span></div>
           {profile?.date_of_birth && (
-            <div className="flex justify-between"><span className="font-semibold">تاريخ الميلاد:</span><span>{new Date(profile.date_of_birth).toLocaleDateString()}</span></div>
+            <div className="flex justify-between" dir="rtl"><span className="font-semibold">تاريخ الميلاد:</span><span>{new Date(profile.date_of_birth).toLocaleDateString()}</span></div>
           )}
           {profile?.place_of_birth && (
-            <div className="flex justify-between"><span className="font-semibold">مكان الميلاد:</span><span>{profile.place_of_birth}</span></div>
+            <div className="flex justify-between" dir="rtl"><span className="font-semibold">مكان الميلاد:</span><span>{profile.place_of_birth}</span></div>
           )}
         </div>
       </div>

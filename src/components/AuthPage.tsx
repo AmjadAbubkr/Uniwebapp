@@ -3,8 +3,10 @@ import { supabase } from '../lib/supabase';
 import logo from '../assets/logo.png';
 import { KeyRound, User, ArrowRight } from 'lucide-react';
 import { Button, Input, Alert } from '../ui';
+import { useLang } from '../context/LanguageContext';
 
 export const AuthPage: React.FC = () => {
+  const { isRTL } = useLang();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -222,7 +224,7 @@ export const AuthPage: React.FC = () => {
                 Identifiant / الرقم الجامعي (ID)
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
+                <div className={`absolute inset-y-0 ${isRTL ? 'right-0 pr-4' : 'left-0 pl-4'} flex items-center pointer-events-none text-[#666666]`}>
                   <User className="w-5 h-5" />
                 </div>
                 <Input
@@ -230,7 +232,7 @@ export const AuthPage: React.FC = () => {
                   placeholder="Ex: 9193, admin"
                   value={uniId}
                   onChange={(e) => setUniId(e.target.value)}
-                  className="pl-11"
+                  className={isRTL ? 'pr-11' : 'pl-11'}
                 />
               </div>
             </div>
@@ -240,7 +242,7 @@ export const AuthPage: React.FC = () => {
                 Mot de Passe / كلمة المرور
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
+                <div className={`absolute inset-y-0 ${isRTL ? 'right-0 pr-4' : 'left-0 pl-4'} flex items-center pointer-events-none text-[#666666]`}>
                   <KeyRound className="w-5 h-5" />
                 </div>
                 <Input
@@ -249,7 +251,7 @@ export const AuthPage: React.FC = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-11"
+                  className={isRTL ? 'pr-11' : 'pl-11'}
                 />
               </div>
             </div>
@@ -260,7 +262,7 @@ export const AuthPage: React.FC = () => {
                   Confirmer le Mot de Passe / تأكيد كلمة المرور
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#666666]">
+                  <div className={`absolute inset-y-0 ${isRTL ? 'right-0 pr-4' : 'left-0 pl-4'} flex items-center pointer-events-none text-[#666666]`}>
                     <KeyRound className="w-5 h-5" />
                   </div>
                   <Input
@@ -269,7 +271,7 @@ export const AuthPage: React.FC = () => {
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-11"
+                    className={isRTL ? 'pr-11' : 'pl-11'}
                   />
                 </div>
               </div>
@@ -279,10 +281,10 @@ export const AuthPage: React.FC = () => {
               type="submit"
               disabled={loading}
               size="lg"
-              className="w-full"
+              className={`w-full flex items-center justify-center ${isRTL ? 'flex-row-reverse' : ''}`}
             >
               <span>{loading ? 'Traitement...' : isLogin ? 'Se Connecter' : 'Activer le Compte'}</span>
-              {!loading && <ArrowRight className="w-5 h-5 ml-2" />}
+              {!loading && <ArrowRight className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />}
             </Button>
           </form>
         </div>
